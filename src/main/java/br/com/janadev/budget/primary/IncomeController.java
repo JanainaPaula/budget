@@ -1,7 +1,7 @@
 package br.com.janadev.budget.primary;
 
-import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.IncomeDomainPort;
+import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
+import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,15 +14,16 @@ import java.net.URI;
 @RequestMapping("/incomes")
 public class IncomeController {
 
-    private final IncomeDomainPort incomeDomainPort;
+    private final RegisterIncomePort incomeDomainPort;
 
-    public IncomeController(IncomeDomainPort incomeDomainPort) {
+    public IncomeController(RegisterIncomePort incomeDomainPort) {
         this.incomeDomainPort = incomeDomainPort;
     }
 
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> registerIncome(@RequestBody IncomeRequestDTO request){
-        IncomeResponseDTO response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(request));
+        RegisterIncomeCommand command = RegisterIncomeCommand.of(request.description(), request.amount(), request.date());
+        IncomeResponseDTO response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(command));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
     }
 }
