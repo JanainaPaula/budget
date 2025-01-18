@@ -3,7 +3,6 @@ package br.com.janadev.budget.primary;
 import br.com.janadev.budget.domain.income.Income;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record IncomeResponseDTO(
         Long id,

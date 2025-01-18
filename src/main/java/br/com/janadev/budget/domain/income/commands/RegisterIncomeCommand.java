@@ -1,5 +1,7 @@
 package br.com.janadev.budget.domain.income.commands;
 
+import br.com.janadev.budget.domain.exceptions.DomainValidationException;
+
 import java.time.LocalDate;
 
 public class RegisterIncomeCommand {
@@ -20,13 +22,13 @@ public class RegisterIncomeCommand {
 
     private void validateFields(String description, Double amount, LocalDate date) {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be null or empty.");
+            throw new DomainValidationException("Description cannot be null or empty.");
         }
         if (amount == null || amount <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero.");
+            throw new DomainValidationException("Amount must be greater than zero.");
         }
         if (date == null) {
-            throw new IllegalArgumentException("Date cannot be null.");
+            throw new DomainValidationException("Date cannot be null.");
         }
     }
 
