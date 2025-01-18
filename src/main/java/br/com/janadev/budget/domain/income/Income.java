@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class Income {
     private Long id;
-    private String description;
-    private Double amount;
-    private LocalDate date;
+    private final String description;
+    private final Double amount;
+    private final LocalDate date;
 
     public static Income of(Long id, String description, Double amount, LocalDate date){
         return new Income(id, description, amount, date);
