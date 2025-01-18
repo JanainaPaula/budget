@@ -11,7 +11,7 @@ public class ErrorResponse{
         Throwable cause = exception.getCause();
         return new ErrorResponse(
                 status,
-                exception.getClass().getName(),
+                exception.getClass().getSimpleName(),
                 exception.getMessage(),
                 cause != null ? cause.getMessage() : null,
                 path.replace("uri=", ""));
