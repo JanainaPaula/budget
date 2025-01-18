@@ -3,12 +3,10 @@ package br.com.janadev.budget.domain.income.usecases;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
