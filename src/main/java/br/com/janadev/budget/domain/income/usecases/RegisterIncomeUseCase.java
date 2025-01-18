@@ -14,7 +14,7 @@ public class RegisterIncomeUseCase implements RegisterIncomePort {
 
     @Override
     public Income registerIncome(RegisterIncomeCommand command) {
-        Income income = Income.of(command.getDescription(), command.getAmount(), command.getDate());
+        var income = Income.of(command.getDescription(), command.getAmount(), command.getDate());
         return incomeDatabasePort.save(income);
     }
 }
