@@ -1,6 +1,7 @@
-package br.com.janadev.budget.domain.income.commands;
+package br.com.janadev.budget.unit.domain.income.commands;
 
 import br.com.janadev.budget.domain.exceptions.DomainValidationException;
+import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

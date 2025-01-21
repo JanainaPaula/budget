@@ -1,4 +1,4 @@
-package br.com.janadev.budget.primary;
+package br.com.janadev.budget.primary.income.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

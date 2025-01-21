@@ -1,7 +1,9 @@
-package br.com.janadev.budget.primary;
+package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
+import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
+import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

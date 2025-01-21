@@ -1,7 +1,10 @@
-package br.com.janadev.budget.primary;
+package br.com.janadev.budget.unit.primary;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
+import br.com.janadev.budget.primary.income.IncomeController;
+import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
+import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

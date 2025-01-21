@@ -1,4 +1,4 @@
-package br.com.janadev.budget.primary;
+package br.com.janadev.budget.primary.income.dto;
 
 import br.com.janadev.budget.domain.income.Income;
 

@@ -19,14 +19,14 @@ public class IncomeDBO {
     private final Double amount;
     private final LocalDate date;
 
-    public static IncomeDBO toIncomeDBO(Income income){
-        return new IncomeDBO(income.getDescription(), income.getAmount(), income.getDate());
-    }
-
     private IncomeDBO(String description, Double amount, LocalDate date) {
         this.description = description;
         this.amount = amount;
         this.date = date;
+    }
+
+    public static IncomeDBO toIncomeDBO(Income income){
+        return new IncomeDBO(income.getDescription(), income.getAmount(), income.getDate());
     }
 
     public Income toDomain(){
