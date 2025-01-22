@@ -2,6 +2,7 @@ package br.com.janadev.budget.secondary.config;
 
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.FindAllIncomesUseCase;
+import br.com.janadev.budget.domain.income.usecases.GetIncomesDetailsUseCase;
 import br.com.janadev.budget.domain.income.usecases.RegisterIncomeUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,5 +24,10 @@ public class IncomeDatabaseConfig {
     @Bean
     public FindAllIncomesUseCase findAllIncomesUseCase(){
         return new FindAllIncomesUseCase(incomeDatabasePort);
+    }
+
+    @Bean
+    public GetIncomesDetailsUseCase getIncomesDetailsUseCase(){
+        return new GetIncomesDetailsUseCase(incomeDatabasePort);
     }
 }
