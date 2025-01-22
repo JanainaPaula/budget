@@ -28,7 +28,7 @@ public class IncomeController {
     }
 
     @PostMapping
-    public ResponseEntity<IncomeResponseDTO> registerIncome(@RequestBody IncomeRequestDTO request){
+    public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
         RegisterIncomeCommand command = RegisterIncomeCommand.of(request.description(), request.amount(), request.date());
         IncomeResponseDTO response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(command));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
