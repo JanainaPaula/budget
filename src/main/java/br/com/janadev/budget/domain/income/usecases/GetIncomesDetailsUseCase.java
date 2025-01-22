@@ -19,7 +19,7 @@ public class GetIncomesDetailsUseCase implements GetIncomeDetailsPort {
     public Income getIncomeDetails(Long id) {
         Income income = incomeDatabasePort.findById(id);
         if (income == null){
-            throw new DomainNotFoundException(String.format(INCOME_NOT_FOUND, id));
+            throw new DomainNotFoundException(INCOME_NOT_FOUND);
         }
         return income;
     }

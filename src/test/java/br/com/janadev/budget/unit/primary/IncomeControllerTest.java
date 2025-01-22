@@ -1,7 +1,9 @@
 package br.com.janadev.budget.unit.primary;
 
+import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
+import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
@@ -23,6 +25,7 @@ import java.time.Month;
 import java.util.List;
 
 import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
+import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.INCOME_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +48,9 @@ class IncomeControllerTest {
     private RegisterIncomePort registerIncomePort;
     @MockitoBean
     private FindAllIncomesPort findAllIncomesPort;
+
+    @MockitoBean
+    private GetIncomeDetailsPort getIncomeDetailsPort;
 
     @BeforeEach
     void setUp(){
@@ -126,4 +132,44 @@ class IncomeControllerTest {
         );
     }
 
+    @Test
+    void shouldRespondWithStatus200WhenCallGetIncomeDetailsEndpoint() throws Exception {
+        Income incomeExpected = Income.of(2L, "Venda", 55.90, LocalDate.of(2025, Month.JANUARY, 21));
+        when(getIncomeDetailsPort.getIncomeDetails(any())).thenReturn(incomeExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/incomes/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        IncomeResponseDTO incomeResponse = jsonResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(incomeExpected.getId(), incomeResponse.id()),
+                () -> assertEquals(incomeExpected.getDescription(), incomeResponse.description()),
+                () -> assertEquals(incomeExpected.getAmount(), incomeResponse.amount()),
+                () -> assertEquals(incomeExpected.getDate(), incomeResponse.date())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus400WhenCallGetIncomeDetailsWithIncomeIdThatNotExits() throws Exception {
+        when(getIncomeDetailsPort.getIncomeDetails(any()))
+                .thenThrow(new DomainNotFoundException(INCOME_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/incomes/{id}", 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        ErrorResponse errorResponse = jsonErrorResponse.parse(response.getContentAsString()).getObject();
+
+        assertEquals(400, response.getStatus());
+        assertAll(
+                () -> assertEquals(INCOME_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
+                () -> assertEquals("/incomes/2", errorResponse.getPath())
+        );
+    }
 }
