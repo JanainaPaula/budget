@@ -30,7 +30,7 @@ class RegisterIncomeUseCaseTest {
 
     @Test
     void shouldRegisterIncomeSuccessfully(){
-        var description = "Internet";
+        var description = "Venda Enjoei";
         double amount = 159.90;
         var date = LocalDate.of(2025, Month.JANUARY, 21);
         var incomeCommand = RegisterIncomeCommand.of(description, amount, date);

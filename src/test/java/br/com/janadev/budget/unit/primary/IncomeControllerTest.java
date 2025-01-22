@@ -40,17 +40,16 @@ class IncomeControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    private JacksonTester<IncomeRequestDTO> jsonRequestDto;
-    private JacksonTester<IncomeResponseDTO> jsonResponseDto;
-    private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
-    private JacksonTester<ErrorResponse> jsonErrorResponse;
     @MockitoBean
     private RegisterIncomePort registerIncomePort;
     @MockitoBean
     private FindAllIncomesPort findAllIncomesPort;
-
     @MockitoBean
     private GetIncomeDetailsPort getIncomeDetailsPort;
+    private JacksonTester<IncomeRequestDTO> jsonRequestDto;
+    private JacksonTester<IncomeResponseDTO> jsonResponseDto;
+    private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
+    private JacksonTester<ErrorResponse> jsonErrorResponse;
 
     @BeforeEach
     void setUp(){

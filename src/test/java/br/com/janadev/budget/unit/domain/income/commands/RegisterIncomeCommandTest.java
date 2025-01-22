@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RegisterIncomeCommandTest {
 
-    private final String description = "Gás";
+    private final String description = "Pagamento";
     private final double amount = 39.90;
     private final LocalDate date = LocalDate.of(2025, Month.JANUARY, 20);
 
