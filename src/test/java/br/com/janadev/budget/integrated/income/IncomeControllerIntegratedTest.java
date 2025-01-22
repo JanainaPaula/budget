@@ -79,4 +79,23 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(incomesExpected.get(1).getDate(), response.get(1).date())
         );
     }
+
+    @Test
+    void shouldGetIncomeDetailsSuccessfully(){
+        Income income = Income.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21));
+        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.toIncomeDBO(income));
+
+        ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.GET, null,
+                IncomeResponseDTO.class, savedIncome.getId());
+
+        IncomeResponseDTO response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertNotNull(response.id()),
+                () -> assertEquals(savedIncome.getDescription(), response.description()),
+                () -> assertEquals(savedIncome.getAmount(), response.amount()),
+                () -> assertEquals(savedIncome.getDate(), response.date())
+        );
+    }
 }
