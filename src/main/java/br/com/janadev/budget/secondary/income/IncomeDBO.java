@@ -15,9 +15,12 @@ public class IncomeDBO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private final String description;
-    private final Double amount;
-    private final LocalDate date;
+    private String description;
+    private Double amount;
+    private LocalDate date;
+
+    public IncomeDBO() {
+    }
 
     private IncomeDBO(String description, Double amount, LocalDate date) {
         this.description = description;
@@ -31,5 +34,21 @@ public class IncomeDBO {
 
     public Income toDomain(){
         return Income.of(this.id, this.description, this.amount, this.date);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }

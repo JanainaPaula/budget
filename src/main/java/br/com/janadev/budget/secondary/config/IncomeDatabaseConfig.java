@@ -20,6 +20,7 @@ public class IncomeDatabaseConfig {
         return new RegisterIncomeUseCase(incomeDatabasePort);
     }
 
+    @Bean
     public FindAllIncomesUseCase findAllIncomesUseCase(){
         return new FindAllIncomesUseCase(incomeDatabasePort);
     }
