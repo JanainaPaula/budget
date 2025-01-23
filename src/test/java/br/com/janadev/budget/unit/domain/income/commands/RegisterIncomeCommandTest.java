@@ -1,7 +1,7 @@
 package br.com.janadev.budget.unit.domain.income.commands;
 
 import br.com.janadev.budget.domain.exceptions.DomainValidationException;
-import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
+import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -20,7 +20,7 @@ class RegisterIncomeCommandTest {
 
     @Test
     void shouldCreateCommandSuccessFully(){
-        var incomeCommand = RegisterIncomeCommand.of(description, amount, date);
+        var incomeCommand = IncomeCommand.of(description, amount, date);
         assertAll(
                 () -> assertNotNull(incomeCommand),
                 () -> assertEquals(description, incomeCommand.getDescription()),
@@ -33,13 +33,13 @@ class RegisterIncomeCommandTest {
     void shouldThrownDomainValidationExceptionWhenSomeFieldsValueIsInvalid(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> RegisterIncomeCommand.of(description, 0.0, date),
+                        () -> IncomeCommand.of(description, 0.0, date),
                         "Amount field is zero."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> RegisterIncomeCommand.of("", amount, date),
+                        () -> IncomeCommand.of("", amount, date),
                         "Description fiels is blank or empty."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> RegisterIncomeCommand.of(description, amount, null),
+                        () -> IncomeCommand.of(description, amount, null),
                         "Date field is null.")
         );
     }

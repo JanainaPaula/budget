@@ -8,16 +8,16 @@ import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.AMOUNT
 import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.DATE_CANNOT_BE_NULL;
 import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.DESCRIPTION_CANNOT_BE_NULL;
 
-public class RegisterIncomeCommand {
+public class IncomeCommand {
     private final String description;
     private final Double amount;
     private final LocalDate date;
 
-    public static RegisterIncomeCommand of(String description, Double amount, LocalDate date){
-        return new RegisterIncomeCommand(description, amount, date);
+    public static IncomeCommand of(String description, Double amount, LocalDate date){
+        return new IncomeCommand(description, amount, date);
     }
 
-    private RegisterIncomeCommand(String description, Double amount, LocalDate date) {
+    private IncomeCommand(String description, Double amount, LocalDate date) {
         validateFields(description, amount, date);
         this.description = description;
         this.amount = amount;

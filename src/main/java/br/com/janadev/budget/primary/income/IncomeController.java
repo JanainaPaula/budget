@@ -1,7 +1,7 @@
 package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.commands.RegisterIncomeCommand;
+import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
@@ -36,7 +36,7 @@ public class IncomeController {
 
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
-        var command = RegisterIncomeCommand.of(request.description(), request.amount(), request.date());
+        var command = IncomeCommand.of(request.description(), request.amount(), request.date());
         var response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(command));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
     }
