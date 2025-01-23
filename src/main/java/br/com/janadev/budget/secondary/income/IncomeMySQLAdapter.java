@@ -18,7 +18,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public Income save(Income income) {
-        IncomeDBO incomeDBO = IncomeDBO.toIncomeDBO(income);
+        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate());
         return repository.save(incomeDBO).toDomain();
     }
 
@@ -32,6 +32,12 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         return Objects.requireNonNull(
                 repository.findById(id).orElse(null))
                 .toDomain();
+    }
+
+    @Override
+    public Income updateById(Income income) {
+        var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate());
+        return repository.save(incomeDBO).toDomain();
     }
 
 }

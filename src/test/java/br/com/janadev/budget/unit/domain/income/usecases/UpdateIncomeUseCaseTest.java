@@ -37,11 +37,12 @@ class UpdateIncomeUseCaseTest {
         double amount = 3000.0;
         var date = LocalDate.of(2025, Month.JANUARY, 23);
         var income = Income.of(id, description, amount, date);
+
         var incomeCommand = IncomeCommand.of(description, 5000.0, LocalDate.of(2025, Month.JANUARY, 15));
         var incomeUpdatedExpected = Income.of(id, description, incomeCommand.getAmount(), incomeCommand.getDate());
 
         when(incomeDatabasePort.findById(any())).thenReturn(income);
-        when(incomeDatabasePort.save(any())).thenReturn(incomeUpdatedExpected);
+        when(incomeDatabasePort.updateById(any())).thenReturn(incomeUpdatedExpected);
 
         Income incomeUpdated = updateIncomeUseCase.update(id, incomeCommand);
 

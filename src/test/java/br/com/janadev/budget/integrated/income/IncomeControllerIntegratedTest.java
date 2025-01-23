@@ -1,6 +1,7 @@
 package br.com.janadev.budget.integrated.income;
 
 import br.com.janadev.budget.domain.income.Income;
+import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -52,11 +54,12 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
     @Test
     void shouldFindAllIncomesSuccessfully(){
-        Income salario = Income.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21));
-        Income vendas = Income.of("Vendas enjoei", 700.0, LocalDate.of(2025, Month.JANUARY, 21));
-
         List<IncomeDBO> incomesExpected = incomeRepository.saveAll(
-                List.of(IncomeDBO.toIncomeDBO(salario), IncomeDBO.toIncomeDBO(vendas)));
+                List.of(
+                        IncomeDBO.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)),
+                        IncomeDBO.of("Vendas enjoei", 700.0, LocalDate.of(2025, Month.JANUARY, 21))
+                )
+        );
 
         ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/incomes", HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {}
@@ -82,8 +85,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
     @Test
     void shouldGetIncomeDetailsSuccessfully(){
-        Income income = Income.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21));
-        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.toIncomeDBO(income));
+        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)));
 
         ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.GET, null,
                 IncomeResponseDTO.class, savedIncome.getId());
@@ -96,6 +98,31 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(savedIncome.getDescription(), response.description()),
                 () -> assertEquals(savedIncome.getAmount(), response.amount()),
                 () -> assertEquals(savedIncome.getDate(), response.date())
+        );
+    }
+
+    @Test
+    void shouldUpdateIncomeSuccessfully(){
+        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)));
+
+        var incomeCommand = IncomeCommand.of("Salário", 6000.0, LocalDate.of(2025, Month.JANUARY, 21));
+
+        HttpEntity<IncomeCommand> requestEntity = new HttpEntity<>(incomeCommand);
+
+        ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
+                requestEntity,
+                IncomeResponseDTO.class, savedIncome.getId());
+
+        IncomeResponseDTO response = responseEntity.getBody();
+
+        IncomeDBO incomeUpdated = incomeRepository.findById(savedIncome.getId()).get();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(savedIncome.getId(), response.id()),
+                () -> assertEquals(incomeUpdated.getDescription(), response.description()),
+                () -> assertEquals(incomeUpdated.getAmount(), response.amount()),
+                () -> assertEquals(incomeUpdated.getDate(), response.date())
         );
     }
 }

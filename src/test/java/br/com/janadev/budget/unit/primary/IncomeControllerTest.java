@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
+import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
@@ -20,18 +21,22 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
 import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
 import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(controllers = IncomeController.class)
 class IncomeControllerTest {
@@ -46,6 +51,8 @@ class IncomeControllerTest {
     private FindAllIncomesPort findAllIncomesPort;
     @MockitoBean
     private GetIncomeDetailsPort getIncomeDetailsPort;
+    @MockitoBean
+    private UpdateIncomePort updateIncomePort;
     private JacksonTester<IncomeRequestDTO> jsonRequestDto;
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
@@ -111,7 +118,8 @@ class IncomeControllerTest {
 
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomesEndpoint() throws Exception {
-        Income income = Income.of(2L, "Venda", 55.90, LocalDate.of(2025, Month.JANUARY, 21));
+        var income = Income.of(2L, "Venda", 55.90,
+                LocalDate.of(2025, Month.JANUARY, 21));
         when(findAllIncomesPort.findAll()).thenReturn(List.of(income));
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -133,7 +141,8 @@ class IncomeControllerTest {
 
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomeDetailsEndpoint() throws Exception {
-        Income incomeExpected = Income.of(2L, "Venda", 55.90, LocalDate.of(2025, Month.JANUARY, 21));
+        var incomeExpected = Income.of(2L, "Venda", 55.90,
+                LocalDate.of(2025, Month.JANUARY, 21));
         when(getIncomeDetailsPort.getIncomeDetails(any())).thenReturn(incomeExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -169,6 +178,57 @@ class IncomeControllerTest {
                 () -> assertEquals(INCOME_NOT_FOUND, errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/2", errorResponse.getPath())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus200WhenCallUpdateIncomeEndpoint() throws Exception {
+        var incomeExpected = Income.of(2L, "Venda", 55.90,
+                LocalDate.of(2025, Month.JANUARY, 21));
+        var request = new IncomeRequestDTO(
+                incomeExpected.getDescription(),
+                incomeExpected.getAmount(),
+                incomeExpected.getDate());
+        when(updateIncomePort.update(any(), any())).thenReturn(incomeExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                put("/incomes/{id}", 2)
+                        .content(jsonRequestDto.write(request).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        IncomeResponseDTO incomeResponse = jsonResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(incomeExpected.getId(), incomeResponse.id()),
+                () -> assertEquals(incomeExpected.getDescription(), incomeResponse.description()),
+                () -> assertEquals(incomeExpected.getAmount(), incomeResponse.amount()),
+                () -> assertEquals(incomeExpected.getDate(), incomeResponse.date())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus400WhenCallUpdateIncomeWithIncomeIdThatNotExits() throws Exception {
+        var request = new IncomeRequestDTO("Venda", 55.90,
+                LocalDate.of(2025, Month.JANUARY, 21));
+
+        when(updateIncomePort.update(any(), any()))
+                .thenThrow(new DomainNotFoundException(UPDATE_FAILED_INCOME_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                put("/incomes/{id}", 3)
+                        .content(jsonRequestDto.write(request).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        ErrorResponse errorResponse = jsonErrorResponse.parse(response.getContentAsString()).getObject();
+
+        assertEquals(400, response.getStatus());
+        assertAll(
+                () -> assertEquals(UPDATE_FAILED_INCOME_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
+                () -> assertEquals("/incomes/3", errorResponse.getPath())
         );
     }
 }

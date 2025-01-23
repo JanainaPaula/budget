@@ -8,4 +8,5 @@ public interface IncomeDatabasePort {
     Income save(Income income);
     List<Income> findAll();
     Income findById(Long id);
+    Income updateById(Income income);
 }

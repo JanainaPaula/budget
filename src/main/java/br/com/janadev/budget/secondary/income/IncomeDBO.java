@@ -22,14 +22,25 @@ public class IncomeDBO {
     public IncomeDBO() {
     }
 
+    private IncomeDBO(Long id, String description, Double amount, LocalDate date) {
+        this.id = id;
+        this.description = description;
+        this.amount = amount;
+        this.date = date;
+    }
+
     private IncomeDBO(String description, Double amount, LocalDate date) {
         this.description = description;
         this.amount = amount;
         this.date = date;
     }
 
-    public static IncomeDBO toIncomeDBO(Income income){
-        return new IncomeDBO(income.getDescription(), income.getAmount(), income.getDate());
+    public static IncomeDBO of(Long id, String description, Double amount, LocalDate date){
+        return new IncomeDBO(id, description, amount, date);
+    }
+
+    public static IncomeDBO of(String description, Double amount, LocalDate date){
+        return new IncomeDBO(description, amount, date);
     }
 
     public Income toDomain(){

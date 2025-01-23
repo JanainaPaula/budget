@@ -1,7 +1,6 @@
 package br.com.janadev.budget.domain.income.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
-import br.com.janadev.budget.domain.exceptions.IncomeErrorMessages;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
@@ -23,7 +22,7 @@ public class UpdateIncomeUseCase implements UpdateIncomePort {
         if (income == null){
             throw new DomainNotFoundException(UPDATE_FAILED_INCOME_NOT_FOUND);
         }
-        return incomeDatabasePort.save(
+        return incomeDatabasePort.updateById(
                 Income.of(income.getId(), incomeCommand.getDescription(), incomeCommand.getAmount(), incomeCommand.getDate())
         );
     }
