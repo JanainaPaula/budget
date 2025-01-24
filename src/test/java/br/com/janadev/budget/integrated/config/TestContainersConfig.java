@@ -2,7 +2,10 @@ package br.com.janadev.budget.integrated.config;
 
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
@@ -16,6 +19,9 @@ public abstract class TestContainersConfig {
     @Container
     private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>(DockerImageName.parse("mysql:8.2.0"));
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @BeforeAll
     static void beforeAll(){
         mysqlContainer.start();
@@ -24,6 +30,11 @@ public abstract class TestContainersConfig {
     @AfterAll
     static void afterAll(){
         mysqlContainer.stop();
+    }
+
+    @AfterEach
+    void tearDown(){
+        jdbcTemplate.execute("TRUNCATE TABLE incomes");
     }
 
     @DynamicPropertySource

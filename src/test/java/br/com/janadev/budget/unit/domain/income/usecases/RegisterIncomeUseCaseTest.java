@@ -1,5 +1,6 @@
 package br.com.janadev.budget.unit.domain.income.usecases;
 
+import br.com.janadev.budget.domain.exceptions.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
@@ -16,6 +17,7 @@ import java.time.Month;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +48,20 @@ class RegisterIncomeUseCaseTest {
                 () -> assertEquals(incomeExpected.getDescription(), income.getDescription()),
                 () -> assertEquals(incomeExpected.getAmount(), income.getAmount()),
                 () -> assertEquals(incomeExpected.getDate(), income.getDate())
+        );
+    }
+
+    @Test
+    void shouldThrowIncomeAlreadyExistsExceptionWhenTryRegisterIncomeWithDescriptionThatAlreadyExists(){
+        var description = "Venda Enjoei";
+        double amount = 159.90;
+        var date = LocalDate.of(2025, Month.JANUARY, 21);
+        var incomeCommand = IncomeCommand.of(description, amount, date);
+
+        when(incomeDatabasePort.descriptionAlreadyExists(any())).thenReturn(true);
+
+        assertThrows(IncomeAlreadyExistsException.class,
+                () -> registerIncomeUseCase.registerIncome(incomeCommand)
         );
     }
 }

@@ -9,4 +9,5 @@ public interface IncomeDatabasePort {
     List<Income> findAll();
     Income findById(Long id);
     Income updateById(Income income);
+    boolean descriptionAlreadyExists(String description);
 }

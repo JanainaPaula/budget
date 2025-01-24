@@ -40,4 +40,9 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         return repository.save(incomeDBO).toDomain();
     }
 
+    @Override
+    public boolean descriptionAlreadyExists(String description) {
+        return repository.existsByDescription(description);
+    }
+
 }

@@ -1,6 +1,5 @@
 package br.com.janadev.budget.integrated.income;
 
-import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
@@ -50,6 +49,21 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(requestBody.amount(), response.amount()),
                 () -> assertEquals(requestBody.date(), response.date())
         );
+    }
+
+    @Test
+    void shouldRespondStatus400WhenTryRegisterIncomeWithDescriptionThatAlreadyExists(){
+        var incomeDBO = IncomeDBO.of("Salário", 2000.0,
+                LocalDate.of(2025, Month.JANUARY, 23));
+        incomeRepository.save(incomeDBO);
+
+        IncomeRequestDTO request = new IncomeRequestDTO("Salário", 1000.0,
+                LocalDate.of(2025, Month.JANUARY, 21));
+
+        ResponseEntity<IncomeResponseDTO> responseEntity =
+                restTemplate.postForEntity("/incomes", request, IncomeResponseDTO.class);
+
+        assertEquals(400, responseEntity.getStatusCode().value());
     }
 
     @Test

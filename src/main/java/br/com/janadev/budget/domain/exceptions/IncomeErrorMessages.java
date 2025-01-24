@@ -6,6 +6,7 @@ public class IncomeErrorMessages {
     public static final String DATE_CANNOT_BE_NULL = "Date cannot be null.";
     public static final String INCOME_NOT_FOUND = "Income not found.";
     public static final String UPDATE_FAILED_INCOME_NOT_FOUND = "Could not update. Recipe not found.";
+    public static final String INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS = "A income with this description already exists.";
 
     private IncomeErrorMessages() {
     }
