@@ -45,4 +45,10 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         return repository.existsByDescription(description);
     }
 
+    @Override
+    public void delete(Income income) {
+        var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate());
+        repository.delete(incomeDBO);
+    }
+
 }

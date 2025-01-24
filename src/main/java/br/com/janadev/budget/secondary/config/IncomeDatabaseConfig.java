@@ -1,6 +1,7 @@
 package br.com.janadev.budget.secondary.config;
 
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.income.usecases.DeleteIncomeUseCase;
 import br.com.janadev.budget.domain.income.usecases.FindAllIncomesUseCase;
 import br.com.janadev.budget.domain.income.usecases.GetIncomesDetailsUseCase;
 import br.com.janadev.budget.domain.income.usecases.RegisterIncomeUseCase;
@@ -35,5 +36,10 @@ public class IncomeDatabaseConfig {
     @Bean
     public UpdateIncomeUseCase updateIncomeUseCase(){
         return new UpdateIncomeUseCase(incomeDatabasePort);
+    }
+
+    @Bean
+    public DeleteIncomeUseCase deleteIncomeUseCase(){
+        return new DeleteIncomeUseCase(incomeDatabasePort);
     }
 }

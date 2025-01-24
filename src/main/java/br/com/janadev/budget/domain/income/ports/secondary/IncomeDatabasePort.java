@@ -10,4 +10,5 @@ public interface IncomeDatabasePort {
     Income findById(Long id);
     Income updateById(Income income);
     boolean descriptionAlreadyExists(String description);
+    void delete(Income income);
 }
