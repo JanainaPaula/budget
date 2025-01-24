@@ -1,4 +1,4 @@
-package br.com.janadev.budget.domain.exceptions;
+package br.com.janadev.budget.domain.income.exception;
 
 public class IncomeErrorMessages {
     public static final String DESCRIPTION_CANNOT_BE_NULL = "Description cannot be null or empty.";

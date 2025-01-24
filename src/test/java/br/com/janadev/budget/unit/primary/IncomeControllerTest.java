@@ -21,14 +21,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.INCOME_NOT_FOUND;
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

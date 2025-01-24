@@ -4,9 +4,9 @@ import br.com.janadev.budget.domain.exceptions.DomainValidationException;
 
 import java.time.LocalDate;
 
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.DATE_CANNOT_BE_NULL;
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.DESCRIPTION_CANNOT_BE_NULL;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.DATE_CANNOT_BE_NULL;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.DESCRIPTION_CANNOT_BE_NULL;
 
 public class IncomeCommand {
     private final String description;

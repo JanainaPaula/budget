@@ -5,7 +5,7 @@ import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_NOT_FOUND;
 
 public class GetIncomesDetailsUseCase implements GetIncomeDetailsPort {
 

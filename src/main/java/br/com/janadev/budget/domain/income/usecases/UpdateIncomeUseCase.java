@@ -1,14 +1,14 @@
 package br.com.janadev.budget.domain.income.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
-import br.com.janadev.budget.domain.exceptions.IncomeAlreadyExistsException;
+import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS;
-import static br.com.janadev.budget.domain.exceptions.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
 
 public class UpdateIncomeUseCase implements UpdateIncomePort {
 
