@@ -3,6 +3,7 @@ package br.com.janadev.budget.unit.domain.income.usecases;
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
+import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.UpdateIncomeUseCase;
 import org.junit.jupiter.api.Test;
@@ -61,6 +62,18 @@ class UpdateIncomeUseCaseTest {
         when(incomeDatabasePort.findById(any())).thenReturn(null);
 
         assertThrows(DomainNotFoundException.class,
+                () -> updateIncomeUseCase.update(2L, incomeCommand));
+    }
+
+    @Test
+    void shouldThrowsIncomeAlreadyExistsExceptionWhenTryChangeDescriptionAndDescriptionAlreadyExists(){
+        var incomeCommand = IncomeCommand.of("Salário", 3000.0,
+                LocalDate.of(2025, Month.JANUARY, 23));
+        when(incomeDatabasePort.descriptionAlreadyExists(any())).thenReturn(true);
+        when(incomeDatabasePort.findById(any())).thenReturn(Income.of(2L, "Vendas", 2000.0,
+                LocalDate.of(2025, Month.JANUARY, 23)));
+
+        assertThrows(IncomeAlreadyExistsException.class,
                 () -> updateIncomeUseCase.update(2L, incomeCommand));
     }
 
