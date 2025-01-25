@@ -1,4 +1,4 @@
-package br.com.janadev.budget.domain;
+package br.com.janadev.budget.domain.expense;
 
 import java.time.LocalDateTime;
 
