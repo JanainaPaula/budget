@@ -26,9 +26,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.AMOUNT_MUST_BE_GREATER_THAN_ZERO;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_AMOUNT_MUST_BE_GREATER_THAN_ZERO;
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_NOT_FOUND;
-import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_UPDATE_FAILED_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -114,7 +114,7 @@ class IncomeControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(AMOUNT_MUST_BE_GREATER_THAN_ZERO, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_AMOUNT_MUST_BE_GREATER_THAN_ZERO, errorResponse.getMessage()),
                 () -> assertEquals("DomainValidationException", errorResponse.getException()),
                 () -> assertEquals("/incomes", errorResponse.getPath())
         );
@@ -218,7 +218,7 @@ class IncomeControllerTest {
                 LocalDate.of(2025, Month.JANUARY, 21));
 
         when(updateIncomePort.update(any(), any()))
-                .thenThrow(new DomainNotFoundException(UPDATE_FAILED_INCOME_NOT_FOUND));
+                .thenThrow(new DomainNotFoundException(INCOME_UPDATE_FAILED_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(
                 put("/incomes/{id}", 3)
@@ -230,7 +230,7 @@ class IncomeControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(UPDATE_FAILED_INCOME_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_UPDATE_FAILED_NOT_FOUND, errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/3", errorResponse.getPath())
         );

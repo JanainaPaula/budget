@@ -8,7 +8,7 @@ import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS;
-import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.UPDATE_FAILED_INCOME_NOT_FOUND;
+import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_UPDATE_FAILED_NOT_FOUND;
 
 public class UpdateIncomeUseCase implements UpdateIncomePort {
 
@@ -22,7 +22,7 @@ public class UpdateIncomeUseCase implements UpdateIncomePort {
     public Income update(Long id, IncomeCommand incomeCommand) {
         Income income = incomeDatabasePort.findById(id);
         if (income == null){
-            throw new DomainNotFoundException(UPDATE_FAILED_INCOME_NOT_FOUND);
+            throw new DomainNotFoundException(INCOME_UPDATE_FAILED_NOT_FOUND);
         }
 
         if(isChangeDescription(incomeCommand, income)){
