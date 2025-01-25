@@ -2,6 +2,7 @@ package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
+import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
@@ -9,6 +10,7 @@ import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +30,18 @@ public class IncomeController {
     private final FindAllIncomesPort findAllIncomesPort;
     private final GetIncomeDetailsPort getIncomeDetailsPort;
     private final UpdateIncomePort updateIncomePort;
+    private final DeleteIncomePort deleteIncomePort;
 
     public IncomeController(RegisterIncomePort incomeDomainPort,
                             FindAllIncomesPort findAllIncomesPort,
                             GetIncomeDetailsPort getIncomeDetailsPort,
-                            UpdateIncomePort updateIncomePort) {
+                            UpdateIncomePort updateIncomePort,
+                            DeleteIncomePort deleteIncomePort) {
         this.incomeDomainPort = incomeDomainPort;
         this.findAllIncomesPort = findAllIncomesPort;
         this.getIncomeDetailsPort = getIncomeDetailsPort;
         this.updateIncomePort = updateIncomePort;
+        this.deleteIncomePort = deleteIncomePort;
     }
 
     @PostMapping
@@ -63,5 +68,11 @@ public class IncomeController {
         var command = IncomeCommand.of(request.description(), request.amount(), request.date());
         var response = IncomeResponseDTO.toDTO(updateIncomePort.update(id, command));
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        deleteIncomePort.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

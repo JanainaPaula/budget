@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -138,5 +139,26 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(incomeUpdated.getAmount(), response.amount()),
                 () -> assertEquals(incomeUpdated.getDate(), response.date())
         );
+    }
+
+    @Test
+    void shouldDeleteIncomeSuccessfully(){
+        var incomeDBO = IncomeDBO.of("Venda Enjoei", 1000.0,
+                LocalDate.of(2025, Month.JANUARY, 24));
+        IncomeDBO incomeSaved = incomeRepository.save(incomeDBO);
+
+        ResponseEntity<Void> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.DELETE,
+                null, Void.class, incomeSaved.getId());
+
+        assertEquals(204, responseEntity.getStatusCode().value());
+        assertFalse(incomeRepository.findById(incomeSaved.getId()).isPresent());
+    }
+
+    @Test
+    void shouldRespondStatus400WhenTryDeleteIncomeWithIncomeIdDoesNotExists(){
+        ResponseEntity<Void> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.DELETE,
+                null, Void.class, 2);
+
+        assertEquals(400, responseEntity.getStatusCode().value());
     }
 }

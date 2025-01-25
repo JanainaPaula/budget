@@ -2,6 +2,7 @@ package br.com.janadev.budget.unit.primary;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
+import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
@@ -31,8 +32,10 @@ import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -50,6 +53,8 @@ class IncomeControllerTest {
     private FindAllIncomesPort findAllIncomesPort;
     @MockitoBean
     private GetIncomeDetailsPort getIncomeDetailsPort;
+    @MockitoBean
+    private DeleteIncomePort deleteIncomePort;
     @MockitoBean
     private UpdateIncomePort updateIncomePort;
     private JacksonTester<IncomeRequestDTO> jsonRequestDto;
@@ -91,7 +96,7 @@ class IncomeControllerTest {
     }
 
     @Test
-    void shouldRespondWithStatus400WhenCallPostIncomesEnpointWithInvalidDataInRequestBody() throws Exception {
+    void shouldRespondWithStatus400WhenCallPostIncomesEndpointWithInvalidDataInRequestBody() throws Exception {
         var description = "Venda";
         double amount = 98.54;
         var date = LocalDate.of(2025, Month.JANUARY, 21);
@@ -229,5 +234,16 @@ class IncomeControllerTest {
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/3", errorResponse.getPath())
         );
+    }
+
+    @Test
+    void shouldRespondWithStatus204WhenCallDeleteIncomeEndpoint() throws Exception {
+        doNothing().when(deleteIncomePort).delete(any());
+
+        MockHttpServletResponse response = mockMvc.perform(
+                delete("/incomes/{id}", 2)
+        ).andReturn().getResponse();
+
+        assertEquals(204, response.getStatus());
     }
 }

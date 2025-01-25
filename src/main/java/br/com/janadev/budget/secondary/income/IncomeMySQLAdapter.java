@@ -5,7 +5,6 @@ import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class IncomeMySQLAdapter implements IncomeDatabasePort {
@@ -29,9 +28,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public Income findById(Long id) {
-        return Objects.requireNonNull(
-                repository.findById(id).orElse(null))
-                .toDomain();
+        return repository.findById(id).map(IncomeDBO::toDomain).orElse(null);
     }
 
     @Override
