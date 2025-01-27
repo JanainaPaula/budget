@@ -1,6 +1,6 @@
-package br.com.janadev.budget.domain.expense;
+package br.com.janadev.budget.domain.expense.usecases;
 
-import br.com.janadev.budget.domain.expense.commands.ExpenseCommand;
+import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
 import br.com.janadev.budget.domain.expense.ports.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.ports.RegisterExpensePort;
@@ -18,18 +18,18 @@ public class RegisterExpenseUseCase implements RegisterExpensePort {
     }
 
     @Override
-    public Expense register(ExpenseCommand command) {
-        if (isAlreadyExpenseDescriptionInMonth(command)){
+    public Expense register(Expense expenseCommand) {
+        if (isAlreadyExpenseDescriptionInMonth(expenseCommand)){
             throw new ExpenseAlreadyExistException(EXPENSE_DESCRIPTION_ALREADY_EXIST);
         }
-        var expense = Expense.of(command.getDescription(), command.getAmount(), command.getDate());
+        var expense = Expense.of(expenseCommand.getDescription(), expenseCommand.getAmount(), expenseCommand.getDate());
         return expenseDatabasePort.register(expense);
     }
 
-    private boolean isAlreadyExpenseDescriptionInMonth(ExpenseCommand command) {
-        LocalDate date = command.getDate();
+    private boolean isAlreadyExpenseDescriptionInMonth(Expense expenseCommand) {
+        LocalDate date = expenseCommand.getDate();
         var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
         var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-        return expenseDatabasePort.descriptionAlreadyExists(command.getDescription(), startDate, endDate);
+        return expenseDatabasePort.descriptionAlreadyExists(expenseCommand.getDescription(), startDate, endDate);
     }
 }

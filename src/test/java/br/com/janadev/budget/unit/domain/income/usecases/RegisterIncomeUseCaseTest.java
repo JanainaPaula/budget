@@ -1,8 +1,8 @@
 package br.com.janadev.budget.unit.domain.income.usecases;
 
-import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.commands.IncomeCommand;
+import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.RegisterIncomeUseCase;
 import org.junit.jupiter.api.Test;
