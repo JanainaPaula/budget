@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.config;
+package br.com.janadev.budget.secondary.income.config;
 
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.DeleteIncomeUseCase;
