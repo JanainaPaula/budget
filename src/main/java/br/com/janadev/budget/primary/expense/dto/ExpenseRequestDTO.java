@@ -1,8 +1,8 @@
-package br.com.janadev.budget.primary.income.dto;
+package br.com.janadev.budget.primary.expense.dto;
 
 import java.time.LocalDate;
 
-public record IncomeRequestDTO(
+public record ExpenseRequestDTO(
         String description,
         Double amount,
         LocalDate date
