@@ -6,6 +6,8 @@ import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsExceptio
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 
+import java.time.LocalDate;
+
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_UPDATE_FAILED_NOT_FOUND;
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS;
 
@@ -25,7 +27,7 @@ public class UpdateIncomeUseCase implements UpdateIncomePort {
         }
 
         if(isChangeDescription(income, incomeFound)){
-            if (incomeDatabasePort.descriptionAlreadyExists(income.getDescription())){
+            if (isAlreadyExpenseDescriptionInMonth(income)){
                 throw new IncomeAlreadyExistsException(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS);
             }
         }
@@ -36,5 +38,12 @@ public class UpdateIncomeUseCase implements UpdateIncomePort {
 
     private static boolean isChangeDescription(Income income, Income incomeFound) {
         return !incomeFound.getDescription().equals(income.getDescription());
+    }
+
+    private boolean isAlreadyExpenseDescriptionInMonth(Income income) {
+        LocalDate date = income.getDate();
+        var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
+        var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        return incomeDatabasePort.descriptionAlreadyExists(income.getDescription(), startDate, endDate);
     }
 }

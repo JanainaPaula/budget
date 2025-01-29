@@ -4,6 +4,7 @@ import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -38,8 +39,8 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
     }
 
     @Override
-    public boolean descriptionAlreadyExists(String description) {
-        return repository.existsByDescription(description);
+    public boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate) {
+        return repository.existsByDescriptionAndDateBetween(description, startDate, endDate);
     }
 
     @Override

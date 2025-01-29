@@ -64,6 +64,16 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 restTemplate.postForEntity("/incomes", request, IncomeResponseDTO.class);
 
         assertEquals(400, responseEntity.getStatusCode().value());
+
+        IncomeRequestDTO requestIncomeInFebruary = new IncomeRequestDTO("Salário", 1000.0,
+                LocalDate.of(2025, Month.FEBRUARY, 21));
+
+        ResponseEntity<IncomeResponseDTO> responseEntity1 =
+                restTemplate.postForEntity("/incomes", requestIncomeInFebruary, IncomeResponseDTO.class);
+
+        IncomeResponseDTO response = responseEntity1.getBody();
+
+        assertEquals(201, responseEntity1.getStatusCode().value());
     }
 
     @Test
@@ -140,6 +150,40 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(incomeUpdated.getAmount(), response.amount()),
                 () -> assertEquals(incomeUpdated.getDate(), response.date())
         );
+    }
+
+    @Test
+    void shouldReturnWithStatus400WhenTryUpdateIncomeDescriptionWithADescriptionAlreadyExistsInMonth(){
+        IncomeDBO incomeVendas = incomeRepository.saveAll(List.of(
+                IncomeDBO.of("Salário", 7000.0, LocalDate.of(2025, Month.JANUARY, 29)),
+                IncomeDBO.of("Vendas enjoei", 200.0, LocalDate.of(2025, Month.JANUARY, 20))
+        )).get(1);
+
+        var request = new IncomeRequestDTO("Salário", 1000.0,
+                LocalDate.of(2025, Month.JANUARY, 20));
+
+        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(request);
+
+        ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
+                requestEntity,
+                IncomeResponseDTO.class, incomeVendas.getId());
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+
+        var requestWithOtherDescription = new IncomeRequestDTO("Renda Extra", 1000.0,
+                LocalDate.of(2025, Month.JANUARY, 20));
+
+        HttpEntity<IncomeRequestDTO> requestEntity1 = new HttpEntity<>(requestWithOtherDescription);
+
+        ResponseEntity<IncomeResponseDTO> responseEntity1 = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
+                requestEntity1,
+                IncomeResponseDTO.class, incomeVendas.getId());
+
+        IncomeResponseDTO response = responseEntity1.getBody();
+
+        assertEquals(200, responseEntity1.getStatusCode().value());
+        assertNotNull(response);
+
     }
 
     @Test
