@@ -1,4 +1,4 @@
-package br.com.janadev.budget.unit.primary;
+package br.com.janadev.budget.unit.primary.income;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
@@ -7,10 +7,10 @@ import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
+import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
-import br.com.janadev.budget.primary.handler.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

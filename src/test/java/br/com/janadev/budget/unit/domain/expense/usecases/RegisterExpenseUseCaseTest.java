@@ -1,4 +1,4 @@
-package br.com.janadev.budget.unit.domain.expense;
+package br.com.janadev.budget.unit.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
