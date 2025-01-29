@@ -1,7 +1,7 @@
-package br.com.janadev.budget.unit.domain.income.commands;
+package br.com.janadev.budget.unit.domain.income;
 
 import br.com.janadev.budget.domain.exceptions.DomainValidationException;
-import br.com.janadev.budget.domain.income.commands.IncomeCommand;
+import br.com.janadev.budget.domain.income.Income;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class RegisterIncomeCommandTest {
+class IncomeTest {
 
     private final String description = "Pagamento";
     private final double amount = 39.90;
@@ -20,12 +20,12 @@ class RegisterIncomeCommandTest {
 
     @Test
     void shouldCreateCommandSuccessFully(){
-        var incomeCommand = IncomeCommand.of(description, amount, date);
+        var income = Income.of(description, amount, date);
         assertAll(
-                () -> assertNotNull(incomeCommand),
-                () -> assertEquals(description, incomeCommand.getDescription()),
-                () -> assertEquals(amount, incomeCommand.getAmount()),
-                () -> assertEquals(date, incomeCommand.getDate())
+                () -> assertNotNull(income),
+                () -> assertEquals(description, income.getDescription()),
+                () -> assertEquals(amount, income.getAmount()),
+                () -> assertEquals(date, income.getDate())
         );
     }
 
@@ -33,13 +33,13 @@ class RegisterIncomeCommandTest {
     void shouldThrownDomainValidationExceptionWhenSomeFieldsValueIsInvalid(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> IncomeCommand.of(description, 0.0, date),
+                        () -> Income.of(description, 0.0, date),
                         "Amount field is zero."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> IncomeCommand.of("", amount, date),
+                        () -> Income.of("", amount, date),
                         "Description fiels is blank or empty."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> IncomeCommand.of(description, amount, null),
+                        () -> Income.of(description, amount, null),
                         "Date field is null.")
         );
     }

@@ -1,10 +1,9 @@
 package br.com.janadev.budget.domain.income.usecases;
 
-import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.commands.IncomeCommand;
-import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
+import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS;
 
@@ -16,11 +15,10 @@ public class RegisterIncomeUseCase implements RegisterIncomePort {
     }
 
     @Override
-    public Income registerIncome(IncomeCommand command) {
-        if (incomeDatabasePort.descriptionAlreadyExists(command.getDescription())){
+    public Income registerIncome(Income income) {
+        if (incomeDatabasePort.descriptionAlreadyExists(income.getDescription())){
             throw new IncomeAlreadyExistsException(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS);
         }
-        var income = Income.of(command.getDescription(), command.getAmount(), command.getDate());
         return incomeDatabasePort.save(income);
     }
 }

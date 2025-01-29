@@ -2,7 +2,6 @@ package br.com.janadev.budget.unit.domain.income.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.exception.IncomeAlreadyExistsException;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.UpdateIncomeUseCase;
@@ -39,7 +38,7 @@ class UpdateIncomeUseCaseTest {
         var date = LocalDate.of(2025, Month.JANUARY, 23);
         var income = Income.of(id, description, amount, date);
 
-        var incomeCommand = IncomeCommand.of(description, 5000.0, LocalDate.of(2025, Month.JANUARY, 15));
+        var incomeCommand = Income.of(description, 5000.0, LocalDate.of(2025, Month.JANUARY, 15));
         var incomeUpdatedExpected = Income.of(id, description, incomeCommand.getAmount(), incomeCommand.getDate());
 
         when(incomeDatabasePort.findById(any())).thenReturn(income);
@@ -58,7 +57,7 @@ class UpdateIncomeUseCaseTest {
 
     @Test
     void shouldThrowsDomainNotFoundExceptionWhenIncomeNotFound(){
-        var incomeCommand = IncomeCommand.of("Salário", 3000.0, LocalDate.of(2025, Month.JANUARY, 23));
+        var incomeCommand = Income.of("Salário", 3000.0, LocalDate.of(2025, Month.JANUARY, 23));
         when(incomeDatabasePort.findById(any())).thenReturn(null);
 
         assertThrows(DomainNotFoundException.class,
@@ -67,7 +66,7 @@ class UpdateIncomeUseCaseTest {
 
     @Test
     void shouldThrowsIncomeAlreadyExistsExceptionWhenTryChangeDescriptionAndDescriptionAlreadyExists(){
-        var incomeCommand = IncomeCommand.of("Salário", 3000.0,
+        var incomeCommand = Income.of("Salário", 3000.0,
                 LocalDate.of(2025, Month.JANUARY, 23));
         when(incomeDatabasePort.descriptionAlreadyExists(any())).thenReturn(true);
         when(incomeDatabasePort.findById(any())).thenReturn(Income.of(2L, "Vendas", 2000.0,

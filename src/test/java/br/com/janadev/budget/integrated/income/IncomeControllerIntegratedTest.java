@@ -1,6 +1,5 @@
 package br.com.janadev.budget.integrated.income;
 
-import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
@@ -118,11 +117,13 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
     @Test
     void shouldUpdateIncomeSuccessfully(){
-        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)));
+        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salário", 5000.0,
+                LocalDate.of(2025, Month.JANUARY, 21)));
 
-        var incomeCommand = IncomeCommand.of("Salário", 6000.0, LocalDate.of(2025, Month.JANUARY, 21));
+        var incomeRequestDTO = new IncomeRequestDTO("Salário", 6000.0,
+                LocalDate.of(2025, Month.JANUARY, 21));
 
-        HttpEntity<IncomeCommand> requestEntity = new HttpEntity<>(incomeCommand);
+        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(incomeRequestDTO);
 
         ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
                 requestEntity,

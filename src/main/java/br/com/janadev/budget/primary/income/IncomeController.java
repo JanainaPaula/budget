@@ -1,7 +1,6 @@
 package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.commands.IncomeCommand;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
@@ -46,8 +45,8 @@ public class IncomeController {
 
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
-        var command = IncomeCommand.of(request.description(), request.amount(), request.date());
-        var response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(command));
+        var income = Income.of(request.description(), request.amount(), request.date());
+        var response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(income));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
     }
 
@@ -65,7 +64,7 @@ public class IncomeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<IncomeResponseDTO> update(@PathVariable Long id, @RequestBody IncomeRequestDTO request){
-        var command = IncomeCommand.of(request.description(), request.amount(), request.date());
+        var command = Income.of(request.description(), request.amount(), request.date());
         var response = IncomeResponseDTO.toDTO(updateIncomePort.update(id, command));
         return ResponseEntity.ok(response);
     }
