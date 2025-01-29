@@ -35,6 +35,7 @@ public abstract class TestContainersConfig {
     @AfterEach
     void tearDown(){
         jdbcTemplate.execute("TRUNCATE TABLE incomes");
+        jdbcTemplate.execute("TRUNCATE TABLE expenses");
     }
 
     @DynamicPropertySource
