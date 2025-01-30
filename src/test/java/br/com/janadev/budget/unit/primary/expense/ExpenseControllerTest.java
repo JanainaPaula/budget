@@ -1,6 +1,8 @@
 package br.com.janadev.budget.unit.primary.expense;
 
+import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.ports.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.RegisterExpensePort;
 import br.com.janadev.budget.primary.expense.ExpenseController;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
@@ -21,10 +23,12 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_DESCRIPTION_CANNOT_BE_NULL;
+import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers = ExpenseController.class)
@@ -35,6 +39,8 @@ class ExpenseControllerTest {
     private ObjectMapper objectMapper;
     @MockitoBean
     private RegisterExpensePort registerExpensePort;
+    @MockitoBean
+    private GetExpenseDetailsPort getExpenseDetailsPort;
     private JacksonTester<ExpenseRequestDTO> jsonRequestDto;
     private JacksonTester<ExpenseResponseDTO> jsonResponseDto;
     private JacksonTester<ErrorResponse> jsonErrorResponse;
@@ -94,5 +100,47 @@ class ExpenseControllerTest {
                 () -> assertEquals("DomainValidationException", errorResponse.getException()),
                 () -> assertEquals("/expenses", errorResponse.getPath())
         );
+    }
+
+    @Test
+    void shouldRespondWithStatus200WhenGetExpenseDetailsSuccessfully() throws Exception {
+        var expenseExpected = Expense.of(2L, "Luz", 150.0,
+                LocalDate.of(2025, Month.JANUARY, 30));
+        when(getExpenseDetailsPort.getDetails(any())).thenReturn(expenseExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/expenses/{id}", 2L)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        ExpenseResponseDTO expense = jsonResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(expenseExpected.getId(), expense.id()),
+                () -> assertEquals(expenseExpected.getDescription(), expense.description()),
+                () -> assertEquals(expenseExpected.getAmount(), expense.amount()),
+                () -> assertEquals(expenseExpected.getDate(), expense.date())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus400WhenTryGetExpenseDetailsAndExpenseDoesNotExist() throws Exception {
+        when(getExpenseDetailsPort.getDetails(any())).thenThrow(new DomainNotFoundException(EXPENSE_NOT_FOUND));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/expenses/{id}", 2L)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        ErrorResponse errorResponse = jsonErrorResponse.parse(response.getContentAsString()).getObject();
+
+        assertEquals(400, response.getStatus());
+        assertAll(
+                () -> assertEquals(EXPENSE_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
+                () -> assertEquals("/expenses/2", errorResponse.getPath())
+        );
+
     }
 }
