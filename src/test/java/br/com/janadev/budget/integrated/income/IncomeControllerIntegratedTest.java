@@ -60,7 +60,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 LocalDate.of(2025, Month.JANUARY, 23));
         incomeRepository.save(incomeDBO);
 
-        IncomeRequestDTO request = new IncomeRequestDTO("Salário", 1000.0,
+        var request = new IncomeRequestDTO("Salário", 1000.0,
                 LocalDate.of(2025, Month.JANUARY, 21));
 
         ResponseEntity<ErrorResponse> responseEntity =
@@ -75,7 +75,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals("/incomes", errorResponse.getPath())
         );
 
-        IncomeRequestDTO requestIncomeInFebruary = new IncomeRequestDTO("Salário", 1000.0,
+        var requestIncomeInFebruary = new IncomeRequestDTO("Salário", 1000.0,
                 LocalDate.of(2025, Month.FEBRUARY, 21));
 
         ResponseEntity<IncomeResponseDTO> responseEntity1 =
