@@ -35,4 +35,20 @@ public class ExpenseDBO {
     public Expense toDomain(){
         return Expense.of(this.id, this.description, this.amount, this.date);
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 }

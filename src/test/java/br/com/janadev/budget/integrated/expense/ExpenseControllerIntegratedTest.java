@@ -3,6 +3,7 @@ package br.com.janadev.budget.integrated.expense;
 import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
+import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.secondary.expense.ExpenseDBO;
 import br.com.janadev.budget.secondary.expense.ExpenseRepository;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
+import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -81,6 +83,41 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(requestGasToFebruary.description(), response.description()),
                 () -> assertEquals(requestGasToFebruary.amount(), response.amount()),
                 () -> assertEquals(requestGasToFebruary.date(), response.date())
+        );
+    }
+
+    @Test
+    void shouldGetExpenseDetailsSuccessfully(){
+        var expenseExpected = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
+                LocalDate.of(2025, Month.FEBRUARY, 1))
+        );
+
+        ResponseEntity<ExpenseResponseDTO> responseEntity =
+                restTemplate.getForEntity("/expenses/{id}", ExpenseResponseDTO.class, expenseExpected.getId());
+
+        ExpenseResponseDTO response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(expenseExpected.getId(), response.id()),
+                () -> assertEquals(expenseExpected.getDescription(), response.description()),
+                () -> assertEquals(expenseExpected.getAmount(), response.amount()),
+                () -> assertEquals(expenseExpected.getDate(), response.date())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus400WhenTryGetDetailsOfExpenseThatNotExist(){
+        ResponseEntity<ErrorResponse> responseEntity =
+                restTemplate.getForEntity("/expenses/{id}", ErrorResponse.class, 2);
+
+        ErrorResponse errorResponse = responseEntity.getBody();
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(EXPENSE_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
+                () -> assertEquals("/expenses/2", errorResponse.getPath())
         );
     }
 }
