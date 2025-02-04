@@ -1,6 +1,7 @@
 package br.com.janadev.budget.secondary.expense.config;
 
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
 import br.com.janadev.budget.domain.expense.usecases.GetExpenseDetailsUseCase;
 import br.com.janadev.budget.domain.expense.usecases.RegisterExpenseUseCase;
 import org.springframework.context.annotation.Bean;
@@ -23,5 +24,10 @@ public class ExpenseDatabaseConfig {
     @Bean
     public GetExpenseDetailsUseCase getExpenseDetailsUseCase(){
         return new GetExpenseDetailsUseCase(expenseDatabasePort);
+    }
+
+    @Bean
+    public FindAllExpensesUseCase findAllExpensesUseCase(){
+        return new FindAllExpensesUseCase(expenseDatabasePort);
     }
 }
