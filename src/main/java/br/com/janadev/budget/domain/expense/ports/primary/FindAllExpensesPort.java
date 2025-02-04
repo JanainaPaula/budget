@@ -4,6 +4,6 @@ import br.com.janadev.budget.domain.expense.Expense;
 
 import java.util.List;
 
-public interface FindAllExpensePort {
+public interface FindAllExpensesPort {
     List<Expense> findAll();
 }
