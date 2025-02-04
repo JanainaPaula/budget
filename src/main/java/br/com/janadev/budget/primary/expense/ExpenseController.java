@@ -3,6 +3,7 @@ package br.com.janadev.budget.primary.expense;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/expenses")
@@ -21,10 +23,14 @@ public class ExpenseController {
 
     private final RegisterExpensePort registerExpensePort;
     private final GetExpenseDetailsPort getExpenseDetailsPort;
+    private final FindAllExpensesUseCase findAllExpensesUseCase;
 
-    public ExpenseController(RegisterExpensePort registerExpensePort, GetExpenseDetailsPort getExpenseDetailsPort) {
+    public ExpenseController(RegisterExpensePort registerExpensePort,
+                             GetExpenseDetailsPort getExpenseDetailsPort,
+                             FindAllExpensesUseCase findAllExpensesUseCase) {
         this.registerExpensePort = registerExpensePort;
         this.getExpenseDetailsPort = getExpenseDetailsPort;
+        this.findAllExpensesUseCase = findAllExpensesUseCase;
     }
 
     @PostMapping
@@ -39,5 +45,12 @@ public class ExpenseController {
     public ResponseEntity<ExpenseResponseDTO> getDetails(@PathVariable Long id){
         Expense expense = getExpenseDetailsPort.getDetails(id);
         return ResponseEntity.ok(ExpenseResponseDTO.toDTO(expense));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ExpenseResponseDTO>> findAll(){
+        List<ExpenseResponseDTO> expenses =
+                findAllExpensesUseCase.findAll().stream().map(ExpenseResponseDTO::toDTO).toList();
+        return ResponseEntity.ok(expenses);
     }
 }
