@@ -1,8 +1,8 @@
 package br.com.janadev.budget.primary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
-import br.com.janadev.budget.domain.expense.ports.GetExpenseDetailsPort;
-import br.com.janadev.budget.domain.expense.ports.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
+import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import org.springframework.http.ResponseEntity;

@@ -2,8 +2,8 @@ package br.com.janadev.budget.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
-import br.com.janadev.budget.domain.expense.ports.ExpenseDatabasePort;
-import br.com.janadev.budget.domain.expense.ports.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 
 import java.time.LocalDate;
 

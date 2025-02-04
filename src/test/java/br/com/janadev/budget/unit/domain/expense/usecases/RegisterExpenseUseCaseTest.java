@@ -2,7 +2,7 @@ package br.com.janadev.budget.unit.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
-import br.com.janadev.budget.domain.expense.ports.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.RegisterExpenseUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

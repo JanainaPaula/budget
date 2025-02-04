@@ -1,4 +1,4 @@
-package br.com.janadev.budget.domain.expense.ports;
+package br.com.janadev.budget.domain.expense.ports.secondary;
 
 import br.com.janadev.budget.domain.expense.Expense;
 

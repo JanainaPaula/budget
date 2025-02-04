@@ -1,7 +1,7 @@
 package br.com.janadev.budget.secondary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
-import br.com.janadev.budget.domain.expense.ports.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

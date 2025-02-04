@@ -1,6 +1,6 @@
 package br.com.janadev.budget.secondary.expense.config;
 
-import br.com.janadev.budget.domain.expense.ports.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.GetExpenseDetailsUseCase;
 import br.com.janadev.budget.domain.expense.usecases.RegisterExpenseUseCase;
 import org.springframework.context.annotation.Bean;
