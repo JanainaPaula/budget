@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
@@ -29,5 +30,10 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     @Override
     public Expense findById(Long id) {
         return expenseRepository.findById(id).map(ExpenseDBO::toDomain).orElse(null);
+    }
+
+    @Override
+    public List<Expense> findAll() {
+        return null;
     }
 }
