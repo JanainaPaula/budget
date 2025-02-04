@@ -2,6 +2,7 @@ package br.com.janadev.budget.unit.primary.expense;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.primary.expense.ExpenseController;
@@ -21,11 +22,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_DESCRIPTION_CANNOT_BE_NULL;
 import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,8 +44,11 @@ class ExpenseControllerTest {
     private RegisterExpensePort registerExpensePort;
     @MockitoBean
     private GetExpenseDetailsPort getExpenseDetailsPort;
+    @MockitoBean
+    private FindAllExpensesPort findAllExpensesPort;
     private JacksonTester<ExpenseRequestDTO> jsonRequestDto;
     private JacksonTester<ExpenseResponseDTO> jsonResponseDto;
+    private JacksonTester<List<ExpenseResponseDTO>> jsonResponseDtoList;
     private JacksonTester<ErrorResponse> jsonErrorResponse;
 
     @BeforeEach
@@ -142,5 +148,35 @@ class ExpenseControllerTest {
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
         );
 
+    }
+
+    @Test
+    void shouldRespondWithStatus200WhenFindAllExpensesSuccessFully() throws Exception {
+        List<Expense> expensesExpected = List.of(
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29)),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30))
+        );
+
+        when(findAllExpensesPort.findAll()).thenReturn(expensesExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        List<ExpenseResponseDTO> expenses = jsonResponseDtoList.parse(response.getContentAsString()).getObject();
+
+        assertNotNull(expenses);
+        assertAll(
+                () -> assertEquals(expensesExpected.size(), expenses.size()),
+                () -> assertEquals(expensesExpected.get(0).getId(), expenses.get(0).id()),
+                () -> assertEquals(expensesExpected.get(0).getDescription(), expenses.get(0).description()),
+                () -> assertEquals(expensesExpected.get(0).getAmount(), expenses.get(0).amount()),
+                () -> assertEquals(expensesExpected.get(0).getDate(), expenses.get(0).date()),
+                () -> assertEquals(expensesExpected.get(1).getId(), expenses.get(1).id()),
+                () -> assertEquals(expensesExpected.get(1).getDescription(), expenses.get(1).description()),
+                () -> assertEquals(expensesExpected.get(1).getAmount(), expenses.get(1).amount()),
+                () -> assertEquals(expensesExpected.get(1).getDate(), expenses.get(1).date())
+        );
     }
 }

@@ -1,9 +1,9 @@
 package br.com.janadev.budget.primary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
-import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,14 @@ public class ExpenseController {
 
     private final RegisterExpensePort registerExpensePort;
     private final GetExpenseDetailsPort getExpenseDetailsPort;
-    private final FindAllExpensesUseCase findAllExpensesUseCase;
+    private final FindAllExpensesPort findAllExpensesPort;
 
     public ExpenseController(RegisterExpensePort registerExpensePort,
                              GetExpenseDetailsPort getExpenseDetailsPort,
-                             FindAllExpensesUseCase findAllExpensesUseCase) {
+                             FindAllExpensesPort findAllExpensesPort) {
         this.registerExpensePort = registerExpensePort;
         this.getExpenseDetailsPort = getExpenseDetailsPort;
-        this.findAllExpensesUseCase = findAllExpensesUseCase;
+        this.findAllExpensesPort = findAllExpensesPort;
     }
 
     @PostMapping
@@ -50,7 +50,7 @@ public class ExpenseController {
     @GetMapping
     public ResponseEntity<List<ExpenseResponseDTO>> findAll(){
         List<ExpenseResponseDTO> expenses =
-                findAllExpensesUseCase.findAll().stream().map(ExpenseResponseDTO::toDTO).toList();
+                findAllExpensesPort.findAll().stream().map(ExpenseResponseDTO::toDTO).toList();
         return ResponseEntity.ok(expenses);
     }
 }
