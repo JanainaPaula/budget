@@ -10,4 +10,5 @@ public interface ExpenseDatabasePort {
     boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate);
     Expense findById(Long id);
     List<Expense> findAll();
+    void delete(Expense expense);
 }

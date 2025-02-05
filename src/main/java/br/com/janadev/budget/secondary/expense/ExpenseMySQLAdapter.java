@@ -36,4 +36,9 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     public List<Expense> findAll() {
         return expenseRepository.findAll().stream().map(ExpenseDBO::toDomain).toList();
     }
+
+    @Override
+    public void delete(Expense expense) {
+
+    }
 }
