@@ -7,6 +7,7 @@ public class ExpenseErrorMessages {
     public static final String EXPENSE_DATE_CANNOT_BE_NULL = "Date cannot be null.";
     public static final String EXPENSE_DESCRIPTION_ALREADY_EXIST = "Already exist an expence with this description.";
     public static final String EXPENSE_NOT_FOUND = "Expense not found.";
+    public static final String EXPENSE_DELETE_FAILED_NOT_FOUND = "Could not delete. Expense not found.";
 
     private ExpenseErrorMessages() {
     }
