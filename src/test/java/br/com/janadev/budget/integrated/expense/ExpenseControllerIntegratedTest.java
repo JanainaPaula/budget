@@ -4,6 +4,7 @@ import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
+import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import br.com.janadev.budget.secondary.expense.ExpenseDBO;
 import br.com.janadev.budget.secondary.expense.ExpenseRepository;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -22,6 +25,7 @@ import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessage
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureJsonTesters
@@ -119,5 +123,45 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
         );
+    }
+    
+    @Test
+    void shouldFindAllExpensesSuccessfully(){
+        List<ExpenseDBO> expenseExpected = List.of(
+                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29)),
+                ExpenseDBO.of("Gás", 30.0, LocalDate.of(2025, Month.JANUARY, 30))
+        );
+        
+        expenseRepository.saveAll(expenseExpected);
+
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        List<IncomeResponseDTO> response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(expenseExpected.get(0).getId(), response.get(0).id()),
+                () -> assertEquals(expenseExpected.get(0).getDescription(), response.get(0).description()),
+                () -> assertEquals(expenseExpected.get(0).getAmount(), response.get(0).amount()),
+                () -> assertEquals(expenseExpected.get(0).getDate(), response.get(0).date()),
+                () -> assertEquals(expenseExpected.get(1).getId(), response.get(1).id()),
+                () -> assertEquals(expenseExpected.get(1).getDescription(), response.get(1).description()),
+                () -> assertEquals(expenseExpected.get(1).getAmount(), response.get(1).amount()),
+                () -> assertEquals(expenseExpected.get(1).getDate(), response.get(1).date())
+        );
+    }
+
+    @Test
+    void shouldReturnStatusCode200WhenThereNotExpenses(){
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        List<IncomeResponseDTO> response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertTrue(response.isEmpty());
     }
 }
