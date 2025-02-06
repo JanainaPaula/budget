@@ -2,6 +2,7 @@ package br.com.janadev.budget.unit.primary.expense;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
@@ -30,7 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -46,6 +49,8 @@ class ExpenseControllerTest {
     private GetExpenseDetailsPort getExpenseDetailsPort;
     @MockitoBean
     private FindAllExpensesPort findAllExpensesPort;
+    @MockitoBean
+    private DeleteExpensePort deleteExpensePort;
     private JacksonTester<ExpenseRequestDTO> jsonRequestDto;
     private JacksonTester<ExpenseResponseDTO> jsonResponseDto;
     private JacksonTester<List<ExpenseResponseDTO>> jsonResponseDtoList;
@@ -178,5 +183,16 @@ class ExpenseControllerTest {
                 () -> assertEquals(expensesExpected.get(1).getAmount(), expenses.get(1).amount()),
                 () -> assertEquals(expensesExpected.get(1).getDate(), expenses.get(1).date())
         );
+    }
+
+    @Test
+    void shouldDeleteExpenseSuccessFully() throws Exception {
+        doNothing().when(deleteExpensePort).delete(any());
+
+        MockHttpServletResponse response = mockMvc.perform(
+                delete("/expenses/{id}", 2)
+        ).andReturn().getResponse();
+
+        assertEquals(204, response.getStatus());
     }
 }
