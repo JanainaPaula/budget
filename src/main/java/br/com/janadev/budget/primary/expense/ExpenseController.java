@@ -1,12 +1,14 @@
 package br.com.janadev.budget.primary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +26,16 @@ public class ExpenseController {
     private final RegisterExpensePort registerExpensePort;
     private final GetExpenseDetailsPort getExpenseDetailsPort;
     private final FindAllExpensesPort findAllExpensesPort;
+    private final DeleteExpensePort deleteExpensePort;
 
     public ExpenseController(RegisterExpensePort registerExpensePort,
                              GetExpenseDetailsPort getExpenseDetailsPort,
-                             FindAllExpensesPort findAllExpensesPort) {
+                             FindAllExpensesPort findAllExpensesPort,
+                             DeleteExpensePort deleteExpensePort) {
         this.registerExpensePort = registerExpensePort;
         this.getExpenseDetailsPort = getExpenseDetailsPort;
         this.findAllExpensesPort = findAllExpensesPort;
+        this.deleteExpensePort = deleteExpensePort;
     }
 
     @PostMapping
@@ -52,5 +57,11 @@ public class ExpenseController {
         List<ExpenseResponseDTO> expenses =
                 findAllExpensesPort.findAll().stream().map(ExpenseResponseDTO::toDTO).toList();
         return ResponseEntity.ok(expenses);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        deleteExpensePort.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
