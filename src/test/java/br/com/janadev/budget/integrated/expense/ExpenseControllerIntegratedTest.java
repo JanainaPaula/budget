@@ -21,9 +21,11 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
+import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_DELETE_FAILED_NOT_FOUND;
 import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -163,5 +165,33 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(200, responseEntity.getStatusCode().value());
         assertTrue(response.isEmpty());
+    }
+
+    @Test
+    void shouldDeleteExpenseSuccessfully(){
+        ExpenseDBO expenseSaved = expenseRepository.save(
+                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29))
+        );
+
+        ResponseEntity<Void> responseEntity = restTemplate.exchange("/expenses/{id}", HttpMethod.DELETE,
+                null, Void.class, expenseSaved.getId());
+
+        assertEquals(204, responseEntity.getStatusCode().value());
+        assertFalse(expenseRepository.findById(expenseSaved.getId()).isPresent());
+    }
+
+    @Test
+    void shouldThrowDomainNotFoundExceptionWhenTryDeleteExpenseThatNotExist(){
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/expenses/{id}", HttpMethod.DELETE,
+                null, ErrorResponse.class, 2);
+
+        ErrorResponse errorResponse = responseEntity.getBody();
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(EXPENSE_DELETE_FAILED_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
+                () -> assertEquals("/expenses/2", errorResponse.getPath())
+        );
     }
 }
