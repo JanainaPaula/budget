@@ -28,8 +28,19 @@ public class ExpenseDBO {
         this.date = date;
     }
 
+    private ExpenseDBO(Long id, String description, Double amount, LocalDate date) {
+        this.id = id;
+        this.description = description;
+        this.amount = amount;
+        this.date = date;
+    }
+
     public static ExpenseDBO of(String description, Double amount, LocalDate date){
         return new ExpenseDBO(description, amount, date);
+    }
+
+    public static ExpenseDBO of(Long id, String description, Double amount, LocalDate date){
+        return new ExpenseDBO(id, description, amount, date);
     }
 
     public Expense toDomain(){

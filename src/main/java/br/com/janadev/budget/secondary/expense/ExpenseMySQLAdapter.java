@@ -39,6 +39,7 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public void delete(Expense expense) {
-
+        ExpenseDBO expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(), expense.getDate());
+        expenseRepository.delete(expenseDBO);
     }
 }
