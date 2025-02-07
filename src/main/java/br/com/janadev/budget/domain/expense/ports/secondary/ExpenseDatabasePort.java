@@ -11,4 +11,5 @@ public interface ExpenseDatabasePort {
     Expense findById(Long id);
     List<Expense> findAll();
     void delete(Expense expense);
+    Expense update(Expense expense);
 }

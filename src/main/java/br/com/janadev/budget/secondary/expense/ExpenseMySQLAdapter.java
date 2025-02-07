@@ -42,4 +42,9 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
         ExpenseDBO expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(), expense.getDate());
         expenseRepository.delete(expenseDBO);
     }
+
+    @Override
+    public Expense update(Expense expense) {
+        return null;
+    }
 }
