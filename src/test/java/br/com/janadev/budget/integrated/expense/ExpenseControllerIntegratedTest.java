@@ -33,7 +33,6 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
     @Autowired
     private ExpenseRepository expenseRepository;
 

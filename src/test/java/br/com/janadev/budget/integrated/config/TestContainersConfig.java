@@ -1,41 +1,33 @@
 package br.com.janadev.budget.integrated.config;
 
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 public abstract class TestContainersConfig {
 
-    @Container
-    private static MySQLContainer<?> mysqlContainer = new MySQLContainer<>(DockerImageName.parse("mysql:8.2.0"));
+    private static final MySQLContainer<?> mysqlContainer;
+
+    static {
+        System.setProperty("testcontainers.reuse.enable", "true");
+        mysqlContainer = new MySQLContainer<>(DockerImageName.parse("mysql:8.2.0"))
+                .withReuse(true);
+        mysqlContainer.start();
+    }
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @BeforeAll
-    static void beforeAll(){
-        mysqlContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll(){
-        mysqlContainer.stop();
-    }
-
     @AfterEach
     void tearDown(){
-        jdbcTemplate.execute("TRUNCATE TABLE incomes");
-        jdbcTemplate.execute("TRUNCATE TABLE expenses");
+        jdbcTemplate.execute("DELETE FROM incomes");
+        jdbcTemplate.execute("DELETE FROM expenses");
     }
 
     @DynamicPropertySource
