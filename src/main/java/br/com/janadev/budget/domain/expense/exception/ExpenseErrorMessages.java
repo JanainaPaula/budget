@@ -8,6 +8,7 @@ public class ExpenseErrorMessages {
     public static final String EXPENSE_DESCRIPTION_ALREADY_EXIST = "Already exist an expence with this description.";
     public static final String EXPENSE_NOT_FOUND = "Expense not found.";
     public static final String EXPENSE_DELETE_FAILED_NOT_FOUND = "Could not delete. Expense not found.";
+    public static final String EXPENSE_UPDATE_FAILED_NOT_FOUND = "Could not update. Expense not found.";
 
     private ExpenseErrorMessages() {
     }
