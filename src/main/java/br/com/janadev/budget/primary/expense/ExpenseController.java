@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,15 +29,18 @@ public class ExpenseController {
     private final GetExpenseDetailsPort getExpenseDetailsPort;
     private final FindAllExpensesPort findAllExpensesPort;
     private final DeleteExpensePort deleteExpensePort;
+    private final UpdateExpensePort updateExpensePort;
 
     public ExpenseController(RegisterExpensePort registerExpensePort,
                              GetExpenseDetailsPort getExpenseDetailsPort,
                              FindAllExpensesPort findAllExpensesPort,
-                             DeleteExpensePort deleteExpensePort) {
+                             DeleteExpensePort deleteExpensePort,
+                             UpdateExpensePort updateExpensePort) {
         this.registerExpensePort = registerExpensePort;
         this.getExpenseDetailsPort = getExpenseDetailsPort;
         this.findAllExpensesPort = findAllExpensesPort;
         this.deleteExpensePort = deleteExpensePort;
+        this.updateExpensePort = updateExpensePort;
     }
 
     @PostMapping
@@ -63,5 +68,12 @@ public class ExpenseController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         deleteExpensePort.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ExpenseResponseDTO> update(@PathVariable Long id, @RequestBody ExpenseRequestDTO request){
+        Expense expenseUpdated = updateExpensePort.update(id,
+                Expense.of(request.description(), request.amount(), request.date()));
+        return ResponseEntity.ok(ExpenseResponseDTO.toDTO(expenseUpdated));
     }
 }
