@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.expense.usecases.DeleteExpenseUseCase;
 import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
 import br.com.janadev.budget.domain.expense.usecases.GetExpenseDetailsUseCase;
 import br.com.janadev.budget.domain.expense.usecases.RegisterExpenseUseCase;
+import br.com.janadev.budget.domain.expense.usecases.UpdateExpenseUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,5 +36,10 @@ public class ExpenseDatabaseConfig {
     @Bean
     public DeleteExpenseUseCase deleteExpenseUseCase(){
         return new DeleteExpenseUseCase(expenseDatabasePort);
+    }
+
+    @Bean
+    public UpdateExpenseUseCase updateExpenseUseCase(){
+        return new UpdateExpenseUseCase(expenseDatabasePort);
     }
 }
