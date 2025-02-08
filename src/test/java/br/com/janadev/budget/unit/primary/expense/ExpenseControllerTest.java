@@ -6,6 +6,7 @@ import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
 import br.com.janadev.budget.primary.expense.ExpenseController;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
@@ -36,6 +37,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(controllers = ExpenseController.class)
 class ExpenseControllerTest {
@@ -51,6 +53,8 @@ class ExpenseControllerTest {
     private FindAllExpensesPort findAllExpensesPort;
     @MockitoBean
     private DeleteExpensePort deleteExpensePort;
+    @MockitoBean
+    private UpdateExpensePort updateExpensePort;
     private JacksonTester<ExpenseRequestDTO> jsonRequestDto;
     private JacksonTester<ExpenseResponseDTO> jsonResponseDto;
     private JacksonTester<List<ExpenseResponseDTO>> jsonResponseDtoList;
@@ -194,5 +198,32 @@ class ExpenseControllerTest {
         ).andReturn().getResponse();
 
         assertEquals(204, response.getStatus());
+    }
+
+    @Test
+    void shouldUpdateExpenseSuccessfully() throws Exception {
+        var expenseExpected = Expense.of(2L, "Gás", 50.0,
+                LocalDate.of(2025, Month.JANUARY, 29));
+        when(updateExpensePort.update(any(), any())).thenReturn(expenseExpected);
+
+        var request = new ExpenseRequestDTO(expenseExpected.getDescription(),
+                expenseExpected.getAmount(),
+                expenseExpected.getDate());
+
+        MockHttpServletResponse response = mockMvc.perform(
+                put("/expenses/{id}", 2)
+                        .content(jsonRequestDto.write(request).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        ExpenseResponseDTO expense = jsonResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(expenseExpected.getId(), expense.id()),
+                () -> assertEquals(expenseExpected.getDescription(), expense.description()),
+                () -> assertEquals(expenseExpected.getAmount(), expense.amount()),
+                () -> assertEquals(expenseExpected.getDate(), expense.date())
+        );
     }
 }
