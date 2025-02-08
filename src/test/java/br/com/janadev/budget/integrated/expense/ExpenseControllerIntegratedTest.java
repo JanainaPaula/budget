@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -189,6 +190,30 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(EXPENSE_DELETE_FAILED_NOT_FOUND, errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
+        );
+    }
+
+    @Test
+    void shouldUpdateExpenseSuccessfully(){
+        var expenseDBO = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
+                LocalDate.of(2025, Month.JANUARY, 30)));
+
+        var expenseRequest = new ExpenseRequestDTO("Gás", 50.0,
+                LocalDate.of(2025, Month.JANUARY, 30));
+        HttpEntity<ExpenseRequestDTO> request = new HttpEntity<>(expenseRequest);
+
+        ResponseEntity<ExpenseResponseDTO> responseEntity =
+                restTemplate.exchange("/expenses/{id}", HttpMethod.PUT, request,
+                        ExpenseResponseDTO.class, expenseDBO.getId());
+
+        ExpenseResponseDTO response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(expenseDBO.getId(), response.id()),
+                () -> assertEquals("Gás", response.description()),
+                () -> assertEquals(50.0, response.amount()),
+                () -> assertEquals(expenseDBO.getDate(), response.date())
         );
     }
 }
