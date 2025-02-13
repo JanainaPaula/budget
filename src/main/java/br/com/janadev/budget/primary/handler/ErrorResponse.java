@@ -25,10 +25,6 @@ public class ErrorResponse{
         this.path = path;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -39,9 +35,5 @@ public class ErrorResponse{
 
     public String getPath() {
         return path;
-    }
-
-    public String getCause() {
-        return cause;
     }
 }
