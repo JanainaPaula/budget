@@ -23,7 +23,7 @@ public enum Category {
         return this.name;
     }
 
-    public Category getCategoryByName(String name){
+    public static Category getCategoryByName(String name){
         List<Category> categories = List.of(Category.values());
         return categories.stream()
                 .filter(category -> Objects.equals(category.getName(), name))

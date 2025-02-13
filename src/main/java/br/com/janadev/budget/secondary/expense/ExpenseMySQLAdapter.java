@@ -18,7 +18,8 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public Expense register(Expense expense) {
-        var expenseDBO = ExpenseDBO.of(expense.getDescription(), expense.getAmount(), expense.getDate());
+        var expenseDBO = ExpenseDBO.of(expense.getDescription(), expense.getAmount(), expense.getDate(),
+                expense.getCategoryName());
         return expenseRepository.save(expenseDBO).toDomain();
     }
 
@@ -39,13 +40,15 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public void delete(Expense expense) {
-        var expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(), expense.getDate());
+        var expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(), expense.getDate(),
+                expense.getCategoryName());
         expenseRepository.delete(expenseDBO);
     }
 
     @Override
     public Expense update(Expense expense) {
-        var expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(), expense.getDate());
+        var expenseDBO = ExpenseDBO.of(expense.getId(), expense.getDescription(), expense.getAmount(),
+                expense.getDate(), expense.getCategoryName());
         return expenseRepository.save(expenseDBO).toDomain();
     }
 }

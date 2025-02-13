@@ -1,5 +1,6 @@
 package br.com.janadev.budget.integrated.expense;
 
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.integrated.config.TestContainersConfig;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
@@ -59,9 +60,9 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
     @Test
     void shouldThrowExpenseAlreadyExistExceptionWhenTryRegisterExpenseWithDescriptionThatAlreadyExistInTheMonth() throws IOException {
         var januaryLuz = ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 28));
+                LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
         var januaryGas = ExpenseDBO.of("Gás", 30.0,
-                LocalDate.of(2025, Month.JANUARY, 27));
+                LocalDate.of(2025, Month.JANUARY, 27), Category.HOUSE.getName());
 
         expenseRepository.saveAll(List.of(januaryLuz, januaryGas));
 
@@ -87,13 +88,14 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(requestGasToFebruary.description(), response.description()),
                 () -> assertEquals(requestGasToFebruary.amount(), response.amount()),
                 () -> assertEquals(requestGasToFebruary.date(), response.date())
+//                () -> assertEquals(requestGasToFebruary)
         );
     }
 
     @Test
     void shouldGetExpenseDetailsSuccessfully(){
         var expenseExpected = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 1))
+                LocalDate.of(2025, Month.FEBRUARY, 1), "House")
         );
 
         ResponseEntity<ExpenseResponseDTO> responseEntity =
@@ -128,8 +130,10 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
     @Test
     void shouldFindAllExpensesSuccessfully(){
         List<ExpenseDBO> expenseExpected = List.of(
-                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29)),
-                ExpenseDBO.of("Gás", 30.0, LocalDate.of(2025, Month.JANUARY, 30))
+                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29),
+                        Category.HOUSE.getName()),
+                ExpenseDBO.of("Gás", 30.0, LocalDate.of(2025, Month.JANUARY, 30),
+                        Category.HOUSE.getName())
         );
         
         expenseRepository.saveAll(expenseExpected);
@@ -168,7 +172,8 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
     @Test
     void shouldDeleteExpenseSuccessfully(){
         ExpenseDBO expenseSaved = expenseRepository.save(
-                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29))
+                ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29),
+                        Category.HOUSE.getName())
         );
 
         ResponseEntity<Void> responseEntity = restTemplate.exchange("/expenses/{id}", HttpMethod.DELETE,
@@ -196,7 +201,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
     @Test
     void shouldUpdateExpenseSuccessfully(){
         var expenseDBO = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30)));
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName()));
 
         var expenseRequest = new ExpenseRequestDTO("Gás", 50.0,
                 LocalDate.of(2025, Month.JANUARY, 30));

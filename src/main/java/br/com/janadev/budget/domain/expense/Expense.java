@@ -13,28 +13,35 @@ public class Expense {
     private final String description;
     private final Double amount;
     private final LocalDate date;
+    private final Category category;
 
-    private Expense(String description, Double amount, LocalDate date) {
+    private Expense(String description, Double amount, LocalDate date, Category category) {
         validateFields(description, amount, date);
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.category = setCategory(category);
     }
 
-    private Expense(Long id, String description, Double amount, LocalDate date) {
+    private Expense(Long id, String description, Double amount, LocalDate date, Category category) {
         validateFields(description, amount, date);
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.category = setCategory(category);
     }
 
-    public static Expense of(Long id, String description, Double amount, LocalDate date){
-        return new Expense(id, description, amount, date);
+    private static Category setCategory(Category category) {
+        return category != null ? category : Category.OTHERS;
     }
 
-    public static Expense of(String description, Double amount, LocalDate date){
-        return new Expense(description, amount, date);
+    public static Expense of(Long id, String description, Double amount, LocalDate date, Category category){
+        return new Expense(id, description, amount, date, category);
+    }
+
+    public static Expense of(String description, Double amount, LocalDate date, Category category){
+        return new Expense(description, amount, date, category);
     }
 
     private void validateFields(String description, Double amount, LocalDate date) {
@@ -63,5 +70,9 @@ public class Expense {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public String getCategoryName() {
+        return category.getName();
     }
 }
