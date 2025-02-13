@@ -22,7 +22,8 @@ public class RegisterExpenseUseCase implements RegisterExpensePort {
         if (isAlreadyExpenseDescriptionInMonth(expenseCommand)){
             throw new ExpenseAlreadyExistException(EXPENSE_DESCRIPTION_ALREADY_EXIST);
         }
-        var expense = Expense.of(expenseCommand.getDescription(), expenseCommand.getAmount(), expenseCommand.getDate());
+        var expense = Expense.of(expenseCommand.getDescription(), expenseCommand.getAmount(), expenseCommand.getDate(),
+                expenseCommand.getCategory());
         return expenseDatabasePort.register(expense);
     }
 

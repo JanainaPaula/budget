@@ -33,7 +33,7 @@ public class UpdateExpenseUseCase implements UpdateExpensePort {
         }
 
         var expenseUpdated = Expense.of(expenseFound.getId(), expense.getDescription(),
-                expense.getAmount(), expense.getDate());
+                expense.getAmount(), expense.getDate(), expense.getCategory());
         return expenseDatabasePort.update(expenseUpdated);
     }
 

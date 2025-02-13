@@ -72,6 +72,10 @@ public class Expense {
         return date;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
     public String getCategoryName() {
         return category.getName();
     }
