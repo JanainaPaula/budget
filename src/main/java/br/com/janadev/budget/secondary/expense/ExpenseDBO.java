@@ -18,6 +18,7 @@ public class ExpenseDBO {
     private String description;
     private Double amount;
     private LocalDate date;
+    private String category;
 
     public ExpenseDBO() {
     }
