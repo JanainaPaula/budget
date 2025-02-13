@@ -1,7 +1,11 @@
 package br.com.janadev.budget.domain.expense;
 
+import br.com.janadev.budget.domain.expense.exception.CategoryNotFoundException;
+
 import java.util.List;
 import java.util.Objects;
+
+import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_CATEGORY_NOT_FOUND;
 
 public enum Category {
     FOOD("Food"),
@@ -28,7 +32,7 @@ public enum Category {
         return categories.stream()
                 .filter(category -> Objects.equals(category.getName(), name))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new CategoryNotFoundException(EXPENSE_CATEGORY_NOT_FOUND));
     }
 }
 
