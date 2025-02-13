@@ -11,7 +11,6 @@ import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 public abstract class TestContainersConfig {
-
     private static final MySQLContainer<?> mysqlContainer;
 
     static {
@@ -20,16 +19,13 @@ public abstract class TestContainersConfig {
                 .withReuse(true);
         mysqlContainer.start();
     }
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @AfterEach
     void tearDown(){
         jdbcTemplate.execute("DELETE FROM incomes");
         jdbcTemplate.execute("DELETE FROM expenses");
     }
-
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry){
         registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);

@@ -3,6 +3,7 @@ package br.com.janadev.budget.unit.domain.expense;
 import br.com.janadev.budget.domain.exceptions.DomainValidationException;
 import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.expense.exception.CategoryNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -40,6 +41,23 @@ class ExpenseTest {
                 () -> assertThrows(DomainValidationException.class,
                         () -> Expense.of(description, amount, null, Category.HOUSE))
         );
+    }
+
+    @Test
+    void shouldCreateExpenseWithCategoryOthersWhenCategoryIsNull(){
+        Expense expense = Expense.of(description, amount, date, null);
+        assertAll(
+                () -> assertEquals(description, expense.getDescription()),
+                () -> assertEquals(amount, expense.getAmount()),
+                () -> assertEquals(date, expense.getDate()),
+                () -> assertEquals(Category.OTHERS, expense.getCategory())
+        );
+    }
+
+    @Test
+    void shouldThrowsCategoryNotFoundExceptionWhenTryGetCategoryWithAInvalidName(){
+        assertThrows(CategoryNotFoundException.class,
+                () -> Category.getCategoryByName("Bolo"));
     }
 
 }

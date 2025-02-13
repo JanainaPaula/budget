@@ -32,12 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ExpenseControllerIntegratedTest extends TestContainersConfig {
-
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
     private ExpenseRepository expenseRepository;
-
     @Test
     void shouldRegisterExpenseSuccessfully(){
         var request = new ExpenseRequestDTO("Luz", 150.0,
@@ -56,7 +54,6 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(response.date(), request.date())
         );
     }
-
     @Test
     void shouldThrowExpenseAlreadyExistExceptionWhenTryRegisterExpenseWithDescriptionThatAlreadyExistInTheMonth() throws IOException {
         var januaryLuz = ExpenseDBO.of("Luz", 150.0,
