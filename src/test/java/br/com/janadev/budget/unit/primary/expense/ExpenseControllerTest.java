@@ -1,6 +1,7 @@
 package br.com.janadev.budget.unit.primary.expense;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
@@ -70,10 +71,10 @@ class ExpenseControllerTest {
         var description = "Luz";
         double amount = 150.0;
         var date = LocalDate.of(2025, Month.JANUARY, 28);
-        var request = new ExpenseRequestDTO(description, amount, date);
-        var responseExpected = new ExpenseResponseDTO(2L, description, amount, date);
+        var request = new ExpenseRequestDTO(description, amount, date, Category.HOUSE.getName());
+        var responseExpected = new ExpenseResponseDTO(2L, description, amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -97,9 +98,9 @@ class ExpenseControllerTest {
         var description = "Luz";
         double amount = 150.0;
         var date = LocalDate.of(2025, Month.JANUARY, 28);
-        var request = new ExpenseRequestDTO("", amount, date);
+        var request = new ExpenseRequestDTO("", amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -120,7 +121,7 @@ class ExpenseControllerTest {
     @Test
     void shouldRespondWithStatus200WhenGetExpenseDetailsSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30));
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE);
         when(getExpenseDetailsPort.getDetails(any())).thenReturn(expenseExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -162,8 +163,8 @@ class ExpenseControllerTest {
     @Test
     void shouldRespondWithStatus200WhenFindAllExpensesSuccessFully() throws Exception {
         List<Expense> expensesExpected = List.of(
-                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29)),
-                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30))
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE)
         );
 
         when(findAllExpensesPort.findAll()).thenReturn(expensesExpected);
@@ -203,12 +204,13 @@ class ExpenseControllerTest {
     @Test
     void shouldUpdateExpenseSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 29));
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE);
         when(updateExpensePort.update(any(), any())).thenReturn(expenseExpected);
 
         var request = new ExpenseRequestDTO(expenseExpected.getDescription(),
                 expenseExpected.getAmount(),
-                expenseExpected.getDate());
+                expenseExpected.getDate(),
+                expenseExpected.getCategoryName());
 
         MockHttpServletResponse response = mockMvc.perform(
                 put("/expenses/{id}", 2)

@@ -1,6 +1,7 @@
 package br.com.janadev.budget.unit.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.GetExpenseDetailsUseCase;
@@ -31,7 +32,7 @@ class GetExpenseDetailsUseCaseTest {
     @Test
     void shouldGetExpenseDetailsSuccessfully(){
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30));
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE);
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseExpected);
 

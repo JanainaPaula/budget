@@ -1,5 +1,6 @@
 package br.com.janadev.budget.unit.domain.expense.usecases;
 
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
@@ -30,8 +31,8 @@ class FindAllExpensesUseCaseTest {
     @Test
     void shouldFindAllExpensesSuccessfully(){
         List<Expense> expensesExpected = List.of(
-                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29)),
-                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30))
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE)
         );
 
         when(expenseDatabasePort.findAll()).thenReturn(expensesExpected);

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public record ExpenseRequestDTO(
         String description,
         Double amount,
-        LocalDate date
+        LocalDate date,
+        String category
 ) {
 }

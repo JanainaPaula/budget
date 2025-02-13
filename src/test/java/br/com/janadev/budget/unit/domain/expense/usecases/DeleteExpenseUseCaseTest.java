@@ -1,6 +1,7 @@
 package br.com.janadev.budget.unit.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.DeleteExpenseUseCase;
@@ -32,7 +33,7 @@ class DeleteExpenseUseCaseTest {
     void shouldDeleteExpenseSuccessfully(){
         when(expenseDatabasePort.findById(any())).thenReturn(
                 Expense.of(2L, "Luz", 150.0,
-                        LocalDate.of(2025, Month.JANUARY, 29))
+                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE)
         );
         doNothing().when(expenseDatabasePort).delete(any());
         assertDoesNotThrow(()-> deleteExpenseUseCase.delete(2L));

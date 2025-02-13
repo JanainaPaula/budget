@@ -1,5 +1,6 @@
 package br.com.janadev.budget.primary.expense;
 
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
@@ -46,7 +47,8 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<ExpenseResponseDTO> register(@RequestBody ExpenseRequestDTO request){
         Expense response = registerExpensePort.register(
-                Expense.of(request.description(), request.amount(), request.date()));
+                Expense.of(request.description(), request.amount(), request.date(),
+                        Category.getCategoryByName(request.category())));
         return ResponseEntity.created(URI.create(String.format("/expense/%s", response.getId())))
                 .body(ExpenseResponseDTO.toDTO(response));
     }
@@ -73,7 +75,8 @@ public class ExpenseController {
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponseDTO> update(@PathVariable Long id, @RequestBody ExpenseRequestDTO request){
         Expense expenseUpdated = updateExpensePort.update(id,
-                Expense.of(request.description(), request.amount(), request.date()));
+                Expense.of(request.description(), request.amount(), request.date(),
+                        Category.getCategoryByName(request.category())));
         return ResponseEntity.ok(ExpenseResponseDTO.toDTO(expenseUpdated));
     }
 }

@@ -41,7 +41,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
     @Test
     void shouldRegisterExpenseSuccessfully(){
         var request = new ExpenseRequestDTO("Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 28));
+                LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
 
         ResponseEntity<ExpenseResponseDTO> responseEntity =
                 restTemplate.postForEntity("/expenses", request, ExpenseResponseDTO.class);
@@ -67,7 +67,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
         expenseRepository.saveAll(List.of(januaryLuz, januaryGas));
 
         var request = new ExpenseRequestDTO("Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 28));
+                LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
 
         ResponseEntity<ExpenseResponseDTO> responseEntity =
                 restTemplate.postForEntity("/expenses", request, ExpenseResponseDTO.class);
@@ -75,7 +75,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
         assertEquals(400, responseEntity.getStatusCode().value());
 
         var requestGasToFebruary = new ExpenseRequestDTO("Gás", 50.0,
-                LocalDate.of(2025, Month.FEBRUARY, 2));
+                LocalDate.of(2025, Month.FEBRUARY, 2), Category.HOUSE.getName());
 
         ResponseEntity<ExpenseResponseDTO> responseEntity1 =
                 restTemplate.postForEntity("/expenses", requestGasToFebruary, ExpenseResponseDTO.class);
@@ -204,7 +204,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName()));
 
         var expenseRequest = new ExpenseRequestDTO("Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 30));
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
         HttpEntity<ExpenseRequestDTO> request = new HttpEntity<>(expenseRequest);
 
         ResponseEntity<ExpenseResponseDTO> responseEntity =

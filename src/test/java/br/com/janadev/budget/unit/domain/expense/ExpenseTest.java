@@ -1,6 +1,7 @@
 package br.com.janadev.budget.unit.domain.expense;
 
 import br.com.janadev.budget.domain.exceptions.DomainValidationException;
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ class ExpenseTest {
 
     @Test
     void shouldCreateExpenseSuccessfully(){
-        var expense = Expense.of(description, amount, date);
+        var expense = Expense.of(description, amount, date, Category.HOUSE);
         assertNotNull(expense);
         assertAll(
                 () -> assertEquals(description, expense.getDescription()),
@@ -33,11 +34,11 @@ class ExpenseTest {
     void shouldThrowsDomainValidationExceptionWhenTryCreateExpenseWithInvalidData(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of("", amount, date)),
+                        () -> Expense.of("", amount, date, Category.HOUSE)),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of(description, 0.0, date)),
+                        () -> Expense.of(description, 0.0, date, Category.HOUSE)),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of(description, amount, null))
+                        () -> Expense.of(description, amount, null, Category.HOUSE))
         );
     }
 

@@ -1,5 +1,6 @@
 package br.com.janadev.budget.unit.domain.expense.usecases;
 
+import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
@@ -34,8 +35,8 @@ class RegisterExpenseUseCaseTest {
         var description = "Luz";
         double amount = 100.0;
         var date = LocalDate.of(2025, Month.JANUARY, 27);
-        var command = Expense.of(description, amount, date);
-        var expenseExpected = Expense.of(1L, description, amount, date);
+        var command = Expense.of(description, amount, date, Category.HOUSE);
+        var expenseExpected = Expense.of(1L, description, amount, date, Category.HOUSE);
 
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(false);
         when(expenseDatabasePort.register(any())).thenReturn(expenseExpected);
@@ -53,7 +54,8 @@ class RegisterExpenseUseCaseTest {
 
     @Test
     void shouldThrowsExpenseAlreadyExistExceptionWhenTryRegisterExpenseWithADescriptionAlreadyExists(){
-        Expense expense = Expense.of("Luz", 50.0, LocalDate.of(2025, Month.JANUARY, 27));
+        Expense expense = Expense.of("Luz", 50.0, LocalDate.of(2025, Month.JANUARY, 27),
+                Category.HOUSE);
 
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
 
