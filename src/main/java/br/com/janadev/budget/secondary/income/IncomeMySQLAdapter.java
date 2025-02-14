@@ -49,4 +49,9 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         repository.delete(incomeDBO);
     }
 
+    @Override
+    public List<Income> findByDescription(String description) {
+        return null;
+    }
+
 }
