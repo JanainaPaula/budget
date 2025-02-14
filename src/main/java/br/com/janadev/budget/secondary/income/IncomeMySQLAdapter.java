@@ -54,5 +54,4 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         return repository.findByDescriptionContainingIgnoreCase(description).stream()
                 .map(IncomeDBO::toDomain).toList();
     }
-
 }
