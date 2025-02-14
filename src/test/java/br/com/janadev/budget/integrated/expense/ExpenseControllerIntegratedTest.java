@@ -85,7 +85,6 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals(requestGasToFebruary.description(), response.description()),
                 () -> assertEquals(requestGasToFebruary.amount(), response.amount()),
                 () -> assertEquals(requestGasToFebruary.date(), response.date())
-//                () -> assertEquals(requestGasToFebruary)
         );
     }
 
