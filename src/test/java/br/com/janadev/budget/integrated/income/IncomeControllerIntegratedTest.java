@@ -70,7 +70,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(400, responseEntity.getStatusCode().value());
         assertAll(
-                () -> assertEquals(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("IncomeAlreadyExistsException", errorResponse.getException()),
                 () -> assertEquals("/incomes", errorResponse.getPath())
         );
@@ -188,7 +188,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(400, responseEntity.getStatusCode().value());
         assertAll(
-                () -> assertEquals(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("IncomeAlreadyExistsException", errorResponse.getException()),
                 () -> assertEquals(String.format("/incomes/%s", incomeVendas.getId()), errorResponse.getPath())
         );
@@ -231,7 +231,7 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(400, responseEntity.getStatusCode().value());
         assertAll(
-                () -> assertEquals(INCOME_DELETE_FAILED_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_DELETE_FAILED_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/2", errorResponse.getPath())
         );

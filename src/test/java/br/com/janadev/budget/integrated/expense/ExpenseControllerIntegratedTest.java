@@ -118,7 +118,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(400, responseEntity.getStatusCode().value());
         assertAll(
-                () -> assertEquals(EXPENSE_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(EXPENSE_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
         );
@@ -189,7 +189,7 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(400, responseEntity.getStatusCode().value());
         assertAll(
-                () -> assertEquals(EXPENSE_DELETE_FAILED_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(EXPENSE_DELETE_FAILED_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
         );

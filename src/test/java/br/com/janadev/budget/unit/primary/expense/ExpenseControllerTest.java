@@ -112,7 +112,7 @@ class ExpenseControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(EXPENSE_DESCRIPTION_CANNOT_BE_NULL, errorResponse.getMessage()),
+                () -> assertEquals(EXPENSE_DESCRIPTION_CANNOT_BE_NULL.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainValidationException", errorResponse.getException()),
                 () -> assertEquals("/expenses", errorResponse.getPath())
         );
@@ -153,7 +153,7 @@ class ExpenseControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(EXPENSE_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(EXPENSE_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/expenses/2", errorResponse.getPath())
         );

@@ -113,7 +113,7 @@ class IncomeControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(INCOME_AMOUNT_MUST_BE_GREATER_THAN_ZERO, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_AMOUNT_MUST_BE_GREATER_THAN_ZERO.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainValidationException", errorResponse.getException()),
                 () -> assertEquals("/incomes", errorResponse.getPath())
         );
@@ -178,7 +178,7 @@ class IncomeControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(INCOME_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/2", errorResponse.getPath())
         );
@@ -229,7 +229,7 @@ class IncomeControllerTest {
 
         assertEquals(400, response.getStatus());
         assertAll(
-                () -> assertEquals(INCOME_UPDATE_FAILED_NOT_FOUND, errorResponse.getMessage()),
+                () -> assertEquals(INCOME_UPDATE_FAILED_NOT_FOUND.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/3", errorResponse.getPath())
         );
