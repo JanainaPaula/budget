@@ -17,7 +17,7 @@ public class RegisterIncomeUseCase implements RegisterIncomePort {
     }
 
     @Override
-    public Income registerIncome(Income income) {
+    public Income register(Income income) {
         if (isAlreadyExpenseDescriptionInMonth(income)){
             throw new IncomeAlreadyExistsException(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS);
         }

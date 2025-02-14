@@ -39,7 +39,7 @@ class RegisterIncomeUseCaseTest {
 
         when(incomeDatabasePort.save(any())).thenReturn(incomeExpected);
 
-        Income income = registerIncomeUseCase.registerIncome(incomeCommand);
+        Income income = registerIncomeUseCase.register(incomeCommand);
 
         assertNotNull(income);
         assertAll(
@@ -60,7 +60,7 @@ class RegisterIncomeUseCaseTest {
         when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
 
         assertThrows(IncomeAlreadyExistsException.class,
-                () -> registerIncomeUseCase.registerIncome(incomeCommand)
+                () -> registerIncomeUseCase.register(incomeCommand)
         );
     }
 }

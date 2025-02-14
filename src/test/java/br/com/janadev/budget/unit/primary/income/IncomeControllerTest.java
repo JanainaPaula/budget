@@ -74,7 +74,7 @@ class IncomeControllerTest {
         var requestBody = new IncomeRequestDTO(description, amount, date);
         var responseExpected = new IncomeResponseDTO(2L, description, amount, date);
 
-        when(registerIncomePort.registerIncome(any())).thenReturn(Income.of(2L, description, amount, date));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -101,7 +101,7 @@ class IncomeControllerTest {
         var date = LocalDate.of(2025, Month.JANUARY, 21);
         var requestBody = new IncomeRequestDTO(description, 0.0, date);
 
-        when(registerIncomePort.registerIncome(any())).thenReturn(Income.of(2L, description, amount, date));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -146,7 +146,7 @@ class IncomeControllerTest {
     void shouldRespondWithStatus200WhenCallGetIncomeDetailsEndpoint() throws Exception {
         var incomeExpected = Income.of(2L, "Venda", 55.90,
                 LocalDate.of(2025, Month.JANUARY, 21));
-        when(getIncomeDetailsPort.getIncomeDetails(any())).thenReturn(incomeExpected);
+        when(getIncomeDetailsPort.getDetails(any())).thenReturn(incomeExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/incomes/{id}", 2)
@@ -166,7 +166,7 @@ class IncomeControllerTest {
 
     @Test
     void shouldRespondWithStatus400WhenCallGetIncomeDetailsWithIncomeIdThatNotExits() throws Exception {
-        when(getIncomeDetailsPort.getIncomeDetails(any()))
+        when(getIncomeDetailsPort.getDetails(any()))
                 .thenThrow(new DomainNotFoundException(INCOME_NOT_FOUND));
 
         MockHttpServletResponse response = mockMvc.perform(

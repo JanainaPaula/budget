@@ -51,13 +51,13 @@ public class IncomeController {
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
         var income = Income.of(request.description(), request.amount(), request.date());
-        var response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(income));
+        var response = IncomeResponseDTO.toDTO(incomeDomainPort.register(income));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<IncomeResponseDTO> getDetails(@PathVariable Long id){
-        Income incomeDetails = getIncomeDetailsPort.getIncomeDetails(id);
+        Income incomeDetails = getIncomeDetailsPort.getDetails(id);
         return ResponseEntity.ok(IncomeResponseDTO.toDTO(incomeDetails));
     }
 

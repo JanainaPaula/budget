@@ -36,7 +36,7 @@ class GetIncomesDetailsUseCaseTest {
 
         when(incomeDatabasePort.findById(any())).thenReturn(incomeExpected);
 
-        Income income = getIncomesDetailsUseCase.getIncomeDetails(2L);
+        Income income = getIncomesDetailsUseCase.getDetails(2L);
 
         assertNotNull(income);
         assertAll(
@@ -52,7 +52,7 @@ class GetIncomesDetailsUseCaseTest {
         when(incomeDatabasePort.findById(any())).thenReturn(null);
 
         assertThrows(DomainNotFoundException.class,
-                () -> getIncomesDetailsUseCase.getIncomeDetails(1L));
+                () -> getIncomesDetailsUseCase.getDetails(1L));
     }
 
 }

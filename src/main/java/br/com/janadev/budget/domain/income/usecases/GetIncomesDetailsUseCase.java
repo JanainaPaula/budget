@@ -16,7 +16,7 @@ public class GetIncomesDetailsUseCase implements GetIncomeDetailsPort {
     }
 
     @Override
-    public Income getIncomeDetails(Long id) {
+    public Income getDetails(Long id) {
         Income income = incomeDatabasePort.findById(id);
         if (income == null){
             throw new DomainNotFoundException(INCOME_NOT_FOUND);
