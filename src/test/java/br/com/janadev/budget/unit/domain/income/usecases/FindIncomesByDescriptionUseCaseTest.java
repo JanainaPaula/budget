@@ -1,4 +1,4 @@
-package br.com.janadev.budget.unit.domain.expense.usecases;
+package br.com.janadev.budget.unit.domain.income.usecases;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
@@ -32,13 +32,13 @@ class FindIncomesByDescriptionUseCaseTest {
     @Test
     void shouldReturnIncomesWithDescription(){
         List<Income> incomesExpected = List.of(
-                Income.of(2L, "Luz", 150.0, LocalDate.of(2025, Month.FEBRUARY, 14)),
-                Income.of(3L, "Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 30))
+                Income.of(2L, "Salário", 150.0, LocalDate.of(2025, Month.FEBRUARY, 14)),
+                Income.of(3L, "Salário", 150.0, LocalDate.of(2025, Month.JANUARY, 30))
         );
 
         when(incomeDatabasePort.findByDescription(any())).thenReturn(incomesExpected);
 
-        List<Income> incomes = findIncomesByDescriptionUseCase.findByDescription("Luz");
+        List<Income> incomes = findIncomesByDescriptionUseCase.findByDescription("Salário");
 
         assertNotNull(incomes);
         assertFalse(incomes.isEmpty());
