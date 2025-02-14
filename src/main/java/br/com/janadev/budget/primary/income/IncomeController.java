@@ -3,6 +3,7 @@ package br.com.janadev.budget.primary.income;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
+import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -30,17 +32,20 @@ public class IncomeController {
     private final GetIncomeDetailsPort getIncomeDetailsPort;
     private final UpdateIncomePort updateIncomePort;
     private final DeleteIncomePort deleteIncomePort;
+    private final FindIncomesByDescriptionPort findIncomesByDescriptionPort;
 
     public IncomeController(RegisterIncomePort incomeDomainPort,
                             FindAllIncomesPort findAllIncomesPort,
                             GetIncomeDetailsPort getIncomeDetailsPort,
                             UpdateIncomePort updateIncomePort,
-                            DeleteIncomePort deleteIncomePort) {
+                            DeleteIncomePort deleteIncomePort,
+                            FindIncomesByDescriptionPort findIncomesByDescriptionPort) {
         this.incomeDomainPort = incomeDomainPort;
         this.findAllIncomesPort = findAllIncomesPort;
         this.getIncomeDetailsPort = getIncomeDetailsPort;
         this.updateIncomePort = updateIncomePort;
         this.deleteIncomePort = deleteIncomePort;
+        this.findIncomesByDescriptionPort = findIncomesByDescriptionPort;
     }
 
     @PostMapping
@@ -48,12 +53,6 @@ public class IncomeController {
         var income = Income.of(request.description(), request.amount(), request.date());
         var response = IncomeResponseDTO.toDTO(incomeDomainPort.registerIncome(income));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<IncomeResponseDTO>> findAll(){
-        var incomes = findAllIncomesPort.findAll().stream().map(IncomeResponseDTO::toDTO).toList();
-        return ResponseEntity.ok(incomes);
     }
 
     @GetMapping("/{id}")
@@ -73,5 +72,25 @@ public class IncomeController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         deleteIncomePort.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<IncomeResponseDTO>> findAllOrFindByDescription(
+            @RequestParam(required = false) String description){
+        if (description == null){
+            return findAll();
+        }
+        return findByDescription(description);
+    }
+
+    private ResponseEntity<List<IncomeResponseDTO>> findAll() {
+        var incomes = findAllIncomesPort.findAll().stream().map(IncomeResponseDTO::toDTO).toList();
+        return ResponseEntity.ok(incomes);
+    }
+
+    private ResponseEntity<List<IncomeResponseDTO>> findByDescription(String description) {
+        var incomes = findIncomesByDescriptionPort.findByDescription(description).stream()
+                .map(IncomeResponseDTO::toDTO).toList();
+        return ResponseEntity.ok(incomes);
     }
 }
