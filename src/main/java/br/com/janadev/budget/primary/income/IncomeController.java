@@ -75,7 +75,7 @@ public class IncomeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<IncomeResponseDTO>> findAllOrFindByDescription(
+    public ResponseEntity<List<IncomeResponseDTO>> findAllOrByDescription(
             @RequestParam(required = false) String description){
         if (description == null){
             return findAll();
