@@ -14,6 +14,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class IncomeControllerIntegratedTest extends TestContainersConfig {
@@ -235,5 +237,46 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 () -> assertEquals("DomainNotFoundException", errorResponse.getException()),
                 () -> assertEquals("/incomes/2", errorResponse.getPath())
         );
+    }
+
+    @Test
+    void shouldRespondStatus200WhenFindIncomesByDescriptionWithSuccess(){
+        List<IncomeDBO> incomesExpected = List.of(
+                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15)),
+                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.FEBRUARY, 15))
+        );
+        incomeRepository.saveAll(incomesExpected);
+
+        String uri = UriComponentsBuilder.fromPath("/incomes")
+                .queryParam("description", "salario")
+                .toUriString();
+
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {
+        });
+
+        List<IncomeResponseDTO> response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertEquals(1, response.size());
+        assertAll(
+                () -> assertEquals(incomesExpected.get(0).getId(), response.get(0).id()),
+                () -> assertEquals(incomesExpected.get(0).getDescription(), response.get(0).description()),
+                () -> assertEquals(incomesExpected.get(0).getAmount(), response.get(0).amount()),
+                () -> assertEquals(incomesExpected.get(0).getDate(), response.get(0).date())
+        );
+
+        String uriAluguel = UriComponentsBuilder.fromPath("/incomes")
+                .queryParam("description", "aluguel")
+                .toUriString();
+
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity1 = restTemplate.exchange(uriAluguel, HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {
+                });
+
+        List<IncomeResponseDTO> response1 = responseEntity1.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertTrue(response1.isEmpty());
     }
 }
