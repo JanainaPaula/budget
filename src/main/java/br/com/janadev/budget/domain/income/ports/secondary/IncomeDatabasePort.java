@@ -13,4 +13,5 @@ public interface IncomeDatabasePort {
     boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate);
     void delete(Income income);
     List<Income> findByDescription(String description);
+    List<Income> findAllByMonth(int year, int month);
 }
