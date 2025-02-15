@@ -4,6 +4,7 @@ import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
+import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
@@ -56,6 +57,8 @@ class IncomeControllerTest {
     private DeleteIncomePort deleteIncomePort;
     @MockitoBean
     private UpdateIncomePort updateIncomePort;
+    @MockitoBean
+    private FindIncomesByDescriptionPort findIncomesByDescriptionPort;
     private JacksonTester<IncomeRequestDTO> jsonRequestDto;
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
@@ -244,5 +247,32 @@ class IncomeControllerTest {
         ).andReturn().getResponse();
 
         assertEquals(204, response.getStatus());
+    }
+
+    @Test
+    void shouldRespondWithStatus200WhenFindIncomesWithADescription() throws Exception {
+        List<Income> incomesExpected = List.of(
+                Income.of(2L, "Salário", 5000.0,
+                        LocalDate.of(2025, Month.FEBRUARY, 15))
+        );
+
+        when(findIncomesByDescriptionPort.findByDescription(any())).thenReturn(incomesExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/incomes")
+                        .queryParam("description", "salario")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        List<IncomeResponseDTO> incomes = jsonListResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(1, incomes.size()),
+                () -> assertEquals(incomesExpected.get(0).getId(), incomes.get(0).id()),
+                () -> assertEquals(incomesExpected.get(0).getDescription(), incomes.get(0).description()),
+                () -> assertEquals(incomesExpected.get(0).getAmount(), incomes.get(0).amount()),
+                () -> assertEquals(incomesExpected.get(0).getDate(), incomes.get(0).date())
+        );
     }
 }
