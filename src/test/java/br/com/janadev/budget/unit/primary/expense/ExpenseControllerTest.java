@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
+import br.com.janadev.budget.domain.expense.ports.primary.FindExpenseByDescriptionPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
@@ -56,6 +57,8 @@ class ExpenseControllerTest {
     private DeleteExpensePort deleteExpensePort;
     @MockitoBean
     private UpdateExpensePort updateExpensePort;
+    @MockitoBean
+    private FindExpenseByDescriptionPort findExpenseByDescriptionPort;
     private JacksonTester<ExpenseRequestDTO> jsonRequestDto;
     private JacksonTester<ExpenseResponseDTO> jsonResponseDto;
     private JacksonTester<List<ExpenseResponseDTO>> jsonResponseDtoList;
@@ -226,6 +229,31 @@ class ExpenseControllerTest {
                 () -> assertEquals(expenseExpected.getDescription(), expense.description()),
                 () -> assertEquals(expenseExpected.getAmount(), expense.amount()),
                 () -> assertEquals(expenseExpected.getDate(), expense.date())
+        );
+    }
+
+    @Test
+    void shouldFindExpenseByDescriptionSuccessfully() throws Exception {
+        Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE);
+
+        when(findExpenseByDescriptionPort.findByDescription(any())).thenReturn(List.of(expenseExpected));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/expenses")
+                        .queryParam("description", "luz")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        List<ExpenseResponseDTO> expenses = jsonResponseDtoList.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertEquals(1, expenses.size());
+        assertAll(
+                () -> assertEquals(expenseExpected.getId(), expenses.get(0).id()),
+                () -> assertEquals(expenseExpected.getDescription(), expenses.get(0).description()),
+                () -> assertEquals(expenseExpected.getAmount(), expenses.get(0).amount()),
+                () -> assertEquals(expenseExpected.getDate(), expenses.get(0).date())
         );
     }
 }
