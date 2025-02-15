@@ -2,6 +2,7 @@ package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
+import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
@@ -33,19 +34,22 @@ public class IncomeController {
     private final UpdateIncomePort updateIncomePort;
     private final DeleteIncomePort deleteIncomePort;
     private final FindIncomesByDescriptionPort findIncomesByDescriptionPort;
+    private final FindAllIncomesByMonthPort findAllIncomesByMonthPort;
 
     public IncomeController(RegisterIncomePort incomeDomainPort,
                             FindAllIncomesPort findAllIncomesPort,
                             GetIncomeDetailsPort getIncomeDetailsPort,
                             UpdateIncomePort updateIncomePort,
                             DeleteIncomePort deleteIncomePort,
-                            FindIncomesByDescriptionPort findIncomesByDescriptionPort) {
+                            FindIncomesByDescriptionPort findIncomesByDescriptionPort,
+                            FindAllIncomesByMonthPort findAllIncomesByMonthPort) {
         this.incomeDomainPort = incomeDomainPort;
         this.findAllIncomesPort = findAllIncomesPort;
         this.getIncomeDetailsPort = getIncomeDetailsPort;
         this.updateIncomePort = updateIncomePort;
         this.deleteIncomePort = deleteIncomePort;
         this.findIncomesByDescriptionPort = findIncomesByDescriptionPort;
+        this.findAllIncomesByMonthPort = findAllIncomesByMonthPort;
     }
 
     @PostMapping
@@ -72,6 +76,13 @@ public class IncomeController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         deleteIncomePort.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<List<IncomeResponseDTO>> findAllByMonth(@PathVariable int year, @PathVariable int month){
+        List<IncomeResponseDTO> incomes =
+                findAllIncomesByMonthPort.findAllByMonth(year, month).stream().map(IncomeResponseDTO::toDTO).toList();
+        return ResponseEntity.ok(incomes);
     }
 
     @GetMapping
