@@ -54,6 +54,7 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public List<Expense> findByDescription(String description) {
-        return null;
+        return expenseRepository.findByDescriptionContainingIgnoreCase(description)
+                .stream().map(ExpenseDBO::toDomain).toList();
     }
 }
