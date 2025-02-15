@@ -3,6 +3,7 @@ package br.com.janadev.budget.unit.primary.income;
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
+import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
@@ -33,6 +34,7 @@ import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -59,6 +61,8 @@ class IncomeControllerTest {
     private UpdateIncomePort updateIncomePort;
     @MockitoBean
     private FindIncomesByDescriptionPort findIncomesByDescriptionPort;
+    @MockitoBean
+    private FindAllIncomesByMonthPort findAllIncomesByMonthPort;
     private JacksonTester<IncomeRequestDTO> jsonRequestDto;
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
@@ -273,6 +277,30 @@ class IncomeControllerTest {
                 () -> assertEquals(incomesExpected.get(0).getDescription(), incomes.get(0).description()),
                 () -> assertEquals(incomesExpected.get(0).getAmount(), incomes.get(0).amount()),
                 () -> assertEquals(incomesExpected.get(0).getDate(), incomes.get(0).date())
+        );
+    }
+
+    @Test
+    void shouldRespondWithStatus2OOWhenFindAllIncomesByMonthSuccessfully() throws Exception {
+        Income incomeExpected = Income.of(2L, "Salário", 5000.0,
+                LocalDate.of(2025, Month.FEBRUARY, 15));
+
+        when(findAllIncomesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/incomes/{year}/{month}", 2025, 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        List<IncomeResponseDTO> incomes = jsonListResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertEquals(1, incomes.size());
+        assertAll(
+                () -> assertEquals(incomeExpected.getId(), incomes.get(0).id()),
+                () -> assertEquals(incomeExpected.getDescription(), incomes.get(0).description()),
+                () -> assertEquals(incomeExpected.getAmount(), incomes.get(0).amount()),
+                () -> assertEquals(incomeExpected.getDate(), incomes.get(0).date())
         );
     }
 }
