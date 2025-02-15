@@ -2,7 +2,7 @@ package br.com.janadev.budget.unit.domain.income.usecases;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
-import br.com.janadev.budget.domain.income.usecases.FindAllIncomesByMonthUseCase;
+import br.com.janadev.budget.domain.income.usecases.FindIncomesByMonthUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ class FindAllIncomesByMonthUseCaseTest {
     private IncomeDatabasePort incomeDatabasePort;
 
     @InjectMocks
-    private FindAllIncomesByMonthUseCase findAllIncomesByMonthUseCase;
+    private FindIncomesByMonthUseCase findAllIncomesByMonthUseCase;
 
     @Test
     void shouldFindAllIncomesByMonthSuccessfully(){

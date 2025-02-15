@@ -4,6 +4,6 @@ import br.com.janadev.budget.domain.income.Income;
 
 import java.util.List;
 
-public interface FindAllIncomesByMonthPort {
+public interface FindIncomesByMonthPort {
     List<Income> findAllByMonth(int year, int month);
 }

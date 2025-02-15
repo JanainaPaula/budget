@@ -2,7 +2,7 @@ package br.com.janadev.budget.secondary.income.config;
 
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.DeleteIncomeUseCase;
-import br.com.janadev.budget.domain.income.usecases.FindAllIncomesByMonthUseCase;
+import br.com.janadev.budget.domain.income.usecases.FindIncomesByMonthUseCase;
 import br.com.janadev.budget.domain.income.usecases.FindAllIncomesUseCase;
 import br.com.janadev.budget.domain.income.usecases.FindIncomesByDescriptionUseCase;
 import br.com.janadev.budget.domain.income.usecases.GetIncomesDetailsUseCase;
@@ -51,7 +51,7 @@ public class IncomeDatabaseConfig {
     }
 
     @Bean
-    public FindAllIncomesByMonthUseCase findAllIncomesByMonthUseCase(){
-        return new FindAllIncomesByMonthUseCase(incomeDatabasePort);
+    public FindIncomesByMonthUseCase findAllIncomesByMonthUseCase(){
+        return new FindIncomesByMonthUseCase(incomeDatabasePort);
     }
 }

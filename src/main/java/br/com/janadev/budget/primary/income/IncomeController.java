@@ -2,7 +2,7 @@ package br.com.janadev.budget.primary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
-import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesByMonthPort;
+import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
@@ -34,7 +34,7 @@ public class IncomeController {
     private final UpdateIncomePort updateIncomePort;
     private final DeleteIncomePort deleteIncomePort;
     private final FindIncomesByDescriptionPort findIncomesByDescriptionPort;
-    private final FindAllIncomesByMonthPort findAllIncomesByMonthPort;
+    private final FindIncomesByMonthPort findAllIncomesByMonthPort;
 
     public IncomeController(RegisterIncomePort incomeDomainPort,
                             FindAllIncomesPort findAllIncomesPort,
@@ -42,7 +42,7 @@ public class IncomeController {
                             UpdateIncomePort updateIncomePort,
                             DeleteIncomePort deleteIncomePort,
                             FindIncomesByDescriptionPort findIncomesByDescriptionPort,
-                            FindAllIncomesByMonthPort findAllIncomesByMonthPort) {
+                            FindIncomesByMonthPort findAllIncomesByMonthPort) {
         this.incomeDomainPort = incomeDomainPort;
         this.findAllIncomesPort = findAllIncomesPort;
         this.getIncomeDetailsPort = getIncomeDetailsPort;

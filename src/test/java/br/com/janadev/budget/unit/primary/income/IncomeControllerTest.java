@@ -3,7 +3,7 @@ package br.com.janadev.budget.unit.primary.income;
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
-import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesByMonthPort;
+import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
@@ -62,7 +62,7 @@ class IncomeControllerTest {
     @MockitoBean
     private FindIncomesByDescriptionPort findIncomesByDescriptionPort;
     @MockitoBean
-    private FindAllIncomesByMonthPort findAllIncomesByMonthPort;
+    private FindIncomesByMonthPort findAllIncomesByMonthPort;
     private JacksonTester<IncomeRequestDTO> jsonRequestDto;
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
