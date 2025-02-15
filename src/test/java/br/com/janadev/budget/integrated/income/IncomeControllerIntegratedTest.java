@@ -252,8 +252,8 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
                 .toUriString();
 
         ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null,
-                new ParameterizedTypeReference<>() {
-        });
+                new ParameterizedTypeReference<>() {}
+        );
 
         List<IncomeResponseDTO> response = responseEntity.getBody();
 
@@ -277,6 +277,45 @@ class IncomeControllerIntegratedTest extends TestContainersConfig {
         List<IncomeResponseDTO> response1 = responseEntity1.getBody();
 
         assertEquals(200, responseEntity.getStatusCode().value());
+        assertTrue(response1.isEmpty());
+    }
+
+    @Test
+    void shouldFindAllIncomesByMonthSuccessfully(){
+        List<IncomeDBO> incomesExpected = List.of(
+                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15)),
+                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.JANUARY, 15))
+        );
+        incomeRepository.saveAll(incomesExpected);
+
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/incomes/{year}/{month}",
+                HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {
+                },
+                2025, 2
+        );
+
+        List<IncomeResponseDTO> response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertEquals(1, response.size());
+        assertAll(
+                () -> assertEquals(incomesExpected.get(0).getId(), response.get(0).id()),
+                () -> assertEquals(incomesExpected.get(0).getDescription(), response.get(0).description()),
+                () -> assertEquals(incomesExpected.get(0).getAmount(), response.get(0).amount()),
+                () -> assertEquals(incomesExpected.get(0).getDate(), response.get(0).date())
+        );
+
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity1 = restTemplate.exchange("/incomes/{year}/{month}",
+                HttpMethod.GET, null,
+                new ParameterizedTypeReference<>() {
+                },
+                2024, 2
+        );
+
+        List<IncomeResponseDTO> response1 = responseEntity1.getBody();
+
+        assertEquals(200, responseEntity1.getStatusCode().value());
         assertTrue(response1.isEmpty());
     }
 }
