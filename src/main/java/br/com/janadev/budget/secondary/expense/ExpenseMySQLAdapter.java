@@ -51,4 +51,9 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
                 expense.getDate(), expense.getCategoryName());
         return expenseRepository.save(expenseDBO).toDomain();
     }
+
+    @Override
+    public List<Expense> findByDescription(String description) {
+        return null;
+    }
 }

@@ -12,4 +12,5 @@ public interface ExpenseDatabasePort {
     List<Expense> findAll();
     void delete(Expense expense);
     Expense update(Expense expense);
+    List<Expense> findByDescription(String description);
 }
