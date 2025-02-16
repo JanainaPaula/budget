@@ -60,6 +60,7 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public List<Expense> findAllByMonth(int year, int month) {
-        return null;
+        return expenseRepository.findByDateYearAndDateMonth(year, month)
+                .stream().map(ExpenseDBO::toDomain).toList();
     }
 }
