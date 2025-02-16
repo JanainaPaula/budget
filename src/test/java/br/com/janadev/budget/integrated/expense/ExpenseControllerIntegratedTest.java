@@ -260,6 +260,49 @@ public class ExpenseControllerIntegratedTest extends TestContainersConfig {
 
         assertEquals(200, responseEntity1.getStatusCode().value());
         assertTrue(response1.isEmpty());
+    }
 
+    @Test
+    void shouldFindExpensesByMonthSuccessfully(){
+        List<ExpenseDBO> expensesExpected = List.of(
+                ExpenseDBO.of("Luz", 150.0,
+                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName()),
+                ExpenseDBO.of("Mensalidade da Faculdade", 1550.0,
+                        LocalDate.of(2025, Month.JANUARY, 15), Category.EDUCATION.getName())
+        );
+        expenseRepository.saveAll(expensesExpected);
+
+        ResponseEntity<List<ExpenseResponseDTO>> responseEntity = restTemplate.exchange("/expenses/{year}/{month}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {},
+                2025,
+                2
+        );
+
+        List<ExpenseResponseDTO> response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertEquals(1, response.size());
+        assertAll(
+                () -> assertEquals(expensesExpected.get(0).getId(), response.get(0).id()),
+                () -> assertEquals(expensesExpected.get(0).getDescription(), response.get(0).description()),
+                () -> assertEquals(expensesExpected.get(0).getAmount(), response.get(0).amount()),
+                () -> assertEquals(expensesExpected.get(0).getDate(), response.get(0).date()),
+                () -> assertEquals(expensesExpected.get(0).getCategory(), response.get(0).category())
+        );
+
+        ResponseEntity<List<ExpenseResponseDTO>> responseEntity1 = restTemplate.exchange("/expenses/{year}/{month}",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {},
+                2024,
+                2
+        );
+
+        List<ExpenseResponseDTO> response1 = responseEntity1.getBody();
+
+        assertEquals(200, responseEntity1.getStatusCode().value());
+        assertTrue(response1.isEmpty());
     }
 }

@@ -67,4 +67,8 @@ public class ExpenseDBO {
     public LocalDate getDate() {
         return date;
     }
+
+    public String getCategory() {
+        return category;
+    }
 }
