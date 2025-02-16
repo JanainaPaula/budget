@@ -57,4 +57,9 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
         return expenseRepository.findByDescriptionContainingIgnoreCase(description)
                 .stream().map(ExpenseDBO::toDomain).toList();
     }
+
+    @Override
+    public List<Expense> findAllByMonth(int year, int month) {
+        return null;
+    }
 }
