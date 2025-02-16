@@ -5,6 +5,7 @@ import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.primary.DeleteExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindAllExpensesPort;
 import br.com.janadev.budget.domain.expense.ports.primary.FindExpenseByDescriptionPort;
+import br.com.janadev.budget.domain.expense.ports.primary.FindExpensesByMonthPort;
 import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
@@ -34,19 +35,22 @@ public class ExpenseController {
     private final DeleteExpensePort deleteExpensePort;
     private final UpdateExpensePort updateExpensePort;
     private final FindExpenseByDescriptionPort findExpenseByDescriptionPort;
+    private final FindExpensesByMonthPort findExpensesByMonthPort;
 
     public ExpenseController(RegisterExpensePort registerExpensePort,
                              GetExpenseDetailsPort getExpenseDetailsPort,
                              FindAllExpensesPort findAllExpensesPort,
                              DeleteExpensePort deleteExpensePort,
                              UpdateExpensePort updateExpensePort,
-                             FindExpenseByDescriptionPort findExpenseByDescriptionPort) {
+                             FindExpenseByDescriptionPort findExpenseByDescriptionPort,
+                             FindExpensesByMonthPort findExpensesByMonthPort) {
         this.registerExpensePort = registerExpensePort;
         this.getExpenseDetailsPort = getExpenseDetailsPort;
         this.findAllExpensesPort = findAllExpensesPort;
         this.deleteExpensePort = deleteExpensePort;
         this.updateExpensePort = updateExpensePort;
         this.findExpenseByDescriptionPort = findExpenseByDescriptionPort;
+        this.findExpensesByMonthPort = findExpensesByMonthPort;
     }
 
     @PostMapping
@@ -76,6 +80,13 @@ public class ExpenseController {
                 Expense.of(request.description(), request.amount(), request.date(),
                         Category.getCategoryByName(request.category())));
         return ResponseEntity.ok(ExpenseResponseDTO.toDTO(expenseUpdated));
+    }
+
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<List<ExpenseResponseDTO>> findByMonth(@PathVariable int year, @PathVariable int month){
+        List<ExpenseResponseDTO> expenses = findExpensesByMonthPort.findAllByMonth(year, month)
+                .stream().map(ExpenseResponseDTO::toDTO).toList();
+        return ResponseEntity.ok(expenses);
     }
 
     @GetMapping
