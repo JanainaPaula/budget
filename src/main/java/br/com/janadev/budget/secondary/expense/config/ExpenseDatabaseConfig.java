@@ -4,6 +4,7 @@ import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.DeleteExpenseUseCase;
 import br.com.janadev.budget.domain.expense.usecases.FindAllExpensesUseCase;
 import br.com.janadev.budget.domain.expense.usecases.FindExpenseByDescriptionUseCase;
+import br.com.janadev.budget.domain.expense.usecases.FindExpensesByMonthUseCase;
 import br.com.janadev.budget.domain.expense.usecases.GetExpenseDetailsUseCase;
 import br.com.janadev.budget.domain.expense.usecases.RegisterExpenseUseCase;
 import br.com.janadev.budget.domain.expense.usecases.UpdateExpenseUseCase;
@@ -47,5 +48,10 @@ public class ExpenseDatabaseConfig {
     @Bean
     public FindExpenseByDescriptionUseCase findExpenseByDescriptionUseCase(){
         return new FindExpenseByDescriptionUseCase(expenseDatabasePort);
+    }
+
+    @Bean
+    public FindExpensesByMonthUseCase findExpensesByMonthUseCase(){
+        return new FindExpensesByMonthUseCase(expenseDatabasePort);
     }
 }
