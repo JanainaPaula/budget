@@ -60,4 +60,9 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
         return repository.findByDateYearAndDateMonth(year, month).stream()
                 .map(IncomeDBO::toDomain).toList();
     }
+
+    @Override
+    public double sumTotalAmountByMonth(int year, int month) {
+        return repository.sumTotalAmountByMonth(year, month);
+    }
 }
