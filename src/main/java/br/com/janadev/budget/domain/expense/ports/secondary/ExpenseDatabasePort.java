@@ -14,4 +14,5 @@ public interface ExpenseDatabasePort {
     Expense update(Expense expense);
     List<Expense> findByDescription(String description);
     List<Expense> findAllByMonth(int year, int month);
+    ExpenseSummary findExpenseSummaryByMonth(int year, int month);
 }
