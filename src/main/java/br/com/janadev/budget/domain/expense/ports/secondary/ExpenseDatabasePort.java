@@ -1,6 +1,7 @@
 package br.com.janadev.budget.domain.expense.ports.secondary;
 
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.domain.summary.CategorySummary;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,5 +15,6 @@ public interface ExpenseDatabasePort {
     Expense update(Expense expense);
     List<Expense> findByDescription(String description);
     List<Expense> findAllByMonth(int year, int month);
-    ExpenseSummary findExpenseSummaryByMonth(int year, int month);
+    double sumTotalAmountByMonth(int year, int month);
+    CategorySummary findExpensesByCategoryByMonth(int year, int month);
 }

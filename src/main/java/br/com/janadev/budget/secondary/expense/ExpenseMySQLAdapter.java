@@ -2,7 +2,7 @@ package br.com.janadev.budget.secondary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseSummary;
+import br.com.janadev.budget.domain.summary.CategorySummary;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -66,11 +66,7 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     }
 
     @Override
-    public ExpenseSummary findExpenseSummaryByMonth(int year, int month) {
-        var expenseProjection = expenseRepository.createExpenseSummary(year, month);
-        var categoryProjection = expenseProjection.getCategoryExpenses().stream()
-                .map(category -> ExpenseSummary.CategoryExpense.of(category.getCategory(), category.getTotal()))
-                .toList();
-        return ExpenseSummary.of(expenseProjection.getExpenseTotal(), categoryProjection);
+    public CategorySummary findExpensesByCategoryByMonth(int year, int month) {
+        return null;
     }
 }
