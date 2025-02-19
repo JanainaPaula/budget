@@ -35,31 +35,31 @@ class GetSummaryByMonthUseCaseTest {
 
     @Test
     void shouldGetSummaryByMonthSuccessfully(){
-        double totalIncomes = 5350.0;
-        double totalExpenses = 4000.0;
-        double finalBalance = 1350.0;
-        double totalCategoryHouse = 2000.0;
-        double totalCategoryOthers = 2000.0;
+        double totalIncomesExpected = 5350.0;
+        double totalExpensesExpected = 4000.0;
+        double finalBalanceExpected = 1350.0;
+        double totalCategoryHouseExpected = 2000.0;
+        double totalCategoryOthersExpected = 2000.0;
         List<CategorySummary> expensesByCategory = List.of(
-                CategorySummary.of(Category.HOUSE.getName(), totalCategoryHouse),
-                CategorySummary.of(Category.OTHERS.getName(), totalCategoryOthers)
+                CategorySummary.of(Category.HOUSE.getName(), totalCategoryHouseExpected),
+                CategorySummary.of(Category.OTHERS.getName(), totalCategoryOthersExpected)
         );
 
-        when(incomeDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalIncomes);
-        when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalExpenses);
+        when(incomeDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalIncomesExpected);
+        when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalExpensesExpected);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(expensesByCategory);
 
         Summary summary = getSummaryByMonthUseCase.getMonthlySummary(2025, 2);
 
         assertNotNull(summary);
         assertAll(
-                () -> assertEquals(totalIncomes, summary.getIncomes()),
-                () -> assertEquals(totalExpenses, summary.getExpenses()),
-                () -> assertEquals(finalBalance, summary.getFinalBalance()),
+                () -> assertEquals(totalIncomesExpected, summary.getIncomes()),
+                () -> assertEquals(totalExpensesExpected, summary.getExpenses()),
+                () -> assertEquals(finalBalanceExpected, summary.getFinalBalance()),
                 () -> assertEquals(2, summary.getExpensesByCategory().size()),
-                () -> assertEquals(totalCategoryHouse, summary.getExpensesByCategory().get(0).getTotal()),
+                () -> assertEquals(totalCategoryHouseExpected, summary.getExpensesByCategory().get(0).getTotal()),
                 () -> assertEquals(Category.HOUSE.getName(), summary.getExpensesByCategory().get(0).getCategory()),
-                () -> assertEquals(totalCategoryOthers, summary.getExpensesByCategory().get(1).getTotal()),
+                () -> assertEquals(totalCategoryOthersExpected, summary.getExpensesByCategory().get(1).getTotal()),
                 () -> assertEquals(Category.OTHERS.getName(), summary.getExpensesByCategory().get(1).getCategory())
         );
     }

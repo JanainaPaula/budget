@@ -8,15 +8,19 @@ public class Summary {
     private final double finalBalance;
     private final List<CategorySummary> expensesByCategory;
 
-    private Summary(double incomes, double expenses, double finalBalance, List<CategorySummary> expensesByCategory) {
+    private Summary(double incomes, double expenses, List<CategorySummary> expensesByCategory) {
         this.incomes = incomes;
         this.expenses = expenses;
-        this.finalBalance = finalBalance;
+        this.finalBalance = calculateFinalBalance();
         this.expensesByCategory = expensesByCategory;
     }
 
-    public static Summary of(double incomes, double expenses, double finalBalance, List<CategorySummary> expensesByCategory){
-        return new Summary(incomes, expenses, finalBalance, expensesByCategory);
+    private double calculateFinalBalance() {
+        return this.incomes - this.expenses;
+    }
+
+    public static Summary of(double incomes, double expenses, List<CategorySummary> expensesByCategory){
+        return new Summary(incomes, expenses, expensesByCategory);
     }
 
     public double getIncomes() {

@@ -50,7 +50,7 @@ class SummaryControllerTest {
 
     @Test
     void shouldGetMonthlySummarySuccessfully() throws Exception {
-        Summary summaryExpected = Summary.of(2000.0, 250.0, 1750.0, List.of(
+        Summary summaryExpected = Summary.of(2000.0, 250.0, List.of(
                 CategorySummary.of(Category.HOUSE.getName(), 100.0),
                 CategorySummary.of(Category.LEISURE.getName(), 150.0)
         ));

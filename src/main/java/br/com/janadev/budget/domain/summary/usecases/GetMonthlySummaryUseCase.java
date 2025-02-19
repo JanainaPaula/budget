@@ -21,11 +21,6 @@ public class GetMonthlySummaryUseCase implements GetMonthlySummaryPort {
         double totalIncomes = incomeDatabasePort.sumTotalAmountByMonth(year, month);
         double totalExpenses = expenseDatabasePort.sumTotalAmountByMonth(year, month);
         var expensesByCategorySummary = expenseDatabasePort.findExpensesByCategoryByMonth(year, month);
-        double finalBalance = calculateFinalBalance(totalIncomes, totalExpenses);
-        return Summary.of(totalIncomes, totalExpenses, finalBalance, expensesByCategorySummary);
-    }
-
-    private static double calculateFinalBalance(double totalIncomes, double totalExpenses) {
-        return totalIncomes - totalExpenses;
+        return Summary.of(totalIncomes, totalExpenses, expensesByCategorySummary);
     }
 }
