@@ -32,7 +32,7 @@ class GetExpenseDetailsUseCaseTest {
     @Test
     void shouldGetExpenseDetailsSuccessfully(){
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE);
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseExpected);
 

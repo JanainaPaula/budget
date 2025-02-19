@@ -1,6 +1,5 @@
 package br.com.janadev.budget.secondary.expense;
 
-import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +48,7 @@ public class ExpenseDBO {
 
     public Expense toDomain(){
         return Expense.of(this.id, this.description, this.amount, this.date,
-                Category.getCategoryByName(this.category));
+                this.category);
     }
 
     public Long getId() {

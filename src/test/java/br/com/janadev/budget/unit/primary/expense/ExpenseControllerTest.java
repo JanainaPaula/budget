@@ -81,7 +81,7 @@ class ExpenseControllerTest {
         var request = new ExpenseRequestDTO(description, amount, date, Category.HOUSE.getName());
         var responseExpected = new ExpenseResponseDTO(2L, description, amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName()));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -107,7 +107,7 @@ class ExpenseControllerTest {
         var date = LocalDate.of(2025, Month.JANUARY, 28);
         var request = new ExpenseRequestDTO("", amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName()));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -128,7 +128,7 @@ class ExpenseControllerTest {
     @Test
     void shouldRespondWithStatus200WhenGetExpenseDetailsSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE);
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
         when(getExpenseDetailsPort.getDetails(any())).thenReturn(expenseExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -170,8 +170,8 @@ class ExpenseControllerTest {
     @Test
     void shouldRespondWithStatus200WhenFindAllExpensesSuccessFully() throws Exception {
         List<Expense> expensesExpected = List.of(
-                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE),
-                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE)
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName())
         );
 
         when(findAllExpensesPort.findAll()).thenReturn(expensesExpected);
@@ -211,7 +211,7 @@ class ExpenseControllerTest {
     @Test
     void shouldUpdateExpenseSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE);
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName());
         when(updateExpensePort.update(any(), any())).thenReturn(expenseExpected);
 
         var request = new ExpenseRequestDTO(expenseExpected.getDescription(),
@@ -239,7 +239,7 @@ class ExpenseControllerTest {
     @Test
     void shouldFindExpenseByDescriptionSuccessfully() throws Exception {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE);
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
 
         when(findExpenseByDescriptionPort.findByDescription(any())).thenReturn(List.of(expenseExpected));
 
@@ -264,7 +264,7 @@ class ExpenseControllerTest {
     @Test
     void shouldFindExpenseByMonthSuccessfully() throws Exception {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE);
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
 
         when(findExpensesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
 

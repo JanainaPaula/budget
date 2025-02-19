@@ -15,7 +15,7 @@ public class Expense {
     private final LocalDate date;
     private final Category category;
 
-    private Expense(String description, Double amount, LocalDate date, Category category) {
+    private Expense(String description, Double amount, LocalDate date, String category) {
         validateFields(description, amount, date);
         this.description = description;
         this.amount = amount;
@@ -23,7 +23,7 @@ public class Expense {
         this.category = setCategory(category);
     }
 
-    private Expense(Long id, String description, Double amount, LocalDate date, Category category) {
+    private Expense(Long id, String description, Double amount, LocalDate date, String category) {
         validateFields(description, amount, date);
         this.id = id;
         this.description = description;
@@ -32,15 +32,11 @@ public class Expense {
         this.category = setCategory(category);
     }
 
-    private static Category setCategory(Category category) {
-        return category != null ? category : Category.OTHERS;
-    }
-
-    public static Expense of(Long id, String description, Double amount, LocalDate date, Category category){
+    public static Expense of(Long id, String description, Double amount, LocalDate date, String category){
         return new Expense(id, description, amount, date, category);
     }
 
-    public static Expense of(String description, Double amount, LocalDate date, Category category){
+    public static Expense of(String description, Double amount, LocalDate date, String category){
         return new Expense(description, amount, date, category);
     }
 
@@ -54,6 +50,10 @@ public class Expense {
         if (date == null) {
             throw new DomainValidationException(EXPENSE_DATE_CANNOT_BE_NULL);
         }
+    }
+
+    private static Category setCategory(String category) {
+        return category == null ? Category.OTHERS : Category.getCategoryByName(category);
     }
 
     public Long getId() {

@@ -5,7 +5,7 @@ import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
 import br.com.janadev.budget.domain.summary.CategorySummary;
 import br.com.janadev.budget.domain.summary.Summary;
-import br.com.janadev.budget.domain.summary.usecases.GetSummaryByMonthUseCase;
+import br.com.janadev.budget.domain.summary.usecases.GetMonthlySummaryUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ class GetSummaryByMonthUseCaseTest {
     private ExpenseDatabasePort expenseDatabasePort;
 
     @InjectMocks
-    private GetSummaryByMonthUseCase getSummaryByMonthUseCase;
+    private GetMonthlySummaryUseCase getSummaryByMonthUseCase;
 
     @Test
     void shouldGetSummaryByMonthSuccessfully(){
@@ -49,7 +49,7 @@ class GetSummaryByMonthUseCaseTest {
         when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalExpenses);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(expensesByCategory);
 
-        Summary summary = getSummaryByMonthUseCase.getSummaryByMonth(2025, 2);
+        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(2025, 2);
 
         assertNotNull(summary);
         assertAll(
@@ -70,7 +70,7 @@ class GetSummaryByMonthUseCaseTest {
         when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(0.0);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(List.of());
 
-        Summary summary = getSummaryByMonthUseCase.getSummaryByMonth(2025, 2);
+        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(2025, 2);
 
         assertNotNull(summary);
         assertAll(

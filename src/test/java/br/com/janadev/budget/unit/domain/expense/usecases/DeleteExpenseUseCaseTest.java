@@ -33,7 +33,7 @@ class DeleteExpenseUseCaseTest {
     void shouldDeleteExpenseSuccessfully(){
         when(expenseDatabasePort.findById(any())).thenReturn(
                 Expense.of(2L, "Luz", 150.0,
-                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE)
+                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName())
         );
         doNothing().when(expenseDatabasePort).delete(any());
         assertDoesNotThrow(()-> deleteExpenseUseCase.delete(2L));

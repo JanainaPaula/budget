@@ -34,16 +34,16 @@ class UpdateExpenseUseCaseTest {
     @Test
     void shouldUpdateExpenseSuccessfully(){
         var expenseFound = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE);
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName());
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseFound);
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(false);
         when(expenseDatabasePort.update(any())).thenReturn(Expense.of(2L, "Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE));
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()));
 
         Expense expenseUpdated = updateExpenseUseCase.update(2L,
                 Expense.of("Gás", 50.0,
-                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE));
+                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()));
 
         assertNotNull(expenseUpdated);
         assertAll(
@@ -60,14 +60,14 @@ class UpdateExpenseUseCaseTest {
 
         assertThrows(DomainNotFoundException.class,
                 () -> updateExpenseUseCase.update(2L, Expense.of("Gás", 50.0,
-                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE))
+                        LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()))
         );
     }
 
     @Test
     void shouldThrowsExpenseAlreadyExistExceptionWhenTryUpdateExpenseDescriptionToADescriptionThatAlreadyExistInMonth(){
         var expenseFound = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE);
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName());
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseFound);
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
@@ -75,7 +75,7 @@ class UpdateExpenseUseCaseTest {
         assertThrows(ExpenseAlreadyExistException.class,
                 () -> updateExpenseUseCase.update(2L,
                         Expense.of("Gás", 50.0,
-                                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE))
+                                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()))
         );
     }
 

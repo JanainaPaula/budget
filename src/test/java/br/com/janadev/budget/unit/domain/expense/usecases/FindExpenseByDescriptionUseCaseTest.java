@@ -31,7 +31,7 @@ class FindExpenseByDescriptionUseCaseTest {
     @Test
     void shouldFindExpenseByDescriptionSuccessfully(){
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE);
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
 
         when(expenseDatabasePort.findByDescription(any())).thenReturn(List.of(expenseExpected));
 

@@ -31,8 +31,8 @@ class FindAllExpensesUseCaseTest {
     @Test
     void shouldFindAllExpensesSuccessfully(){
         List<Expense> expensesExpected = List.of(
-                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE),
-                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE)
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName())
         );
 
         when(expenseDatabasePort.findAll()).thenReturn(expensesExpected);

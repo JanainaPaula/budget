@@ -31,7 +31,7 @@ class FindExpensesByMonthUseCaseTest {
     @Test
     void shouldFindAllExpensesByMonthSuccessfully(){
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE);
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
 
         when(expenseDatabasePort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
 

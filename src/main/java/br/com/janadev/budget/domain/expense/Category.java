@@ -23,14 +23,14 @@ public enum Category {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public static Category getCategoryByName(String name){
+    public static Category getCategoryByName(String name) {
         List<Category> categories = List.of(Category.values());
         return categories.stream()
-                .filter(category -> Objects.equals(category.getName(), name))
+                .filter(category -> Objects.equals(category.getName().toLowerCase(), name.toLowerCase()))
                 .findFirst()
                 .orElseThrow(() -> new CategoryNotFoundException(EXPENSE_CATEGORY_NOT_FOUND));
     }

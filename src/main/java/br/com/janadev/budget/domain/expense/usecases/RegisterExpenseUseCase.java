@@ -2,8 +2,8 @@ package br.com.janadev.budget.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
+import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
 
 import java.time.LocalDate;
 
@@ -23,7 +23,7 @@ public class RegisterExpenseUseCase implements RegisterExpensePort {
             throw new ExpenseAlreadyExistException(EXPENSE_DESCRIPTION_ALREADY_EXIST);
         }
         var expense = Expense.of(expenseCommand.getDescription(), expenseCommand.getAmount(), expenseCommand.getDate(),
-                expenseCommand.getCategory());
+                expenseCommand.getCategoryName());
         return expenseDatabasePort.register(expense);
     }
 
