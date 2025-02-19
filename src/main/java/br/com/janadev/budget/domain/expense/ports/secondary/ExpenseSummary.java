@@ -11,6 +11,14 @@ public class ExpenseSummary {
         this.totalByCategory = totalByCategory;
     }
 
+    public double getTotal() {
+        return total;
+    }
+
+    public List<CategoryExpense> getTotalByCategory() {
+        return totalByCategory;
+    }
+
     public static ExpenseSummary of(double total, List<CategoryExpense> categoryExpenses){
         return new ExpenseSummary(total, categoryExpenses);
     }
@@ -30,6 +38,10 @@ public class ExpenseSummary {
 
         public String getCategory() {
             return category;
+        }
+
+        public double getTotal() {
+            return total;
         }
     }
 }
