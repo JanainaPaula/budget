@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ExpenseControllerIntegratedTest extends TestContainersConfig {
+public class ExpenseIntegratedTests extends TestContainersConfig {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
