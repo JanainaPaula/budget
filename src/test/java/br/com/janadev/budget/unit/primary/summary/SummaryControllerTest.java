@@ -7,10 +7,8 @@ import br.com.janadev.budget.domain.summary.port.primary.GetMonthlySummaryPort;
 import br.com.janadev.budget.primary.summary.SummaryController;
 import br.com.janadev.budget.primary.summary.dto.SummaryDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
@@ -18,13 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -81,4 +78,25 @@ class SummaryControllerTest {
         );
     }
 
+    @Test
+    void shouldReturnZeroMonthlySummaryWhenThereNoAreIncomesAndExpensesRegisteredInMonth() throws Exception {
+        Summary summaryExpected = Summary.of(0.0, 0.0, List.of());
+
+        when(getMonthlySummaryPort.getMonthlySummary(anyInt(), anyInt())).thenReturn(summaryExpected);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/summaries/{year}/{month}", 2025, 2)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        SummaryDTO summary = jsonSummaryDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertTrue(summary.expensesByCategory().isEmpty()),
+                () -> assertEquals(summaryExpected.getIncomes(), summary.incomes()),
+                () -> assertEquals(summaryExpected.getExpenses(), summary.expenses()),
+                () -> assertEquals(summaryExpected.getFinalBalance(), summary.finalBalance())
+        );
+    }
 }
