@@ -16,5 +16,5 @@ public interface ExpenseDatabasePort {
     List<Expense> findByDescription(String description);
     List<Expense> findAllByMonth(int year, int month);
     double sumTotalAmountByMonth(int year, int month);
-    CategorySummary findExpensesByCategoryByMonth(int year, int month);
+    List<CategorySummary> findExpensesByCategoryByMonth(int year, int month);
 }

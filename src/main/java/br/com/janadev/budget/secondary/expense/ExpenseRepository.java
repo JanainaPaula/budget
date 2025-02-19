@@ -1,6 +1,6 @@
 package br.com.janadev.budget.secondary.expense;
 
-import br.com.janadev.budget.secondary.expense.projections.ExpenseProjection;
+import br.com.janadev.budget.secondary.expense.projections.ExpensesByCategoryProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,16 +16,18 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
     @Query("SELECT e FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
     List<ExpenseDBO> findByDateYearAndDateMonth(int year, int month);
 
-    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
+    @Query("""
+            SELECT COALESCE(SUM(e.amount), 0)
+            FROM ExpenseDBO e
+            WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month"
+            """)
     double sumTotalAmountByMonth(int year, int month);
 
     @Query("""
-            SELECT
-            (SELECT COALESCE(SUM(e.amount), 0) FROM ExpenseDBO e
-                WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month) AS expenseTotal,
-            (SELECT e.category AS category, COALESCE(SUM(e.amount), 0) AS total FROM ExpenseDBO e
-                WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month GROUP BY e.category) AS categoryExpenses
-            FROM Dual
+            SELECT e.category AS category, COALESCE(SUM(e.amount), 0) AS total
+            FROM ExpenseDBO e
+            WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month
+            GROUP BY e.category
             """)
-    ExpenseProjection createExpenseSummary(int year, int month);
+    List<ExpensesByCategoryProjection> createExpensesByCategorySummary(int year, int month);
 }

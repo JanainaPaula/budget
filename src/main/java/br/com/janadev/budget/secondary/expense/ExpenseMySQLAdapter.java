@@ -71,7 +71,9 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     }
 
     @Override
-    public CategorySummary findExpensesByCategoryByMonth(int year, int month) {
-        return null;
+    public List<CategorySummary> findExpensesByCategoryByMonth(int year, int month) {
+        return expenseRepository.createExpensesByCategorySummary(year, month).stream()
+                .map(summary -> CategorySummary.of(summary.getCategory(), summary.getTotal()))
+                .toList();
     }
 }
