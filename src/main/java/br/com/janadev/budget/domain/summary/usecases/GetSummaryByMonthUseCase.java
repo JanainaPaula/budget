@@ -20,9 +20,9 @@ public class GetSummaryByMonthUseCase implements GetSummaryByMonthPort {
     public Summary getSummaryByMonth(int year, int month) {
         double totalIncomes = incomeDatabasePort.sumTotalAmountByMonth(year, month);
         double totalExpenses = expenseDatabasePort.sumTotalAmountByMonth(year, month);
-        var expenseSummary = expenseDatabasePort.findExpensesByCategoryByMonth(year, month);
+        var expensesByCategorySummary = expenseDatabasePort.findExpensesByCategoryByMonth(year, month);
         double finalBalance = calculateFinalBalance(totalIncomes, totalExpenses);
-        return null;
+        return Summary.of(totalIncomes, totalExpenses, finalBalance, expensesByCategorySummary);
     }
 
     private static double calculateFinalBalance(double totalIncomes, double totalExpenses) {

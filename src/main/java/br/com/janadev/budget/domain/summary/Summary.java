@@ -18,6 +18,4 @@ public class Summary {
     public static Summary of(double incomes, double expenses, double finalBalance, List<CategorySummary> expensesByCategory){
         return new Summary(incomes, expenses, finalBalance, expensesByCategory);
     }
-
-
 }
