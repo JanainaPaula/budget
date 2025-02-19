@@ -66,6 +66,11 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     }
 
     @Override
+    public double sumTotalAmountByMonth(int year, int month) {
+        return expenseRepository.sumTotalAmountByMonth(year, month);
+    }
+
+    @Override
     public CategorySummary findExpensesByCategoryByMonth(int year, int month) {
         return null;
     }

@@ -16,6 +16,9 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
     @Query("SELECT e FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
     List<ExpenseDBO> findByDateYearAndDateMonth(int year, int month);
 
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
+    double sumTotalAmountByMonth(int year, int month);
+
     @Query("""
             SELECT
             (SELECT COALESCE(SUM(e.amount), 0) FROM ExpenseDBO e
