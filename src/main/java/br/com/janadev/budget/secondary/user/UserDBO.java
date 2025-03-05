@@ -1,5 +1,6 @@
 package br.com.janadev.budget.secondary.user;
 
+import br.com.janadev.budget.primary.user.UserResponseDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
