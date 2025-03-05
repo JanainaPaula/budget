@@ -30,7 +30,7 @@ class FindIncomesByMonthUseCaseTest {
     @Test
     void shouldFindAllIncomesByMonthSuccessfully(){
         Income incomeExpected = Income.of(2L, "Salário", 5000.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15));
+                LocalDate.of(2025, Month.FEBRUARY, 15), 2L);
 
         when(incomeDatabasePort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
 

@@ -1,10 +1,12 @@
 package br.com.janadev.budget.secondary.income;
 
 import br.com.janadev.budget.domain.income.Income;
+import br.com.janadev.budget.secondary.user.UserDBO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -18,6 +20,9 @@ public class IncomeDBO {
     private String description;
     private Double amount;
     private LocalDate date;
+
+    @ManyToOne
+    private UserDBO user;
 
     public IncomeDBO() {
     }
@@ -44,7 +49,7 @@ public class IncomeDBO {
     }
 
     public Income toDomain(){
-        return Income.of(this.id, this.description, this.amount, this.date);
+        return Income.of(this.id, this.description, this.amount, this.date, this.user.getId());
     }
 
     public Long getId() {

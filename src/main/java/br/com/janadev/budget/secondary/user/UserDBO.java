@@ -18,4 +18,16 @@ public class UserDBO {
 
     public UserDBO() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
 }

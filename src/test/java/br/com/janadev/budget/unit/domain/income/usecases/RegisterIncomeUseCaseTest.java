@@ -34,8 +34,8 @@ class RegisterIncomeUseCaseTest {
         var description = "Venda Enjoei";
         double amount = 159.90;
         var date = LocalDate.of(2025, Month.JANUARY, 21);
-        var incomeCommand = Income.of(description, amount, date);
-        var incomeExpected = Income.of(2L, description, amount, date);
+        var incomeCommand = Income.of(description, amount, date, 2L);
+        var incomeExpected = Income.of(2L, description, amount, date, 2L);
 
         when(incomeDatabasePort.save(any())).thenReturn(incomeExpected);
 
@@ -55,7 +55,7 @@ class RegisterIncomeUseCaseTest {
         var description = "Venda Enjoei";
         double amount = 159.90;
         var date = LocalDate.of(2025, Month.JANUARY, 21);
-        var incomeCommand = Income.of(description, amount, date);
+        var incomeCommand = Income.of(description, amount, date, 2L);
 
         when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
 

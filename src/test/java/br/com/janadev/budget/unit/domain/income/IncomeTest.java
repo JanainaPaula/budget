@@ -20,7 +20,7 @@ class IncomeTest {
 
     @Test
     void shouldCreateCommandSuccessFully(){
-        var income = Income.of(description, amount, date);
+        var income = Income.of(description, amount, date, 2L);
         assertAll(
                 () -> assertNotNull(income),
                 () -> assertEquals(description, income.getDescription()),
@@ -33,13 +33,13 @@ class IncomeTest {
     void shouldThrownDomainValidationExceptionWhenSomeFieldsValueIsInvalid(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of(description, 0.0, date),
+                        () -> Income.of(description, 0.0, date, 2L),
                         "Amount field is zero."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of("", amount, date),
+                        () -> Income.of("", amount, date, 2L),
                         "Description fiels is blank or empty."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of(description, amount, null),
+                        () -> Income.of(description, amount, null, 2L),
                         "Date field is null.")
         );
     }
