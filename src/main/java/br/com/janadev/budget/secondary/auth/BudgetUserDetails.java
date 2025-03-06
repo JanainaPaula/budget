@@ -2,6 +2,7 @@ package br.com.janadev.budget.secondary.auth;
 
 import br.com.janadev.budget.secondary.user.UserDBO;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -23,7 +24,8 @@ public class BudgetUserDetails implements UserDetails {
     }
 
     public static BudgetUserDetails of(UserDBO user){
-        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(), List.of());
+        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     @Override
@@ -43,21 +45,21 @@ public class BudgetUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }
