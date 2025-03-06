@@ -36,10 +36,10 @@ class UpdateIncomeUseCaseTest {
         var description = "Salário";
         double amount = 3000.0;
         var date = LocalDate.of(2025, Month.JANUARY, 23);
-        var income = Income.of(id, description, amount, date, 2L);
+        var income = Income.of(id, description, amount, date);
 
-        var incomeCommand = Income.of(description, 5000.0, LocalDate.of(2025, Month.JANUARY, 15), 2L);
-        var incomeUpdatedExpected = Income.of(id, description, incomeCommand.getAmount(), incomeCommand.getDate(), 2L);
+        var incomeCommand = Income.of(description, 5000.0, LocalDate.of(2025, Month.JANUARY, 15));
+        var incomeUpdatedExpected = Income.of(id, description, incomeCommand.getAmount(), incomeCommand.getDate());
 
         when(incomeDatabasePort.findById(any())).thenReturn(income);
         when(incomeDatabasePort.updateById(any())).thenReturn(incomeUpdatedExpected);
@@ -57,7 +57,7 @@ class UpdateIncomeUseCaseTest {
 
     @Test
     void shouldThrowsDomainNotFoundExceptionWhenIncomeNotFound(){
-        var incomeCommand = Income.of("Salário", 3000.0, LocalDate.of(2025, Month.JANUARY, 23), 2L);
+        var incomeCommand = Income.of("Salário", 3000.0, LocalDate.of(2025, Month.JANUARY, 23));
         when(incomeDatabasePort.findById(any())).thenReturn(null);
 
         assertThrows(DomainNotFoundException.class,
@@ -67,10 +67,10 @@ class UpdateIncomeUseCaseTest {
     @Test
     void shouldThrowsIncomeAlreadyExistsExceptionWhenTryChangeDescriptionAndDescriptionAlreadyExists(){
         var incomeCommand = Income.of("Salário", 3000.0,
-                LocalDate.of(2025, Month.JANUARY, 23), 2L);
+                LocalDate.of(2025, Month.JANUARY, 23));
         when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
         when(incomeDatabasePort.findById(any())).thenReturn(Income.of(2L, "Vendas", 2000.0,
-                LocalDate.of(2025, Month.JANUARY, 23), 2L));
+                LocalDate.of(2025, Month.JANUARY, 23)));
 
         assertThrows(IncomeAlreadyExistsException.class,
                 () -> updateIncomeUseCase.update(2L, incomeCommand));

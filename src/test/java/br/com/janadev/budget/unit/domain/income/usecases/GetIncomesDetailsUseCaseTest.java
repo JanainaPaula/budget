@@ -32,7 +32,7 @@ class GetIncomesDetailsUseCaseTest {
     @Test
     void shouldGetDetailsOfIncomeSuccessfully(){
         Income incomeExpected = Income.of(2L, "Salário", 2000.0,
-                LocalDate.of(2025, Month.JANUARY, 23), 2L);
+                LocalDate.of(2025, Month.JANUARY, 23));
 
         when(incomeDatabasePort.findById(any())).thenReturn(incomeExpected);
 

@@ -81,7 +81,7 @@ class IncomeControllerTest {
         var requestBody = new IncomeRequestDTO(description, amount, date);
         var responseExpected = new IncomeResponseDTO(2L, description, amount, date);
 
-        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date, 2L));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -108,7 +108,7 @@ class IncomeControllerTest {
         var date = LocalDate.of(2025, Month.JANUARY, 21);
         var requestBody = new IncomeRequestDTO(description, 0.0, date);
 
-        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date, 2L));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -129,7 +129,7 @@ class IncomeControllerTest {
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomesEndpoint() throws Exception {
         var income = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21), 2L);
+                LocalDate.of(2025, Month.JANUARY, 21));
         when(findAllIncomesPort.findAll()).thenReturn(List.of(income));
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -152,7 +152,7 @@ class IncomeControllerTest {
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomeDetailsEndpoint() throws Exception {
         var incomeExpected = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21), 2L);
+                LocalDate.of(2025, Month.JANUARY, 21));
         when(getIncomeDetailsPort.getDetails(any())).thenReturn(incomeExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -194,7 +194,7 @@ class IncomeControllerTest {
     @Test
     void shouldRespondWithStatus200WhenCallUpdateIncomeEndpoint() throws Exception {
         var incomeExpected = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21), 2L);
+                LocalDate.of(2025, Month.JANUARY, 21));
         var request = new IncomeRequestDTO(
                 incomeExpected.getDescription(),
                 incomeExpected.getAmount(),
@@ -257,7 +257,7 @@ class IncomeControllerTest {
     void shouldRespondWithStatus200WhenFindIncomesWithADescription() throws Exception {
         List<Income> incomesExpected = List.of(
                 Income.of(2L, "Salário", 5000.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15), 2L)
+                        LocalDate.of(2025, Month.FEBRUARY, 15))
         );
 
         when(findIncomesByDescriptionPort.findByDescription(any())).thenReturn(incomesExpected);
@@ -283,7 +283,7 @@ class IncomeControllerTest {
     @Test
     void shouldRespondWithStatus2OOWhenFindAllIncomesByMonthSuccessfully() throws Exception {
         Income incomeExpected = Income.of(2L, "Salário", 5000.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), 2L);
+                LocalDate.of(2025, Month.FEBRUARY, 15));
 
         when(findAllIncomesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
 
