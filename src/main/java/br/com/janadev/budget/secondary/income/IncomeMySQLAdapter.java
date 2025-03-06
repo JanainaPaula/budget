@@ -2,6 +2,10 @@ package br.com.janadev.budget.secondary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.secondary.user.UserDBO;
+import br.com.janadev.budget.secondary.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,14 +15,20 @@ import java.util.List;
 public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     private final IncomeRepository repository;
+    private final UserRepository userRepository;
 
-    public IncomeMySQLAdapter(IncomeRepository repository) {
+    public IncomeMySQLAdapter(IncomeRepository repository, UserRepository userRepository) {
         this.repository = repository;
+        this.userRepository = userRepository;
     }
 
+
     @Override
+    @Transactional
     public Income save(Income income) {
-        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate());
+        UserDBO user = userRepository.findById(income.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate(), user);
         return repository.save(incomeDBO).toDomain();
     }
 

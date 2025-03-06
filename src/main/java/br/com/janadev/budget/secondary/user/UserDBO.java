@@ -1,6 +1,5 @@
 package br.com.janadev.budget.secondary.user;
 
-import br.com.janadev.budget.primary.user.UserResponseDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,12 +11,31 @@ import jakarta.persistence.Table;
 public class UserDBO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String senha;
+    private String password;
 
     public UserDBO() {
+    }
+
+    public static UserDBO of(String email, String password){
+        return new UserDBO(email, password);
+    }
+
+    public static UserDBO of(Long id, String email, String password){
+        return new UserDBO(id, email, password);
+    }
+
+    private UserDBO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    private UserDBO(Long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -28,7 +46,7 @@ public class UserDBO {
         return email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 }

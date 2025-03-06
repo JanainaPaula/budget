@@ -8,6 +8,6 @@ public record UserResponseDTO(
         String senha
 ) {
     public static UserResponseDTO toDTO(UserDBO userDBO){
-        return new UserResponseDTO(userDBO.getId(), userDBO.getEmail(), userDBO.getSenha());
+        return new UserResponseDTO(userDBO.getId(), userDBO.getEmail(), userDBO.getPassword());
     }
 }
