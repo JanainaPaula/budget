@@ -26,9 +26,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
     @Override
     @Transactional
     public Income save(Income income) {
-        UserDBO user = userRepository.findById(income.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate(), user);
+        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate());
         return repository.save(incomeDBO).toDomain();
     }
 
