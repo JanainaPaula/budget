@@ -15,4 +15,9 @@ public class UserService implements UserServicePort {
     public UserDBO register(UserDBO user) {
         return repository.save(user);
     }
+
+    @Override
+    public UserDBO getUserByUsername(String username) {
+        return repository.findByEmail(username);
+    }
 }
