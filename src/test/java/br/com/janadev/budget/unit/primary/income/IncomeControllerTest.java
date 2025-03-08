@@ -3,9 +3,9 @@ package br.com.janadev.budget.unit.primary.income;
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
-import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindAllIncomesPort;
 import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByDescriptionPort;
+import br.com.janadev.budget.domain.income.ports.primary.FindIncomesByMonthPort;
 import br.com.janadev.budget.domain.income.ports.primary.GetIncomeDetailsPort;
 import br.com.janadev.budget.domain.income.ports.primary.RegisterIncomePort;
 import br.com.janadev.budget.domain.income.ports.primary.UpdateIncomePort;
@@ -13,10 +13,12 @@ import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
+import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
@@ -43,7 +45,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(controllers = IncomeController.class)
-class IncomeControllerTest {
+@AutoConfigureMockMvc(addFilters = false)
+class IncomeControllerTest extends TestSecurityMockConfig {
 
     @Autowired
     private MockMvc mockMvc;

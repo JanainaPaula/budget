@@ -14,10 +14,12 @@ import br.com.janadev.budget.primary.expense.ExpenseController;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
+import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
@@ -44,7 +46,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(controllers = ExpenseController.class)
-class ExpenseControllerTest {
+@AutoConfigureMockMvc(addFilters = false)
+class ExpenseControllerTest extends TestSecurityMockConfig {
     @Autowired
     private MockMvc mockMvc;
     @Autowired

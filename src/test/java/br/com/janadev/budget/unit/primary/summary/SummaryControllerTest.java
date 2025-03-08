@@ -6,10 +6,12 @@ import br.com.janadev.budget.domain.summary.Summary;
 import br.com.janadev.budget.domain.summary.port.primary.GetMonthlySummaryPort;
 import br.com.janadev.budget.primary.summary.SummaryController;
 import br.com.janadev.budget.primary.summary.dto.SummaryDTO;
+import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
@@ -27,7 +29,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(controllers = SummaryController.class)
-class SummaryControllerTest {
+@AutoConfigureMockMvc(addFilters = false)
+class SummaryControllerTest extends TestSecurityMockConfig {
 
     @Autowired
     private MockMvc mockMvc;
