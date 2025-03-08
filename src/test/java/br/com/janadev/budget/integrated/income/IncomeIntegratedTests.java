@@ -1,6 +1,6 @@
 package br.com.janadev.budget.integrated.income;
 
-import br.com.janadev.budget.integrated.config.TestContainersConfig;
+import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class IncomeIntegratedTests extends TestContainersConfig {
+class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -41,9 +41,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
         var requestBody = new IncomeRequestDTO("Vendas Enjoei",
                 2000.0,
                 LocalDate.of(2025, Month.JANUARY, 21));
-
+        HttpEntity<IncomeRequestDTO> entity = new HttpEntity<>(requestBody, getAuthorizationHeader());
         ResponseEntity<IncomeResponseDTO> responseEntity =
-                restTemplate.postForEntity("/incomes", requestBody, IncomeResponseDTO.class);
+                restTemplate.exchange("/incomes", HttpMethod.POST, entity, IncomeResponseDTO.class);
 
         IncomeResponseDTO response = responseEntity.getBody();
 
@@ -64,9 +64,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
 
         var request = new IncomeRequestDTO("Salário", 1000.0,
                 LocalDate.of(2025, Month.JANUARY, 21));
-
+        HttpEntity<IncomeRequestDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
         ResponseEntity<ErrorResponse> responseEntity =
-                restTemplate.postForEntity("/incomes", request, ErrorResponse.class);
+                restTemplate.exchange("/incomes", HttpMethod.POST, entity, ErrorResponse.class);
 
         ErrorResponse errorResponse = responseEntity.getBody();
 
@@ -79,9 +79,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
 
         var requestIncomeInFebruary = new IncomeRequestDTO("Salário", 1000.0,
                 LocalDate.of(2025, Month.FEBRUARY, 21));
-
+        HttpEntity<IncomeRequestDTO> entity1 = new HttpEntity<>(requestIncomeInFebruary, getAuthorizationHeader());
         ResponseEntity<IncomeResponseDTO> responseEntity1 =
-                restTemplate.postForEntity("/incomes", requestIncomeInFebruary, IncomeResponseDTO.class);
+                restTemplate.exchange("/incomes", HttpMethod.POST, entity1, IncomeResponseDTO.class);
 
         IncomeResponseDTO response = responseEntity1.getBody();
 
@@ -98,12 +98,15 @@ class IncomeIntegratedTests extends TestContainersConfig {
     void shouldFindAllIncomesSuccessfully(){
         List<IncomeDBO> incomesExpected = incomeRepository.saveAll(
                 List.of(
-                        IncomeDBO.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)),
-                        IncomeDBO.of("Vendas enjoei", 700.0, LocalDate.of(2025, Month.JANUARY, 21))
+                        IncomeDBO.of("Salario", 5000.0,
+                                LocalDate.of(2025, Month.JANUARY, 21)),
+                        IncomeDBO.of("Vendas enjoei", 700.0,
+                                LocalDate.of(2025, Month.JANUARY, 21))
                 )
         );
-
-        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/incomes", HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/incomes", HttpMethod.GET,
+                entity,
                 new ParameterizedTypeReference<>() {}
         );
 
@@ -127,9 +130,12 @@ class IncomeIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldGetIncomeDetailsSuccessfully(){
-        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salario", 5000.0, LocalDate.of(2025, Month.JANUARY, 21)));
+        IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salario", 5000.0,
+                LocalDate.of(2025, Month.JANUARY, 21)));
 
-        ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.GET,
+                entity,
                 IncomeResponseDTO.class, savedIncome.getId());
 
         IncomeResponseDTO response = responseEntity.getBody();
@@ -151,7 +157,7 @@ class IncomeIntegratedTests extends TestContainersConfig {
         var incomeRequestDTO = new IncomeRequestDTO("Salário", 6000.0,
                 LocalDate.of(2025, Month.JANUARY, 21));
 
-        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(incomeRequestDTO);
+        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(incomeRequestDTO, getAuthorizationHeader());
 
         ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
                 requestEntity,
@@ -180,7 +186,7 @@ class IncomeIntegratedTests extends TestContainersConfig {
         var request = new IncomeRequestDTO("Salário", 1000.0,
                 LocalDate.of(2025, Month.JANUARY, 20));
 
-        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(request);
+        HttpEntity<IncomeRequestDTO> requestEntity = new HttpEntity<>(request, getAuthorizationHeader());
 
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
                 requestEntity,
@@ -198,7 +204,7 @@ class IncomeIntegratedTests extends TestContainersConfig {
         var requestWithOtherDescription = new IncomeRequestDTO("Renda Extra", 1000.0,
                 LocalDate.of(2025, Month.JANUARY, 20));
 
-        HttpEntity<IncomeRequestDTO> requestEntity1 = new HttpEntity<>(requestWithOtherDescription);
+        HttpEntity<IncomeRequestDTO> requestEntity1 = new HttpEntity<>(requestWithOtherDescription, getAuthorizationHeader());
 
         ResponseEntity<IncomeResponseDTO> responseEntity1 = restTemplate.exchange("/incomes/{id}", HttpMethod.PUT,
                 requestEntity1,
@@ -217,8 +223,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
                 LocalDate.of(2025, Month.JANUARY, 24));
         IncomeDBO incomeSaved = incomeRepository.save(incomeDBO);
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<Void> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.DELETE,
-                null, Void.class, incomeSaved.getId());
+                entity, Void.class, incomeSaved.getId());
 
         assertEquals(204, responseEntity.getStatusCode().value());
         assertFalse(incomeRepository.findById(incomeSaved.getId()).isPresent());
@@ -226,8 +233,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldRespondStatus400WhenTryDeleteIncomeWithIncomeIdDoesNotExists(){
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.DELETE,
-                null, ErrorResponse.class, 2);
+                entity, ErrorResponse.class, 2);
 
         ErrorResponse errorResponse = responseEntity.getBody();
 
@@ -251,7 +259,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
                 .queryParam("description", "salario")
                 .toUriString();
 
-        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,
+                entity,
                 new ParameterizedTypeReference<>() {}
         );
 
@@ -270,7 +280,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
                 .queryParam("description", "aluguel")
                 .toUriString();
 
-        ResponseEntity<List<IncomeResponseDTO>> responseEntity1 = restTemplate.exchange(uriAluguel, HttpMethod.GET, null,
+        HttpEntity<String> entity1 = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity1 = restTemplate.exchange(uriAluguel, HttpMethod.GET,
+                entity1,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -288,8 +300,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
         );
         incomeRepository.saveAll(incomesExpected);
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/incomes/{year}/{month}",
-                HttpMethod.GET, null,
+                HttpMethod.GET, entity,
                 new ParameterizedTypeReference<>() {
                 },
                 2025, 2
@@ -306,8 +319,9 @@ class IncomeIntegratedTests extends TestContainersConfig {
                 () -> assertEquals(incomesExpected.get(0).getDate(), response.get(0).date())
         );
 
+        HttpEntity<String> entity1 = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<List<IncomeResponseDTO>> responseEntity1 = restTemplate.exchange("/incomes/{year}/{month}",
-                HttpMethod.GET, null,
+                HttpMethod.GET, entity1,
                 new ParameterizedTypeReference<>() {
                 },
                 2024, 2

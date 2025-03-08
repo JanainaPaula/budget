@@ -9,4 +9,7 @@ public record LoginRequestDTO(
         @NotBlank(message = "The password must not be empty or blank.")
         String password
 ) {
+        public static LoginRequestDTO of(String email, String password){
+            return new LoginRequestDTO(email, password);
+        }
 }

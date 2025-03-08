@@ -1,7 +1,7 @@
 package br.com.janadev.budget.integrated.expense;
 
 import br.com.janadev.budget.domain.expense.Category;
-import br.com.janadev.budget.integrated.config.TestContainersConfig;
+import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
@@ -32,18 +32,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ExpenseIntegratedTests extends TestContainersConfig {
+public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
     private ExpenseRepository expenseRepository;
+
     @Test
     void shouldRegisterExpenseSuccessfully(){
         var request = new ExpenseRequestDTO("Luz", 150.0,
                 LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
 
+        HttpEntity<ExpenseRequestDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
+
         ResponseEntity<ExpenseResponseDTO> responseEntity =
-                restTemplate.postForEntity("/expenses", request, ExpenseResponseDTO.class);
+                restTemplate.exchange("/expenses", HttpMethod.POST, entity, ExpenseResponseDTO.class);
 
         ExpenseResponseDTO response = responseEntity.getBody();
 
@@ -67,16 +70,19 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
         var request = new ExpenseRequestDTO("Gás", 50.0,
                 LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
 
+        HttpEntity<ExpenseRequestDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
         ResponseEntity<ExpenseResponseDTO> responseEntity =
-                restTemplate.postForEntity("/expenses", request, ExpenseResponseDTO.class);
+                restTemplate.exchange("/expenses", HttpMethod.POST, entity, ExpenseResponseDTO.class);
 
         assertEquals(400, responseEntity.getStatusCode().value());
 
         var requestGasToFebruary = new ExpenseRequestDTO("Gás", 50.0,
                 LocalDate.of(2025, Month.FEBRUARY, 2), Category.HOUSE.getName());
 
+
+        HttpEntity<ExpenseRequestDTO> entity1 = new HttpEntity<>(requestGasToFebruary, getAuthorizationHeader());
         ResponseEntity<ExpenseResponseDTO> responseEntity1 =
-                restTemplate.postForEntity("/expenses", requestGasToFebruary, ExpenseResponseDTO.class);
+                restTemplate.exchange("/expenses", HttpMethod.POST, entity1, ExpenseResponseDTO.class);
 
         ExpenseResponseDTO response = responseEntity1.getBody();
 
@@ -95,8 +101,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
                 LocalDate.of(2025, Month.FEBRUARY, 1), "House")
         );
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<ExpenseResponseDTO> responseEntity =
-                restTemplate.getForEntity("/expenses/{id}", ExpenseResponseDTO.class, expenseExpected.getId());
+                restTemplate.exchange("/expenses/{id}", HttpMethod.GET, entity, ExpenseResponseDTO.class, expenseExpected.getId());
 
         ExpenseResponseDTO response = responseEntity.getBody();
 
@@ -111,8 +118,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldRespondWithStatus400WhenTryGetDetailsOfExpenseThatNotExist(){
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<ErrorResponse> responseEntity =
-                restTemplate.getForEntity("/expenses/{id}", ErrorResponse.class, 2);
+                restTemplate.exchange("/expenses/{id}", HttpMethod.GET, entity, ErrorResponse.class, 2);
 
         ErrorResponse errorResponse = responseEntity.getBody();
 
@@ -135,7 +143,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
         
         expenseRepository.saveAll(expenseExpected);
 
-        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET,
+                entity,
                 new ParameterizedTypeReference<>() {}
         );
 
@@ -156,7 +166,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldReturnStatusCode200WhenThereNotExpenses(){
-        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<IncomeResponseDTO>> responseEntity = restTemplate.exchange("/expenses", HttpMethod.GET,
+                entity,
                 new ParameterizedTypeReference<>() {}
         );
 
@@ -173,8 +185,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
                         Category.HOUSE.getName())
         );
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<Void> responseEntity = restTemplate.exchange("/expenses/{id}", HttpMethod.DELETE,
-                null, Void.class, expenseSaved.getId());
+                entity, Void.class, expenseSaved.getId());
 
         assertEquals(204, responseEntity.getStatusCode().value());
         assertFalse(expenseRepository.findById(expenseSaved.getId()).isPresent());
@@ -182,8 +195,9 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldThrowDomainNotFoundExceptionWhenTryDeleteExpenseThatNotExist(){
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/expenses/{id}", HttpMethod.DELETE,
-                null, ErrorResponse.class, 2);
+                entity, ErrorResponse.class, 2);
 
         ErrorResponse errorResponse = responseEntity.getBody();
 
@@ -202,7 +216,7 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
 
         var expenseRequest = new ExpenseRequestDTO("Gás", 50.0,
                 LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
-        HttpEntity<ExpenseRequestDTO> request = new HttpEntity<>(expenseRequest);
+        HttpEntity<ExpenseRequestDTO> request = new HttpEntity<>(expenseRequest, getAuthorizationHeader());
 
         ResponseEntity<ExpenseResponseDTO> responseEntity =
                 restTemplate.exchange("/expenses/{id}", HttpMethod.PUT, request,
@@ -232,8 +246,8 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
         String uri = UriComponentsBuilder.fromPath("/expenses")
                 .queryParam("description", "faculdade")
                 .toUriString();
-
-        ResponseEntity<List<ExpenseResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null,
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<ExpenseResponseDTO>> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity,
                 new ParameterizedTypeReference<>() {
         });
 
@@ -251,8 +265,8 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
         String uriGas = UriComponentsBuilder.fromPath("/expenses")
                 .queryParam("description", "gas")
                 .toUriString();
-
-        ResponseEntity<List<ExpenseResponseDTO>> responseEntity1 = restTemplate.exchange(uriGas, HttpMethod.GET, null,
+        HttpEntity<String> entity1 = new HttpEntity<>(getAuthorizationHeader());
+        ResponseEntity<List<ExpenseResponseDTO>> responseEntity1 = restTemplate.exchange(uriGas, HttpMethod.GET, entity1,
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -272,9 +286,10 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
         );
         expenseRepository.saveAll(expensesExpected);
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<List<ExpenseResponseDTO>> responseEntity = restTemplate.exchange("/expenses/{year}/{month}",
                 HttpMethod.GET,
-                null,
+                entity,
                 new ParameterizedTypeReference<>() {},
                 2025,
                 2
@@ -292,9 +307,10 @@ public class ExpenseIntegratedTests extends TestContainersConfig {
                 () -> assertEquals(expensesExpected.get(0).getCategory(), response.get(0).category())
         );
 
+        HttpEntity<String> entity1 = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<List<ExpenseResponseDTO>> responseEntity1 = restTemplate.exchange("/expenses/{year}/{month}",
                 HttpMethod.GET,
-                null,
+                entity1,
                 new ParameterizedTypeReference<>() {},
                 2024,
                 2

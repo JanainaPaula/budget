@@ -25,7 +25,6 @@ public abstract class TestContainersConfig {
     void tearDown(){
         jdbcTemplate.execute("DELETE FROM incomes");
         jdbcTemplate.execute("DELETE FROM expenses");
-        jdbcTemplate.execute("DELETE FROM users");
     }
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry){

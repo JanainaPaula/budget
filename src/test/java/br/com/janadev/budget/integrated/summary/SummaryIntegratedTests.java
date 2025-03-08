@@ -1,7 +1,7 @@
 package br.com.janadev.budget.integrated.summary;
 
 import br.com.janadev.budget.domain.expense.Category;
-import br.com.janadev.budget.integrated.config.TestContainersConfig;
+import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.primary.summary.dto.SummaryDTO;
 import br.com.janadev.budget.secondary.expense.ExpenseDBO;
 import br.com.janadev.budget.secondary.expense.ExpenseRepository;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SummaryIntegratedTests extends TestContainersConfig {
+public class SummaryIntegratedTests extends IntegratedTestBaseConfig {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -55,8 +56,10 @@ public class SummaryIntegratedTests extends TestContainersConfig {
                         LocalDate.of(2025, Month.FEBRUARY, 10), Category.HOUSE.getName())
         ));
 
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
+
         ResponseEntity<SummaryDTO> responseEntity = restTemplate.exchange("/summaries/{year}/{month}",
-                HttpMethod.GET, null, SummaryDTO.class, 2025, 2);
+                HttpMethod.GET, entity, SummaryDTO.class, 2025, 2);
 
         SummaryDTO response = responseEntity.getBody();
 
@@ -75,8 +78,9 @@ public class SummaryIntegratedTests extends TestContainersConfig {
 
     @Test
     void shouldRespondZeroMonthlySummaryWhenThereNoRegisteredIncomesAndExpensesInMonth(){
+        HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<SummaryDTO> responseEntity = restTemplate.exchange("/summaries/{year}/{month}",
-                HttpMethod.GET, null, SummaryDTO.class, 2025, 2);
+                HttpMethod.GET, entity, SummaryDTO.class, 2025, 2);
 
         SummaryDTO response = responseEntity.getBody();
 
