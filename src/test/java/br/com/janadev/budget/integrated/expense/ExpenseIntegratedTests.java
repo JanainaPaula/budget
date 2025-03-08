@@ -11,7 +11,6 @@ import br.com.janadev.budget.secondary.expense.ExpenseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -33,8 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
-    @Autowired
-    private TestRestTemplate restTemplate;
+
     @Autowired
     private ExpenseRepository expenseRepository;
 
