@@ -1,6 +1,8 @@
 package br.com.janadev.budget.secondary.auth;
 
-import br.com.janadev.budget.secondary.user.UserServicePort;
+import br.com.janadev.budget.secondary.auth.jwt.TokenServicePort;
+import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
+import br.com.janadev.budget.secondary.auth.user.service.UserServicePort;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

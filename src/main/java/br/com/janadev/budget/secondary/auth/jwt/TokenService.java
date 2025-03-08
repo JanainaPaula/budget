@@ -1,5 +1,6 @@
-package br.com.janadev.budget.secondary.auth;
+package br.com.janadev.budget.secondary.auth.jwt;
 
+import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
-public class TokenService implements TokenServicePort{
+public class TokenService implements TokenServicePort {
 
     @Value("${api.security.token.secret}")
     private String secret;

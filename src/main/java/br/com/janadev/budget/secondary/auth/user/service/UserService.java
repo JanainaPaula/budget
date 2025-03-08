@@ -1,5 +1,7 @@
-package br.com.janadev.budget.secondary.user;
+package br.com.janadev.budget.secondary.auth.user.service;
 
+import br.com.janadev.budget.secondary.auth.user.UserDBO;
+import br.com.janadev.budget.secondary.auth.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

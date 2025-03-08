@@ -1,6 +1,7 @@
-package br.com.janadev.budget.secondary.auth;
+package br.com.janadev.budget.secondary.auth.user.service;
 
-import br.com.janadev.budget.secondary.user.UserServicePort;
+import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
+import br.com.janadev.budget.secondary.auth.user.service.UserServicePort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

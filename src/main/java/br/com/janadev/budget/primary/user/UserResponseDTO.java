@@ -1,6 +1,6 @@
 package br.com.janadev.budget.primary.user;
 
-import br.com.janadev.budget.secondary.user.UserDBO;
+import br.com.janadev.budget.secondary.auth.user.UserDBO;
 
 public record UserResponseDTO(
         Long id,

@@ -2,9 +2,7 @@ package br.com.janadev.budget.secondary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
-import br.com.janadev.budget.secondary.user.UserDBO;
-import br.com.janadev.budget.secondary.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import br.com.janadev.budget.secondary.auth.user.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 

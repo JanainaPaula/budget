@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.user;
+package br.com.janadev.budget.secondary.auth.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
