@@ -32,23 +32,14 @@ public class UserDBO {
     public UserDBO() {
     }
 
-    public static UserDBO of(String email, String password){
-        return new UserDBO(email, password);
+    public static UserDBO of(String email, String password, Set<Role> roles){
+        return new UserDBO(email, password, roles);
     }
 
-    public static UserDBO of(Long id, String email, String password){
-        return new UserDBO(id, email, password);
-    }
-
-    private UserDBO(String email, String password) {
+    private UserDBO(String email, String password, Set<Role> roles) {
         this.email = email;
         this.password = password;
-    }
-
-    private UserDBO(Long id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -61,5 +52,9 @@ public class UserDBO {
 
     public String getPassword() {
         return password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 }

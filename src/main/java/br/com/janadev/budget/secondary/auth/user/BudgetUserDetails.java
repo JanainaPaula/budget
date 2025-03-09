@@ -5,31 +5,31 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 public class BudgetUserDetails implements UserDetails {
 
     private final Long id;
     private final String email;
     private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final Set<Role> roles;
 
-    private BudgetUserDetails(Long id, String email, String password,
-                             Collection<? extends GrantedAuthority> authorities) {
+    private BudgetUserDetails(Long id, String email, String password, Set<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.roles = roles;
     }
 
     public static BudgetUserDetails of(UserDBO user){
-        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(), user.getRoles());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(String.format("ROLE_%s", role.name())))
+                .toList();
     }
 
     @Override
