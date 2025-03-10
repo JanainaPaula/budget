@@ -11,6 +11,6 @@ public record UserResponseDTO(
 ) {
     public static UserResponseDTO toDTO(UserDBO userDBO){
         return new UserResponseDTO(userDBO.getId(), userDBO.getEmail(),
-                userDBO.createRoles().stream().map(Enum::name).toList());
+                userDBO.getRoles().stream().map(Enum::name).toList());
     }
 }
