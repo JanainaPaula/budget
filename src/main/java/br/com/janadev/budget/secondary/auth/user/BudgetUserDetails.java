@@ -22,7 +22,7 @@ public class BudgetUserDetails implements UserDetails {
     }
 
     public static BudgetUserDetails of(UserDBO user){
-        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(), user.getRoles());
+        return new BudgetUserDetails(user.getId(), user.getEmail(), user.getPassword(), user.createRoles());
     }
 
     @Override

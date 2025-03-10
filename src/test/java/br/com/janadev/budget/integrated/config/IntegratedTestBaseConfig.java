@@ -42,8 +42,9 @@ public abstract class IntegratedTestBaseConfig extends TestContainersConfig {
     private String getAuthToken(){
         String mail = "integrated@teste.com";
         String password = "123456";
-        if(userRepository.findByEmail(mail) == null) {
-            userRepository.save(UserDBO.of(mail, bCryptPasswordEncoder.encode(password), Set.of(Role.USER, Role.ADMIN)));
+        if(userRepository.findByEmail(mail).isEmpty()) {
+            userRepository.save(UserDBO.of(mail, bCryptPasswordEncoder.encode(password),
+                    Set.of(Role.USER.name(), Role.ADMIN.name())));
         }
 
         LoginRequestDTO request = LoginRequestDTO.of(mail, password);

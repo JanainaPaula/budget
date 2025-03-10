@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -32,14 +33,21 @@ public class UserDBO {
     public UserDBO() {
     }
 
-    public static UserDBO of(String email, String password, Set<Role> roles){
+    public static UserDBO of(String email, String password, Set<String> roles){
         return new UserDBO(email, password, roles);
     }
 
-    private UserDBO(String email, String password, Set<Role> roles) {
+    private UserDBO(String email, String password, Set<String> roles) {
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.roles = createRoles(roles);
+    }
+
+    private Set<Role> createRoles(Set<String> requestRoles) {
+        if (requestRoles != null) {
+            return requestRoles.stream().map(Role::getRoleByName).collect(Collectors.toSet());
+        }
+        return Set.of(Role.USER);
     }
 
     public Long getId() {
@@ -54,7 +62,7 @@ public class UserDBO {
         return password;
     }
 
-    public Set<Role> getRoles() {
+    public Set<Role> createRoles() {
         return roles;
     }
 }
