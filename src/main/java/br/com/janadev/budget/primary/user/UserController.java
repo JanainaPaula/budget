@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +37,12 @@ public class UserController {
         );
         return ResponseEntity.created(URI.create(String.format("/users/%s", userCreated.getId())))
                 .body(UserResponseDTO.toDTO(userCreated));
+    }
+
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable Long userId){
+        userServicePort.delete(userId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -26,4 +26,9 @@ public class UserService implements UserServicePort {
         return repository.findByEmail(username)
                 .orElseThrow(() -> new RuntimeException("There is no user with this email."));
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
+    }
 }
