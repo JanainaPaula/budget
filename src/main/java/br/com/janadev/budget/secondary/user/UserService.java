@@ -1,10 +1,11 @@
 package br.com.janadev.budget.secondary.user;
 
-import br.com.janadev.budget.primary.user.UserSecondaryPort;
+import br.com.janadev.budget.primary.user.port.UserSecondaryPort;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,9 +20,9 @@ public class UserService implements UserSecondaryPort {
     }
 
     @Override
-    public UserDBO register(UserDBO user) {
-        alreadyExistUserByEmail(user.getEmail());
-        return repository.save(user);
+    public UserDBO register(String email, String password, Set<String> roles) {
+        alreadyExistUserByEmail(email);
+        return repository.save(UserDBO.of(email, password, roles));
     }
 
     @Override

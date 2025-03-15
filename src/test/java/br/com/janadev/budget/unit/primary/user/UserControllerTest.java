@@ -3,9 +3,9 @@ package br.com.janadev.budget.unit.primary.user;
 import br.com.janadev.budget.primary.user.UserController;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
+import br.com.janadev.budget.primary.user.port.UserSecondaryPort;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
-import br.com.janadev.budget.primary.user.UserSecondaryPort;
 import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +58,7 @@ public class UserControllerTest extends TestSecurityMockConfig {
         long id = 2L;
         Set<String> roles = Set.of(Role.USER.name());
         UserDBO userExpected = UserDBO.of(id, email, password, roles);
-        when(userServicePort.register(any())).thenReturn(userExpected);
+        when(userServicePort.register(any(), any(), any())).thenReturn(userExpected);
         when(encoder.encode(any())).thenReturn("$2a$10$RPwkm93vinmcaBAX8NRcH.ZxqPstI0bI44MWOR/X0Ea5NrKtTSTGK");
 
         UserRequestDTO request = new UserRequestDTO(email, password, roles);

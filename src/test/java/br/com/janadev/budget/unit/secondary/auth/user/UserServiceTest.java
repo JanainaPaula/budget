@@ -1,9 +1,9 @@
 package br.com.janadev.budget.unit.secondary.auth.user;
 
-import br.com.janadev.budget.secondary.user.dbo.Role;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.UserService;
+import br.com.janadev.budget.secondary.user.dbo.Role;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +39,7 @@ class UserServiceTest {
         when(userRepository.save(any())).thenReturn(userExpected);
         when(userRepository.existsByEmail(any())).thenReturn(false);
 
-        UserDBO user = userService.register(userExpected);
+        UserDBO user = userService.register(email, password, roles);
 
         assertNotNull(user);
         assertAll(
@@ -52,8 +52,8 @@ class UserServiceTest {
 
     @Test
     void shouldThrowsUserAlreadyExistsExceptionWhenUserWithEmailExists(){
-        var user = UserDBO.of(2L, "teste@teste.com", "123456", Set.of());
         when(userRepository.existsByEmail(any())).thenReturn(true);
-        assertThrows(RuntimeException.class, () -> userService.register(user));
+        assertThrows(RuntimeException.class,
+                () -> userService.register("teste@teste.com", "123456", Set.of()));
     }
 }
