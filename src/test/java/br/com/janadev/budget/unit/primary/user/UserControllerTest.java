@@ -26,7 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers = UserController.class)
@@ -78,5 +80,15 @@ public class UserControllerTest extends TestSecurityMockConfig {
         );
     }
 
+    @Test
+    void shouldDeleteUserSuccessfully() throws Exception {
+        doNothing().when(userServicePort).delete(any());
 
+        MockHttpServletResponse response = mockMvc.perform(
+                delete("/users/{userId}", 2L)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        assertEquals(204, response.getStatus());
+    }
 }
