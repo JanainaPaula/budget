@@ -1,5 +1,6 @@
-package br.com.janadev.budget.secondary.auth.user;
+package br.com.janadev.budget.secondary.user;
 
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

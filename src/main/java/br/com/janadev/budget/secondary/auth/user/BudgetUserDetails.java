@@ -1,5 +1,7 @@
 package br.com.janadev.budget.secondary.auth.user;
 
+import br.com.janadev.budget.secondary.user.dbo.Role;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

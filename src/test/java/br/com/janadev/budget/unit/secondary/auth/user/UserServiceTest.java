@@ -1,9 +1,9 @@
 package br.com.janadev.budget.unit.secondary.auth.user;
 
-import br.com.janadev.budget.secondary.auth.user.Role;
-import br.com.janadev.budget.secondary.auth.user.UserDBO;
-import br.com.janadev.budget.secondary.auth.user.UserRepository;
-import br.com.janadev.budget.secondary.auth.user.service.UserService;
+import br.com.janadev.budget.secondary.user.dbo.Role;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.secondary.user.UserRepository;
+import br.com.janadev.budget.secondary.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

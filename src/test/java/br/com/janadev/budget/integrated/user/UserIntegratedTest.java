@@ -3,9 +3,9 @@ package br.com.janadev.budget.integrated.user;
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
-import br.com.janadev.budget.secondary.auth.user.Role;
-import br.com.janadev.budget.secondary.auth.user.UserDBO;
-import br.com.janadev.budget.secondary.auth.user.service.UserServicePort;
+import br.com.janadev.budget.secondary.user.dbo.Role;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.secondary.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,15 +17,15 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserIntegratedTest extends IntegratedTestBaseConfig {
 
     @Autowired
-    private UserServicePort userServicePort;
+    private UserRepository repository;
 
     @Test
     void shouldRegisterUserSuccessfully(){
@@ -48,7 +48,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
 
     @Test
     void shouldDeleteUserSuccessfully(){
-        var userDBO = userServicePort.register(
+        var userDBO = repository.save(
                 UserDBO.of("teste1@test.com", "123456", Set.of(Role.USER.name()))
         );
 
@@ -58,6 +58,6 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
                 entity, Void.class, userDBO.getId());
 
         assertEquals(204, responseEntity.getStatusCode().value());
-        assertThrows(RuntimeException.class, () -> userServicePort.getUserByUsername(userDBO.getEmail()));
+        assertFalse(repository.findById(userDBO.getId()).isPresent());
     }
 }

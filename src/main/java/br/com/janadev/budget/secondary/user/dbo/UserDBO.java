@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.auth.user;
+package br.com.janadev.budget.secondary.user.dbo;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;

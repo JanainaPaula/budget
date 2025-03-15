@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.auth.user;
+package br.com.janadev.budget.secondary.user.dbo;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,5 +14,4 @@ public enum Role {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Role does not exist."));
     }
-
 }

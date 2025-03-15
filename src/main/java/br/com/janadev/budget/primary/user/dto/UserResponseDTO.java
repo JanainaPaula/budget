@@ -1,6 +1,6 @@
 package br.com.janadev.budget.primary.user.dto;
 
-import br.com.janadev.budget.secondary.auth.user.UserDBO;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package br.com.janadev.budget.secondary.auth;
 
 import br.com.janadev.budget.secondary.auth.jwt.TokenServicePort;
 import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
-import br.com.janadev.budget.secondary.auth.user.service.UserServicePort;
+import br.com.janadev.budget.secondary.auth.user.UserAuthDatabasePort;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,11 +18,11 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenServicePort tokenServicePort;
-    private final UserServicePort userServicePort;
+    private final UserAuthDatabasePort userDatabasePort;
 
-    public SecurityFilter(TokenServicePort tokenServicePort, UserServicePort userServicePort) {
+    public SecurityFilter(TokenServicePort tokenServicePort, UserAuthDatabasePort userDatabasePort) {
         this.tokenServicePort = tokenServicePort;
-        this.userServicePort = userServicePort;
+        this.userDatabasePort = userDatabasePort;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (jwtToken != null){
             var subject = tokenServicePort.getSubject(jwtToken);
-            var user = BudgetUserDetails.of(userServicePort.getUserByUsername(subject));
+            var user = BudgetUserDetails.of(userDatabasePort.getUserByUsername(subject));
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

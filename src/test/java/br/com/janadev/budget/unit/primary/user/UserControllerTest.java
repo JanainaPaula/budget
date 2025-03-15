@@ -3,9 +3,9 @@ package br.com.janadev.budget.unit.primary.user;
 import br.com.janadev.budget.primary.user.UserController;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
-import br.com.janadev.budget.secondary.auth.user.Role;
-import br.com.janadev.budget.secondary.auth.user.UserDBO;
-import br.com.janadev.budget.secondary.auth.user.service.UserServicePort;
+import br.com.janadev.budget.secondary.user.dbo.Role;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.primary.user.UserSecondaryPort;
 import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ public class UserControllerTest extends TestSecurityMockConfig {
     @Autowired
     private ObjectMapper objectMapper;
     @MockitoBean
-    private UserServicePort userServicePort;
+    private UserSecondaryPort userServicePort;
     @MockitoBean
     private BCryptPasswordEncoder encoder;
     private JacksonTester<UserRequestDTO> jsonRequestDto;
