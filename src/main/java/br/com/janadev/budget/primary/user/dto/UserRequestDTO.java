@@ -3,7 +3,6 @@ package br.com.janadev.budget.primary.user.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
 import java.util.Set;
 
 public record UserRequestDTO(
