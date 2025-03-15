@@ -48,11 +48,11 @@ public class UserService implements UserSecondaryPort {
     }
 
     private String resolvePassword(String password, UserDBO currentUser) {
-        return password == null ? currentUser.getPassword() : password;
+        return password == null || password.isBlank() ? currentUser.getPassword() : password;
     }
 
     private String resolveEmail(String email, UserDBO currentUser) {
-        if (email == null){
+        if (email == null || email.isBlank()){
             return currentUser.getEmail();
         }
         alreadyExistUserByEmail(email);

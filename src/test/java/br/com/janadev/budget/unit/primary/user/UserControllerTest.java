@@ -3,6 +3,7 @@ package br.com.janadev.budget.unit.primary.user;
 import br.com.janadev.budget.primary.user.UserController;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
+import br.com.janadev.budget.primary.user.dto.UserUpdateDTO;
 import br.com.janadev.budget.primary.user.port.UserSecondaryPort;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -45,6 +47,7 @@ public class UserControllerTest extends TestSecurityMockConfig {
     private BCryptPasswordEncoder encoder;
     private JacksonTester<UserRequestDTO> jsonRequestDto;
     private JacksonTester<UserResponseDTO> jsonResponseDto;
+    private JacksonTester<UserUpdateDTO> jsonUpdateDto;
 
     @BeforeEach
     void setUp(){
@@ -90,5 +93,32 @@ public class UserControllerTest extends TestSecurityMockConfig {
         ).andReturn().getResponse();
 
         assertEquals(204, response.getStatus());
+    }
+
+    @Test
+    void shouldUpdateUserSuccessfully() throws Exception {
+        String email = "teste@unit.com";
+        String password = "123456";
+        long id = 2L;
+        Set<String> roles = Set.of(Role.USER.name());
+        UserDBO userExpected = UserDBO.of(id, email, password, roles);
+
+        when(userServicePort.update(any(), any(), any())).thenReturn(userExpected);
+
+        UserUpdateDTO request = new UserUpdateDTO(email, password);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                put("/users/{id}", 2)
+                        .content(jsonUpdateDto.write(request).getJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+
+        UserResponseDTO userUpdated = jsonResponseDto.parse(response.getContentAsString()).getObject();
+
+        assertEquals(200, response.getStatus());
+        assertAll(
+                () -> assertEquals(userExpected.getId(), userUpdated.id()),
+                () -> assertEquals(userExpected.getEmail(), userUpdated.email())
+        );
     }
 }

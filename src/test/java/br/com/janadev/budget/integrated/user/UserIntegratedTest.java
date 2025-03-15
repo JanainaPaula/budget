@@ -3,9 +3,10 @@ package br.com.janadev.budget.integrated.user;
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
+import br.com.janadev.budget.primary.user.dto.UserUpdateDTO;
+import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
-import br.com.janadev.budget.secondary.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,7 +50,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
     @Test
     void shouldDeleteUserSuccessfully(){
         var userDBO = repository.save(
-                UserDBO.of("teste1@test.com", "123456", Set.of(Role.USER.name()))
+                UserDBO.of("delete@test.com", "123456", Set.of(Role.USER.name()))
         );
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
@@ -59,5 +60,55 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
 
         assertEquals(204, responseEntity.getStatusCode().value());
         assertFalse(repository.findById(userDBO.getId()).isPresent());
+    }
+
+    @Test
+    void shouldUpdateUserSuccessfully(){
+        var userDBO = repository.save(
+                UserDBO.of("update@test.com", "123456", Set.of(Role.USER.name()))
+        );
+
+        var request = new UserUpdateDTO("update1@teste.com", null);
+        HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
+
+        ResponseEntity<UserResponseDTO> responseEntity =
+                restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity, UserResponseDTO.class, userDBO.getId());
+
+        UserResponseDTO response = responseEntity.getBody();
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(request.email(), response.email()),
+                () -> assertEquals(userDBO.getId(), response.id())
+        );
+
+        var request1 = new UserUpdateDTO("", "78910");
+        HttpEntity<UserUpdateDTO> entity1 = new HttpEntity<>(request1, getAuthorizationHeader());
+
+        ResponseEntity<UserResponseDTO> responseEntity1 =
+                restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity1, UserResponseDTO.class, userDBO.getId());
+
+        assertEquals(200, responseEntity.getStatusCode().value());
+    }
+
+    @Test
+    void shouldNotUpdateUserWhenNewEmailAlreadyBelongsToAnotherUser(){
+        String emailThatAlreadyBelogsToAnother = "already-exist@test.com";
+        var userWithEmailAlreadyExist = repository.save(
+                UserDBO.of(emailThatAlreadyBelogsToAnother, "123456", Set.of(Role.USER.name()))
+        );
+
+        var userDBO = repository.save(
+                UserDBO.of("update-teste@teste.com", "123456", Set.of(Role.USER.name()))
+        );
+
+        var request = new UserUpdateDTO(emailThatAlreadyBelogsToAnother, null);
+        HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
+
+        ResponseEntity<UserResponseDTO> responseEntity =
+                restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity, UserResponseDTO.class, userDBO.getId());
+
+        //TODO: Arrumar após fazer tratamento de erros corretamente
+        assertEquals(403, responseEntity.getStatusCode().value());
     }
 }
