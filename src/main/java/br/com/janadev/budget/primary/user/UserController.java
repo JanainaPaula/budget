@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -45,8 +44,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO request){
-        UserDBO userUpdated = userServicePort.update(id, UserDBO.of(request.email(), request.password(), Set.of()));
+        UserDBO userUpdated = userServicePort.update(id, request.email(), request.password());
         return ResponseEntity.ok(UserResponseDTO.toDTO(userUpdated));
     }
 }

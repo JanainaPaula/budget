@@ -7,5 +7,5 @@ import java.util.Set;
 public interface UserSecondaryPort {
     UserDBO register(String email, String password, Set<String> roles);
     void delete(Long id);
-    UserDBO update(Long id, UserDBO user);
+    UserDBO update(Long id, String email, String password);
 }

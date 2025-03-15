@@ -31,11 +31,11 @@ public class UserService implements UserSecondaryPort {
     }
 
     @Override
-    public UserDBO update(Long id, UserDBO user) {
+    public UserDBO update(Long id, String email, String password) {
         UserDBO currentUser = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-        String newEmail = resolveEmail(user, currentUser);
-        String newPassword = resolvePassword(user, currentUser);
+        String newEmail = resolveEmail(email, currentUser);
+        String newPassword = resolvePassword(password, currentUser);
         return repository.save(UserDBO.of(id, newEmail, bCryptPasswordEncoder.encode(newPassword),
                 currentUser.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
         );
@@ -47,15 +47,15 @@ public class UserService implements UserSecondaryPort {
         }
     }
 
-    private String resolvePassword(UserDBO user, UserDBO currentUser) {
-        return user.getPassword() == null ? currentUser.getPassword() : user.getPassword();
+    private String resolvePassword(String password, UserDBO currentUser) {
+        return password == null ? currentUser.getPassword() : password;
     }
 
-    private String resolveEmail(UserDBO user, UserDBO currentUser) {
-        if (user.getEmail() == null){
+    private String resolveEmail(String email, UserDBO currentUser) {
+        if (email == null){
             return currentUser.getEmail();
         }
-        alreadyExistUserByEmail(user.getEmail());
-        return user.getEmail();
+        alreadyExistUserByEmail(email);
+        return email;
     }
 }
