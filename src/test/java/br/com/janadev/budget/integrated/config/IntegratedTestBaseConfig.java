@@ -2,9 +2,9 @@ package br.com.janadev.budget.integrated.config;
 
 import br.com.janadev.budget.primary.login.dto.LoginRequestDTO;
 import br.com.janadev.budget.primary.login.dto.LoginResponseDTO;
+import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
-import br.com.janadev.budget.secondary.user.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public abstract class IntegratedTestBaseConfig extends TestContainersConfig {
     protected TestRestTemplate restTemplate;
 
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    protected BCryptPasswordEncoder bCryptPasswordEncoder;
 
     protected String jwtToken;
 

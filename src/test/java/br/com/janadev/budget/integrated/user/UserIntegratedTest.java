@@ -9,16 +9,19 @@ import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import br.com.janadev.budget.secondary.user.exception.UserAlreadyExistsException;
+import br.com.janadev.budget.secondary.user.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Set;
 
 import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_ALREADY_EXITS_WITH_THIS_EMAIL;
+import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_DOES_NOT_EXIST;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -48,6 +51,20 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
                 () -> assertEquals(request.roles().size(), response.roles().size()),
                 () -> assertTrue(request.roles().contains(Role.USER.name()))
         );
+    }
+
+    @Test
+    void shouldNotRegisterUserWhenTryRegisterAUserWithAInvalidEmail(){
+        var request = new UserRequestDTO("EmailInvalido", "123456", Set.of(Role.USER.name()));
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
+
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/users", HttpMethod.POST,
+                entity, ErrorResponse.class);
+
+        ErrorResponse errorResponse = responseEntity.getBody();
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+        assertEquals(MethodArgumentNotValidException.class.getSimpleName(), errorResponse.getException());
     }
 
     @Test
@@ -91,7 +108,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
         ResponseEntity<UserResponseDTO> responseEntity1 =
                 restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity1, UserResponseDTO.class, userDBO.getId());
 
-        assertEquals(200, responseEntity.getStatusCode().value());
+        assertEquals(200, responseEntity1.getStatusCode().value());
     }
 
     @Test
@@ -118,6 +135,25 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
                 () -> assertEquals(USER_ALREADY_EXITS_WITH_THIS_EMAIL.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals(UserAlreadyExistsException.class.getSimpleName(), errorResponse.getException()),
                 () -> assertEquals(String.format("/users/%s", userDBO.getId()), errorResponse.getPath())
+        );
+    }
+
+    @Test
+    void shouldNotUpdateWhenTryUpdateAUserDoesNotExist(){
+        var request = new UserUpdateDTO("already-exist@test.com", null);
+        HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
+
+        var randomUserId = (long)(Math.random() * 100) + 1;
+        ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity,
+                ErrorResponse.class, randomUserId);
+
+        ErrorResponse errorResponse = responseEntity.getBody();
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(USER_DOES_NOT_EXIST.getMessage(), errorResponse.getMessage()),
+                () -> assertEquals(UserNotFoundException.class.getSimpleName(), errorResponse.getException()),
+                () -> assertEquals(String.format("/users/%s", randomUserId), errorResponse.getPath())
         );
     }
 }
