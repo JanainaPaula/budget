@@ -1,7 +1,12 @@
 package br.com.janadev.budget.secondary.auth;
 
+import br.com.janadev.budget.primary.handler.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.security.PrivilegedAction;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -22,9 +27,11 @@ import java.security.PrivilegedAction;
 public class SecurityConfiguration {
 
     private final SecurityFilter securityFilter;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfiguration(SecurityFilter securityFilter) {
+    public SecurityConfiguration(SecurityFilter securityFilter, ObjectMapper objectMapper) {
         this.securityFilter = securityFilter;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
@@ -34,6 +41,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/login").permitAll();
                     req.anyRequest().authenticated();
+                })
+                .exceptionHandling(eh -> {
+                    eh.authenticationEntryPoint(this::handleAuthenticationError);
+                    eh.accessDeniedHandler(this::handleAccessDeniedError);
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -47,5 +58,20 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    private void handleAuthenticationError(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException {
+        sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, exception, request.getRequestURI());
+    }
+
+    private void handleAccessDeniedError(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException {
+        sendErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, exception, request.getRequestURI());
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, int status, Exception exception, String path) throws IOException {
+        var errorResponse = ErrorResponse.of(String.valueOf(status), exception, path);
+        response.setContentType(MediaType.APPLICATION_JSON.toString());
+        response.setStatus(status);
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

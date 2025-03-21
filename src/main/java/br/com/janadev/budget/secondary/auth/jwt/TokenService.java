@@ -1,5 +1,6 @@
 package br.com.janadev.budget.secondary.auth.jwt;
 
+import br.com.janadev.budget.secondary.auth.exception.JWTTokenException;
 import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+
+import static br.com.janadev.budget.secondary.auth.exception.AuthErrorMessages.TOKEN_GENERATION_ERROR;
+import static br.com.janadev.budget.secondary.auth.exception.AuthErrorMessages.TOKEN_INVALID_OR_EXPIRED;
 
 @Service
 public class TokenService implements TokenServicePort {
@@ -29,7 +33,7 @@ public class TokenService implements TokenServicePort {
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
-            throw new RuntimeException("JWT token generation error");
+            throw new JWTTokenException(TOKEN_GENERATION_ERROR.getMessage());
         }
     }
 
@@ -43,7 +47,7 @@ public class TokenService implements TokenServicePort {
                     .verify(jwtToken)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("JWT token invalid or expired!");
+            throw new JWTTokenException(TOKEN_INVALID_OR_EXPIRED.getMessage());
         }
     }
 

@@ -2,11 +2,16 @@ package br.com.janadev.budget.secondary.user;
 
 import br.com.janadev.budget.primary.user.port.UserSecondaryPort;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.secondary.user.exception.UserAlreadyExistsException;
+import br.com.janadev.budget.secondary.user.exception.UserNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_ALREADY_EXITS_WITH_THIS_EMAIL;
+import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_DOES_NOT_EXIST;
 
 @Service
 public class UserService implements UserSecondaryPort {
@@ -33,7 +38,7 @@ public class UserService implements UserSecondaryPort {
     @Override
     public UserDBO update(Long id, String email, String password) {
         UserDBO currentUser = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
+                .orElseThrow(() -> new UserNotFoundException(USER_DOES_NOT_EXIST.getMessage()));
         String newEmail = resolveEmail(email, currentUser);
         String newPassword = resolvePassword(password, currentUser);
         return repository.save(UserDBO.of(id, newEmail, bCryptPasswordEncoder.encode(newPassword),
@@ -43,7 +48,7 @@ public class UserService implements UserSecondaryPort {
 
     private void alreadyExistUserByEmail(String email){
         if (repository.existsByEmail(email)){
-            throw new RuntimeException("There is already a user with this email.");
+            throw new UserAlreadyExistsException(USER_ALREADY_EXITS_WITH_THIS_EMAIL.getMessage());
         }
     }
 

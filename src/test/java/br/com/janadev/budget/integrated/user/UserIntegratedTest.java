@@ -1,12 +1,14 @@
 package br.com.janadev.budget.integrated.user;
 
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
+import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
 import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
 import br.com.janadev.budget.primary.user.dto.UserUpdateDTO;
 import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.secondary.user.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Set;
 
+import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_ALREADY_EXITS_WITH_THIS_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -94,7 +97,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
     @Test
     void shouldNotUpdateUserWhenNewEmailAlreadyBelongsToAnotherUser(){
         String emailThatAlreadyBelogsToAnother = "already-exist@test.com";
-        var userWithEmailAlreadyExist = repository.save(
+        repository.save(
                 UserDBO.of(emailThatAlreadyBelogsToAnother, "123456", Set.of(Role.USER.name()))
         );
 
@@ -105,10 +108,16 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
         var request = new UserUpdateDTO(emailThatAlreadyBelogsToAnother, null);
         HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
 
-        ResponseEntity<UserResponseDTO> responseEntity =
-                restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity, UserResponseDTO.class, userDBO.getId());
+        ResponseEntity<ErrorResponse> responseEntity =
+                restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity, ErrorResponse.class, userDBO.getId());
 
-        //TODO: Arrumar após fazer tratamento de erros corretamente
-        assertEquals(403, responseEntity.getStatusCode().value());
+        ErrorResponse errorResponse = responseEntity.getBody();
+
+        assertEquals(400, responseEntity.getStatusCode().value());
+        assertAll(
+                () -> assertEquals(USER_ALREADY_EXITS_WITH_THIS_EMAIL.getMessage(), errorResponse.getMessage()),
+                () -> assertEquals(UserAlreadyExistsException.class.getSimpleName(), errorResponse.getException()),
+                () -> assertEquals(String.format("/users/%s", userDBO.getId()), errorResponse.getPath())
+        );
     }
 }
