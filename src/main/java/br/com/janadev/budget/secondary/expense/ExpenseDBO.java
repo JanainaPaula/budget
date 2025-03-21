@@ -1,10 +1,13 @@
 package br.com.janadev.budget.secondary.expense;
 
 import br.com.janadev.budget.domain.expense.Expense;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -19,6 +22,10 @@ public class ExpenseDBO {
     private Double amount;
     private LocalDate date;
     private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserDBO user;
 
     public ExpenseDBO() {
     }
