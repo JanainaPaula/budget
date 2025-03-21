@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.auth;
+package br.com.janadev.budget.secondary.auth.config;
 
 import br.com.janadev.budget.primary.handler.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

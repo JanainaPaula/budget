@@ -1,4 +1,4 @@
-package br.com.janadev.budget.secondary.auth;
+package br.com.janadev.budget.secondary.auth.config;
 
 import br.com.janadev.budget.secondary.auth.jwt.TokenServicePort;
 import br.com.janadev.budget.secondary.auth.user.BudgetUserDetails;
