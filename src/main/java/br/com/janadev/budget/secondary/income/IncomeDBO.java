@@ -29,29 +29,31 @@ public class IncomeDBO {
     public IncomeDBO() {
     }
 
-    private IncomeDBO(Long id, String description, Double amount, LocalDate date) {
+    private IncomeDBO(Long id, String description, Double amount, LocalDate date, UserDBO user) {
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.user = user;
     }
 
-    private IncomeDBO(String description, Double amount, LocalDate date) {
+    private IncomeDBO(String description, Double amount, LocalDate date, UserDBO user) {
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.user = user;
     }
 
-    public static IncomeDBO of(Long id, String description, Double amount, LocalDate date){
-        return new IncomeDBO(id, description, amount, date);
+    public static IncomeDBO of(Long id, String description, Double amount, LocalDate date, UserDBO user){
+        return new IncomeDBO(id, description, amount, date, user);
     }
 
-    public static IncomeDBO of(String description, Double amount, LocalDate date){
-        return new IncomeDBO(description, amount, date);
+    public static IncomeDBO of(String description, Double amount, LocalDate date, UserDBO user){
+        return new IncomeDBO(description, amount, date, user);
     }
 
     public Income toDomain(){
-        return Income.of(this.id, this.description, this.amount, this.date);
+        return Income.of(this.id, this.description, this.amount, this.date, this.user.getId());
     }
 
     public Long getId() {

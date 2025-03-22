@@ -56,7 +56,7 @@ public class IncomeController {
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
         var userId = AuthUserUtil.getAuthenticatedUserId();
-        var income = Income.of(request.description(), request.amount(), request.date());
+        var income = Income.of(request.description(), request.amount(), request.date(), userId);
         var response = IncomeResponseDTO.toDTO(incomeDomainPort.register(income));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
     }
@@ -69,7 +69,8 @@ public class IncomeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<IncomeResponseDTO> update(@PathVariable Long id, @RequestBody IncomeRequestDTO request){
-        var command = Income.of(request.description(), request.amount(), request.date());
+        var userId = AuthUserUtil.getAuthenticatedUserId();
+        var command = Income.of(request.description(), request.amount(), request.date(), userId);
         var response = IncomeResponseDTO.toDTO(updateIncomePort.update(id, command));
         return ResponseEntity.ok(response);
     }

@@ -13,28 +13,31 @@ public class Income {
     private final String description;
     private final Double amount;
     private final LocalDate date;
+    private final Long userId;
 
-    public static Income of(Long id, String description, Double amount, LocalDate date){
-        return new Income(id, description, amount, date);
+    public static Income of(Long id, String description, Double amount, LocalDate date, Long userId){
+        return new Income(id, description, amount, date, userId);
     }
 
-    public static Income of(String description, Double amount, LocalDate date){
-        return new Income(description, amount, date);
+    public static Income of(String description, Double amount, LocalDate date, Long userId){
+        return new Income(description, amount, date, userId);
     }
 
-    private Income(Long id, String description, Double amount, LocalDate date) {
+    private Income(Long id, String description, Double amount, LocalDate date, Long userId) {
         validateFields(description, amount, date);
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.userId = userId;
     }
 
-    private Income(String description, Double amount, LocalDate date) {
+    private Income(String description, Double amount, LocalDate date, Long userId) {
         validateFields(description, amount, date);
         this.description = description;
         this.amount = amount;
         this.date = date;
+        this.userId = userId;
     }
 
     private void validateFields(String description, Double amount, LocalDate date) {
@@ -63,5 +66,9 @@ public class Income {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

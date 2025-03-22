@@ -2,6 +2,7 @@ package br.com.janadev.budget.secondary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.secondary.user.port.UserServicePort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +13,19 @@ import java.util.List;
 public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     private final IncomeRepository repository;
+    private final UserServicePort userServicePort;
 
-    public IncomeMySQLAdapter(IncomeRepository repository) {
+    public IncomeMySQLAdapter(IncomeRepository repository, UserServicePort userServicePort) {
         this.repository = repository;
+        this.userServicePort = userServicePort;
     }
 
 
     @Override
     @Transactional
     public Income save(Income income) {
-        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate());
+        var user = userServicePort.findById(income.getUserId());
+        var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate(), user);
         return repository.save(incomeDBO).toDomain();
     }
 
@@ -37,7 +41,8 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public Income updateById(Income income) {
-        var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate());
+        var user = userServicePort.findById(income.getUserId());
+        var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate(), user);
         return repository.save(incomeDBO).toDomain();
     }
 
@@ -48,8 +53,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public void delete(Income income) {
-        var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate());
-        repository.delete(incomeDBO);
+        repository.deleteById(income.getId());
     }
 
     @Override
