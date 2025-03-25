@@ -13,8 +13,8 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
 
     List<ExpenseDBO> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String description);
 
-    @Query("SELECT e FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
-    List<ExpenseDBO> findByDateYearAndDateMonth(int year, int month);
+    @Query("SELECT e FROM ExpenseDBO e WHERE e.user.id = :userId AND YEAR(e.date) = :year AND MONTH(e.date) = :month")
+    List<ExpenseDBO> findByUserIdAndDateYearAndDateMonth(Long userId, int year, int month);
 
     @Query("""
             SELECT COALESCE(SUM(e.amount), 0)

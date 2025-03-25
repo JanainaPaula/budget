@@ -64,7 +64,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public List<Income> findAllByMonth(Long userId, int year, int month) {
-        return repository.findByUserIdDateYearAndDateMonth(userId, year, month).stream()
+        return repository.findByUserIdAndDateYearAndDateMonth(userId, year, month).stream()
                 .map(IncomeDBO::toDomain).toList();
     }
 

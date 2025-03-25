@@ -11,7 +11,7 @@ public interface IncomeRepository extends JpaRepository<IncomeDBO, Long> {
     List<IncomeDBO> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String description);
 
     @Query("SELECT i FROM IncomeDBO i WHERE i.user.id = :userId AND YEAR(i.date) = :year AND MONTH(i.date) = :month")
-    List<IncomeDBO> findByUserIdDateYearAndDateMonth(Long userId, int year, int month);
+    List<IncomeDBO> findByUserIdAndDateYearAndDateMonth(Long userId, int year, int month);
 
     @Query("SELECT COALESCE(SUM(i.amount), 0) FROM IncomeDBO i WHERE YEAR(i.date) = :year AND MONTH(i.date) = :month")
     double sumTotalAmountByMonth(int year, int month);
