@@ -80,8 +80,11 @@ public class ExpenseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponseDTO> update(@PathVariable Long id, @RequestBody ExpenseRequestDTO request){
-        Expense expenseUpdated = updateExpensePort.update(id,
-                Expense.of(request.description(), request.amount(), request.date(), request.category()));
+        var authenticatedUserId = getAuthenticatedUserId();
+        var expenseUpdated = updateExpensePort.update(id,
+                Expense.of(request.description(), request.amount(), request.date(), request.category(),
+                        authenticatedUserId)
+        );
         return ResponseEntity.ok(ExpenseResponseDTO.toDTO(expenseUpdated));
     }
 
