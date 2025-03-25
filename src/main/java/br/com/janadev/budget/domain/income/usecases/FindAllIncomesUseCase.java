@@ -15,7 +15,7 @@ public class FindAllIncomesUseCase implements FindAllIncomesPort {
     }
 
     @Override
-    public List<Income> findAll() {
+    public List<Income> findAll(Long userId) {
         return incomeDatabasePort.findAll();
     }
 }

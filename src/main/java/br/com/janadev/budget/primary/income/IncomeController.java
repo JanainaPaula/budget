@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import static br.com.janadev.budget.primary.utils.AuthUserUtil.getAuthenticatedUserId;
+
 @RestController
 @RequestMapping("/incomes")
 public class IncomeController {
@@ -55,7 +57,7 @@ public class IncomeController {
 
     @PostMapping
     public ResponseEntity<IncomeResponseDTO> register(@RequestBody IncomeRequestDTO request){
-        var userId = AuthUserUtil.getAuthenticatedUserId();
+        var userId = getAuthenticatedUserId();
         var income = Income.of(request.description(), request.amount(), request.date(), userId);
         var response = IncomeResponseDTO.toDTO(incomeDomainPort.register(income));
         return ResponseEntity.created(URI.create(String.format("/incomes/%s", response.id()))).body(response);
@@ -69,7 +71,7 @@ public class IncomeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<IncomeResponseDTO> update(@PathVariable Long id, @RequestBody IncomeRequestDTO request){
-        var userId = AuthUserUtil.getAuthenticatedUserId();
+        var userId = getAuthenticatedUserId();
         var command = Income.of(request.description(), request.amount(), request.date(), userId);
         var response = IncomeResponseDTO.toDTO(updateIncomePort.update(id, command));
         return ResponseEntity.ok(response);
@@ -98,7 +100,8 @@ public class IncomeController {
     }
 
     private ResponseEntity<List<IncomeResponseDTO>> findAll() {
-        var incomes = findAllIncomesPort.findAll().stream().map(IncomeResponseDTO::toDTO).toList();
+        var authenticatedUserId = getAuthenticatedUserId();
+        var incomes = findAllIncomesPort.findAll(authenticatedUserId).stream().map(IncomeResponseDTO::toDTO).toList();
         return ResponseEntity.ok(incomes);
     }
 
