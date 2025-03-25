@@ -28,6 +28,7 @@ public class RegisterIncomeUseCase implements RegisterIncomePort {
         LocalDate date = income.getDate();
         var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
         var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-        return incomeDatabasePort.descriptionAlreadyExists(income.getDescription(), startDate, endDate);
+        return incomeDatabasePort.descriptionAlreadyExists(income.getUserId(), income.getDescription(),
+                startDate, endDate);
     }
 }

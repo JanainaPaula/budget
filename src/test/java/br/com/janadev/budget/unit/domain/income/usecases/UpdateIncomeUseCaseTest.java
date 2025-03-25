@@ -68,7 +68,7 @@ class UpdateIncomeUseCaseTest {
     void shouldThrowsIncomeAlreadyExistsExceptionWhenTryChangeDescriptionAndDescriptionAlreadyExists(){
         var incomeCommand = Income.of("Salário", 3000.0,
                 LocalDate.of(2025, Month.JANUARY, 23), 3L);
-        when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
+        when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any(), any())).thenReturn(true);
         when(incomeDatabasePort.findById(any())).thenReturn(Income.of(2L, "Vendas", 2000.0,
                 LocalDate.of(2025, Month.JANUARY, 23), 3L));
 

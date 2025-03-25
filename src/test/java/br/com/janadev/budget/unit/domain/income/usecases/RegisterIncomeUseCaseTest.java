@@ -57,7 +57,7 @@ class RegisterIncomeUseCaseTest {
         var date = LocalDate.of(2025, Month.JANUARY, 21);
         var incomeCommand = Income.of(description, amount, date, 3L);
 
-        when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
+        when(incomeDatabasePort.descriptionAlreadyExists(any(), any(), any(), any())).thenReturn(true);
 
         assertThrows(IncomeAlreadyExistsException.class,
                 () -> registerIncomeUseCase.register(incomeCommand)

@@ -47,8 +47,8 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
     }
 
     @Override
-    public boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate) {
-        return repository.existsByDescriptionAndDateBetween(description, startDate, endDate);
+    public boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate) {
+        return repository.existsByUserIdAndDescriptionAndDateBetween(userId, description, startDate, endDate);
     }
 
     @Override

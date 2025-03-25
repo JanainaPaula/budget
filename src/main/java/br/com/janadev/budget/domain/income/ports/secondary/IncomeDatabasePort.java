@@ -10,7 +10,7 @@ public interface IncomeDatabasePort {
     List<Income> findAllByUserId(Long userId);
     Income findById(Long id);
     Income updateById(Income income);
-    boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate);
+    boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate);
     void delete(Income income);
     List<Income> findByDescription(String description);
     List<Income> findAllByMonth(int year, int month);
