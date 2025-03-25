@@ -18,13 +18,13 @@ public class RegisterIncomeUseCase implements RegisterIncomePort {
 
     @Override
     public Income register(Income income) {
-        if (isAlreadyExpenseDescriptionInMonth(income)){
+        if (isAlreadyIncomeDescriptionInMonth(income)){
             throw new IncomeAlreadyExistsException(INCOME_WITH_THIS_DESCRIPTION_ALREADY_EXISTS);
         }
         return incomeDatabasePort.save(income);
     }
 
-    private boolean isAlreadyExpenseDescriptionInMonth(Income income) {
+    private boolean isAlreadyIncomeDescriptionInMonth(Income income) {
         LocalDate date = income.getDate();
         var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
         var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
