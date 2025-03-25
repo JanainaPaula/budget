@@ -10,6 +10,7 @@ import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
+import br.com.janadev.budget.primary.utils.AuthUserUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+
+import static br.com.janadev.budget.primary.utils.AuthUserUtil.getAuthenticatedUserId;
 
 @RestController
 @RequestMapping("/expenses")
@@ -54,8 +57,11 @@ public class ExpenseController {
 
     @PostMapping
     public ResponseEntity<ExpenseResponseDTO> register(@RequestBody ExpenseRequestDTO request){
+        var authenticatedUserId = getAuthenticatedUserId();
         Expense response = registerExpensePort.register(
-                Expense.of(request.description(), request.amount(), request.date(), request.category()));
+                Expense.of(request.description(), request.amount(), request.date(), request.category(),
+                        authenticatedUserId)
+        );
         return ResponseEntity.created(URI.create(String.format("/expense/%s", response.getId())))
                 .body(ExpenseResponseDTO.toDTO(response));
     }

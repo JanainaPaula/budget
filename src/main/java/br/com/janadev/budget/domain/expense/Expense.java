@@ -14,30 +14,33 @@ public class Expense {
     private final Double amount;
     private final LocalDate date;
     private final Category category;
+    private final Long userId;
 
-    private Expense(String description, Double amount, LocalDate date, String category) {
+    private Expense(String description, Double amount, LocalDate date, String category, Long userId) {
         validateFields(description, amount, date);
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.category = setCategory(category);
+        this.userId = userId;
     }
 
-    private Expense(Long id, String description, Double amount, LocalDate date, String category) {
+    private Expense(Long id, String description, Double amount, LocalDate date, String category, Long userId) {
         validateFields(description, amount, date);
         this.id = id;
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.category = setCategory(category);
+        this.userId = userId;
     }
 
-    public static Expense of(Long id, String description, Double amount, LocalDate date, String category){
-        return new Expense(id, description, amount, date, category);
+    public static Expense of(Long id, String description, Double amount, LocalDate date, String category, Long userId){
+        return new Expense(id, description, amount, date, category, userId);
     }
 
-    public static Expense of(String description, Double amount, LocalDate date, String category){
-        return new Expense(description, amount, date, category);
+    public static Expense of(String description, Double amount, LocalDate date, String category, Long userId){
+        return new Expense(description, amount, date, category, userId);
     }
 
     private void validateFields(String description, Double amount, LocalDate date) {
@@ -78,5 +81,9 @@ public class Expense {
 
     public String getCategoryName() {
         return category.getName();
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

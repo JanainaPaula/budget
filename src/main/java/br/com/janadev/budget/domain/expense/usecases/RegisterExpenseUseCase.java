@@ -18,13 +18,14 @@ public class RegisterExpenseUseCase implements RegisterExpensePort {
     }
 
     @Override
-    public Expense register(Expense expenseCommand) {
-        if (isAlreadyExpenseDescriptionInMonth(expenseCommand)){
+    public Expense register(Expense expense) {
+        if (isAlreadyExpenseDescriptionInMonth(expense)){
             throw new ExpenseAlreadyExistException(EXPENSE_DESCRIPTION_ALREADY_EXIST);
         }
-        var expense = Expense.of(expenseCommand.getDescription(), expenseCommand.getAmount(), expenseCommand.getDate(),
-                expenseCommand.getCategoryName());
-        return expenseDatabasePort.register(expense);
+        return expenseDatabasePort.register(
+                Expense.of(expense.getDescription(), expense.getAmount(), expense.getDate(),
+                        expense.getCategoryName(), expense.getUserId())
+        );
     }
 
     private boolean isAlreadyExpenseDescriptionInMonth(Expense expenseCommand) {
