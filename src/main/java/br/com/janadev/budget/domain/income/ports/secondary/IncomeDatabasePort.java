@@ -13,6 +13,6 @@ public interface IncomeDatabasePort {
     boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate);
     void delete(Income income);
     List<Income> findByDescription(Long userId, String description);
-    List<Income> findAllByMonth(int year, int month);
+    List<Income> findAllByMonth(Long userId, int year, int month);
     double sumTotalAmountByMonth(int year, int month);
 }

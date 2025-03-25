@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
@@ -300,7 +301,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
         Income incomeExpected = Income.of(2L, "Salário", 5000.0,
                 LocalDate.of(2025, Month.FEBRUARY, 15), 3L);
 
-        when(findAllIncomesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
+        when(findAllIncomesByMonthPort.findAllByMonth(anyLong(), anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/incomes/{year}/{month}", 2025, 2)
