@@ -17,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,9 +34,9 @@ class FindExpensesByMonthUseCaseTest {
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
                 LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), 3L);
 
-        when(expenseDatabasePort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
+        when(expenseDatabasePort.findAllByMonth(anyLong(), anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
 
-        List<Expense> expenses = findExpensesByMonthUseCase.findAllByMonth(2025, 2);
+        List<Expense> expenses = findExpensesByMonthUseCase.findAllByMonth(3L, 2025, 2);
 
         assertEquals(1, expenses.size());
         assertAll(

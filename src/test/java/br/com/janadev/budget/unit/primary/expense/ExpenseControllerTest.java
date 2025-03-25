@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -257,7 +258,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
                 LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), 3L);
 
-        when(findExpensesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
+        when(findExpensesByMonthPort.findAllByMonth(anyLong(), anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/expenses/{year}/{month}", 2025, 2)

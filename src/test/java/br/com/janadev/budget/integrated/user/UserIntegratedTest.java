@@ -143,9 +143,8 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
         var request = new UserUpdateDTO("userdoesnotexist@test.com", null);
         HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
 
-        var randomUserId = (long)(Math.random() * 100) + 1;
         ResponseEntity<ErrorResponse> responseEntity = restTemplate.exchange("/users/{id}", HttpMethod.PUT, entity,
-                ErrorResponse.class, randomUserId);
+                ErrorResponse.class, 99999);
 
         ErrorResponse errorResponse = responseEntity.getBody();
 
@@ -153,7 +152,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
         assertAll(
                 () -> assertEquals(USER_DOES_NOT_EXIST.getMessage(), errorResponse.getMessage()),
                 () -> assertEquals(UserNotFoundException.class.getSimpleName(), errorResponse.getException()),
-                () -> assertEquals(String.format("/users/%s", randomUserId), errorResponse.getPath())
+                () -> assertEquals(String.format("/users/%s", 99999), errorResponse.getPath())
         );
     }
 }
