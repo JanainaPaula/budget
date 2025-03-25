@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExpenseDatabasePort {
     Expense register(Expense expense);
-    boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate);
+    boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate);
     Expense findById(Long id);
     List<Expense> findAll();
     void delete(Expense expense);

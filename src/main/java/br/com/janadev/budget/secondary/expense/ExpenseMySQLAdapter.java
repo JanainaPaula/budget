@@ -30,8 +30,8 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     }
 
     @Override
-    public boolean descriptionAlreadyExists(String description, LocalDate startDate, LocalDate endDate) {
-        return expenseRepository.existsByDescriptionAndDateBetween(description, startDate, endDate);
+    public boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate) {
+        return expenseRepository.existsByUserIdAndDescriptionAndDateBetween(userId, description, startDate, endDate);
     }
 
     @Override

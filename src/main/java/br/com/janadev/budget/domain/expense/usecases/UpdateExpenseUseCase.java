@@ -45,6 +45,6 @@ public class UpdateExpenseUseCase implements UpdateExpensePort {
         LocalDate date = expense.getDate();
         var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
         var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-        return expenseDatabasePort.descriptionAlreadyExists(expense.getDescription(), startDate, endDate);
+        return expenseDatabasePort.descriptionAlreadyExists(expense.getUserId(), expense.getDescription(), startDate, endDate);
     }
 }

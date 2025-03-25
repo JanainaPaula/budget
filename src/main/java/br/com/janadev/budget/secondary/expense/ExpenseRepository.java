@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
 
-    boolean existsByDescriptionAndDateBetween(String description, LocalDate start, LocalDate end);
+    boolean existsByUserIdAndDescriptionAndDateBetween(Long userId, String description, LocalDate start, LocalDate end);
 
     List<ExpenseDBO> findByDescriptionContainingIgnoreCase(String description);
 

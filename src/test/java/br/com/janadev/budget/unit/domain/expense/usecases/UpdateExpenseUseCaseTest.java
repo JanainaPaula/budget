@@ -37,7 +37,7 @@ class UpdateExpenseUseCaseTest {
                 LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName(), 3L);
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseFound);
-        when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(false);
+        when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any(), any())).thenReturn(false);
         when(expenseDatabasePort.update(any())).thenReturn(Expense.of(2L, "Gás", 50.0,
                 LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName(), 3L));
 
@@ -70,7 +70,7 @@ class UpdateExpenseUseCaseTest {
                 LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName(), 3L);
 
         when(expenseDatabasePort.findById(any())).thenReturn(expenseFound);
-        when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
+        when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any(), any())).thenReturn(true);
 
         assertThrows(ExpenseAlreadyExistException.class,
                 () -> updateExpenseUseCase.update(2L,

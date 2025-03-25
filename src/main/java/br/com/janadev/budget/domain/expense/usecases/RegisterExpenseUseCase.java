@@ -28,10 +28,11 @@ public class RegisterExpenseUseCase implements RegisterExpensePort {
         );
     }
 
-    private boolean isAlreadyExpenseDescriptionInMonth(Expense expenseCommand) {
-        LocalDate date = expenseCommand.getDate();
+    private boolean isAlreadyExpenseDescriptionInMonth(Expense expenses) {
+        LocalDate date = expenses.getDate();
         var startDate = LocalDate.of(date.getYear(), date.getMonth(), 1);
         var endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-        return expenseDatabasePort.descriptionAlreadyExists(expenseCommand.getDescription(), startDate, endDate);
+        return expenseDatabasePort.descriptionAlreadyExists(expenses.getUserId(), expenses.getDescription(),
+                startDate, endDate);
     }
 }
