@@ -145,7 +145,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     void shouldRespondWithStatus200WhenCallGetIncomesEndpoint() throws Exception {
         var income = Income.of(2L, "Venda", 55.90,
                 LocalDate.of(2025, Month.JANUARY, 21), 3L);
-        when(findAllIncomesPort.findAll()).thenReturn(List.of(income));
+        when(findAllIncomesPort.findAll(3L)).thenReturn(List.of(income));
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/incomes")
