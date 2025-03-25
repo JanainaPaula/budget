@@ -85,8 +85,9 @@ public class IncomeController {
 
     @GetMapping("/{year}/{month}")
     public ResponseEntity<List<IncomeResponseDTO>> findAllByMonth(@PathVariable int year, @PathVariable int month){
+        var authenticatedUserId = getAuthenticatedUserId();
         List<IncomeResponseDTO> incomes =
-                findAllIncomesByMonthPort.findAllByMonth(year, month).stream().map(IncomeResponseDTO::toDTO).toList();
+                findAllIncomesByMonthPort.findAllByMonth(authenticatedUserId, year, month).stream().map(IncomeResponseDTO::toDTO).toList();
         return ResponseEntity.ok(incomes);
     }
 

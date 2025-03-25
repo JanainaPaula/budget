@@ -15,7 +15,7 @@ public class FindIncomesByMonthUseCase implements FindIncomesByMonthPort {
     }
 
     @Override
-    public List<Income> findAllByMonth(int year, int month) {
+    public List<Income> findAllByMonth(Long userId, int year, int month) {
         return incomeDatabasePort.findAllByMonth(year, month);
     }
 }
