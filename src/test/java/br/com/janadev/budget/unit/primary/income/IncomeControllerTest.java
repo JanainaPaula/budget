@@ -275,7 +275,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
                         LocalDate.of(2025, Month.FEBRUARY, 15), 3L)
         );
 
-        when(findIncomesByDescriptionPort.findByDescription(any())).thenReturn(incomesExpected);
+        when(findIncomesByDescriptionPort.findByDescription(any(), any())).thenReturn(incomesExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/incomes")

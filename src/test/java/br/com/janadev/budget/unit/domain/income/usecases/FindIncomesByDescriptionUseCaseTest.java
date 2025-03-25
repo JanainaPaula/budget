@@ -36,9 +36,9 @@ class FindIncomesByDescriptionUseCaseTest {
                 Income.of(3L, "Salário", 150.0, LocalDate.of(2025, Month.JANUARY, 30), 3L)
         );
 
-        when(incomeDatabasePort.findByDescription(any())).thenReturn(incomesExpected);
+        when(incomeDatabasePort.findByDescription(any(), any())).thenReturn(incomesExpected);
 
-        List<Income> incomes = findIncomesByDescriptionUseCase.findByDescription("Salário");
+        List<Income> incomes = findIncomesByDescriptionUseCase.findByDescription(3L, "Salário");
 
         assertNotNull(incomes);
         assertFalse(incomes.isEmpty());

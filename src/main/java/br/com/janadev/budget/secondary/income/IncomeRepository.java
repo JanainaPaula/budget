@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IncomeRepository extends JpaRepository<IncomeDBO, Long> {
     boolean existsByUserIdAndDescriptionAndDateBetween(Long userId, String description, LocalDate start, LocalDate end);
-    List<IncomeDBO> findByDescriptionContainingIgnoreCase(String description);
+    List<IncomeDBO> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String description);
 
     @Query("SELECT i FROM IncomeDBO i WHERE YEAR(i.date) = :year AND MONTH(i.date) = :month")
     List<IncomeDBO> findByDateYearAndDateMonth(int year, int month);

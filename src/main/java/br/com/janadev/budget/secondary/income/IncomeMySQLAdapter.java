@@ -57,8 +57,8 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
     }
 
     @Override
-    public List<Income> findByDescription(String description) {
-        return repository.findByDescriptionContainingIgnoreCase(description).stream()
+    public List<Income> findByDescription(Long userId, String description) {
+        return repository.findByUserIdAndDescriptionContainingIgnoreCase(userId, description).stream()
                 .map(IncomeDBO::toDomain).toList();
     }
 
