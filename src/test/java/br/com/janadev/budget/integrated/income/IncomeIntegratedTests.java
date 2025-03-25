@@ -6,6 +6,7 @@ import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import br.com.janadev.budget.secondary.income.IncomeDBO;
 import br.com.janadev.budget.secondary.income.IncomeRepository;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -55,8 +56,9 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldRespondStatus400WhenTryRegisterIncomeWithDescriptionThatAlreadyExists(){
+        UserDBO user = getUser();
         var incomeDBO = IncomeDBO.of("Salário", 2000.0,
-                LocalDate.of(2025, Month.JANUARY, 23));
+                LocalDate.of(2025, Month.JANUARY, 23), user);
         incomeRepository.save(incomeDBO);
 
         var request = new IncomeRequestDTO("Salário", 1000.0,
@@ -93,12 +95,13 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldFindAllIncomesSuccessfully(){
+        UserDBO user = getUser();
         List<IncomeDBO> incomesExpected = incomeRepository.saveAll(
                 List.of(
                         IncomeDBO.of("Salario", 5000.0,
-                                LocalDate.of(2025, Month.JANUARY, 21)),
+                                LocalDate.of(2025, Month.JANUARY, 21), user),
                         IncomeDBO.of("Vendas enjoei", 700.0,
-                                LocalDate.of(2025, Month.JANUARY, 21))
+                                LocalDate.of(2025, Month.JANUARY, 21), user)
                 )
         );
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
@@ -127,8 +130,9 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldGetIncomeDetailsSuccessfully(){
+        UserDBO user = getUser();
         IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salario", 5000.0,
-                LocalDate.of(2025, Month.JANUARY, 21)));
+                LocalDate.of(2025, Month.JANUARY, 21), user));
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
         ResponseEntity<IncomeResponseDTO> responseEntity = restTemplate.exchange("/incomes/{id}", HttpMethod.GET,
@@ -148,8 +152,9 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldUpdateIncomeSuccessfully(){
+        UserDBO user = getUser();
         IncomeDBO savedIncome = incomeRepository.save(IncomeDBO.of("Salário", 5000.0,
-                LocalDate.of(2025, Month.JANUARY, 21)));
+                LocalDate.of(2025, Month.JANUARY, 21), user));
 
         var incomeRequestDTO = new IncomeRequestDTO("Salário", 6000.0,
                 LocalDate.of(2025, Month.JANUARY, 21));
@@ -175,9 +180,10 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldReturnWithStatus400WhenTryUpdateIncomeDescriptionWithADescriptionAlreadyExistsInMonth(){
+        UserDBO user = getUser();
         IncomeDBO incomeVendas = incomeRepository.saveAll(List.of(
-                IncomeDBO.of("Salário", 7000.0, LocalDate.of(2025, Month.JANUARY, 29)),
-                IncomeDBO.of("Vendas enjoei", 200.0, LocalDate.of(2025, Month.JANUARY, 20))
+                IncomeDBO.of("Salário", 7000.0, LocalDate.of(2025, Month.JANUARY, 29), user),
+                IncomeDBO.of("Vendas enjoei", 200.0, LocalDate.of(2025, Month.JANUARY, 20), user)
         )).get(1);
 
         var request = new IncomeRequestDTO("Salário", 1000.0,
@@ -216,8 +222,9 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldDeleteIncomeSuccessfully(){
+        UserDBO user = getUser();
         var incomeDBO = IncomeDBO.of("Venda Enjoei", 1000.0,
-                LocalDate.of(2025, Month.JANUARY, 24));
+                LocalDate.of(2025, Month.JANUARY, 24), user);
         IncomeDBO incomeSaved = incomeRepository.save(incomeDBO);
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
@@ -246,9 +253,10 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldRespondStatus200WhenFindIncomesByDescriptionWithSuccess(){
+        UserDBO user = getUser();
         List<IncomeDBO> incomesExpected = List.of(
-                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15)),
-                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.FEBRUARY, 15))
+                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15), user),
+                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.FEBRUARY, 15), user)
         );
         incomeRepository.saveAll(incomesExpected);
 
@@ -291,9 +299,10 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldFindAllIncomesByMonthSuccessfully(){
+        UserDBO user = getUser();
         List<IncomeDBO> incomesExpected = List.of(
-                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15)),
-                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.JANUARY, 15))
+                IncomeDBO.of("Salário", 5000.0, LocalDate.of(2025, Month.FEBRUARY, 15), user),
+                IncomeDBO.of("Venda Tablet", 2000.0, LocalDate.of(2025, Month.JANUARY, 15), user)
         );
         incomeRepository.saveAll(incomesExpected);
 

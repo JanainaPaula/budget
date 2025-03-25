@@ -5,6 +5,7 @@ import br.com.janadev.budget.secondary.exception.SecondaryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,13 @@ public class BudgetExceptionHandler {
         var errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    private ResponseEntity<ErrorResponse> usernameNotFoundException(BadCredentialsException exception, WebRequest request){
+        var errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED.toString(), exception,
+                request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

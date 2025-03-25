@@ -44,7 +44,6 @@ public class SecurityConfiguration {
                 })
                 .exceptionHandling(eh -> {
                     eh.authenticationEntryPoint(this::handleAuthenticationError);
-                    eh.accessDeniedHandler(this::handleAccessDeniedError);
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -62,10 +61,6 @@ public class SecurityConfiguration {
 
     private void handleAuthenticationError(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException {
         sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, exception, request.getRequestURI());
-    }
-
-    private void handleAccessDeniedError(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException {
-        sendErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, exception, request.getRequestURI());
     }
 
     private void sendErrorResponse(HttpServletResponse response, int status, Exception exception, String path) throws IOException {

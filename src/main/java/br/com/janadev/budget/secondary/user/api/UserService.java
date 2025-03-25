@@ -1,10 +1,10 @@
-package br.com.janadev.budget.secondary.user;
+package br.com.janadev.budget.secondary.user.api;
 
 import br.com.janadev.budget.primary.user.port.UserSecondaryPort;
+import br.com.janadev.budget.secondary.user.UserRepository;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import br.com.janadev.budget.secondary.user.exception.UserAlreadyExistsException;
 import br.com.janadev.budget.secondary.user.exception.UserNotFoundException;
-import br.com.janadev.budget.secondary.user.port.UserServicePort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.U
 import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_DOES_NOT_EXIST;
 
 @Service
-public class UserService implements UserServicePort, UserSecondaryPort {
+public class UserService implements UserSecondaryPort {
 
     private final UserRepository repository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -45,12 +45,6 @@ public class UserService implements UserServicePort, UserSecondaryPort {
         return repository.save(UserDBO.of(id, newEmail, bCryptPasswordEncoder.encode(newPassword),
                 currentUser.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
         );
-    }
-
-    @Override
-    public UserDBO findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(USER_DOES_NOT_EXIST.getMessage()));
     }
 
     private void alreadyExistUserByEmail(String email){

@@ -1,7 +1,7 @@
 package br.com.janadev.budget.unit.secondary.auth.user;
 
 import br.com.janadev.budget.secondary.user.UserRepository;
-import br.com.janadev.budget.secondary.user.UserService;
+import br.com.janadev.budget.secondary.user.api.UserService;
 import br.com.janadev.budget.secondary.user.dbo.Role;
 import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;

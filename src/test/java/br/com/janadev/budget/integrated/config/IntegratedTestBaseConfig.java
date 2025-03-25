@@ -53,4 +53,8 @@ public abstract class IntegratedTestBaseConfig extends TestContainersConfig {
 
         return response.token();
     }
+
+    protected UserDBO getUser(){
+        return userRepository.findAll().stream().findFirst().get();
+    }
 }

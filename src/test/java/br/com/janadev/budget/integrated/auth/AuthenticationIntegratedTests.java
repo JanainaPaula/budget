@@ -58,4 +58,17 @@ public class AuthenticationIntegratedTests extends IntegratedTestBaseConfig {
 
         assertEquals(403, responseEntity.getStatusCode().value());
     }
+
+    @Test
+    void shouldReturnStatus401WhenTryLoginWithAUserThatNotExist(){
+        var rawPassword = "123456";
+
+        var request = new LoginRequestDTO("usernotexist@test.com", rawPassword);
+        HttpEntity<LoginRequestDTO> entityLogin = new HttpEntity<>(request, getAuthorizationHeader());
+
+        ResponseEntity<ErrorResponse> responseToken = restTemplate.exchange("/login", HttpMethod.POST,
+                entityLogin, ErrorResponse.class);
+
+        assertEquals(401, responseToken.getStatusCode().value());
+    }
 }

@@ -33,7 +33,7 @@ class DeleteIncomeUseCaseTest {
     @Test
     void shouldDeleteIncomeSuccessfully(){
         var income = Income.of(2L, "Salário", 2500.0,
-                LocalDate.of(2025, Month.JANUARY, 24));
+                LocalDate.of(2025, Month.JANUARY, 24), 3L);
 
         when(incomeDatabasePort.findById(any())).thenReturn(income);
         doNothing().when(incomeDatabasePort).delete(any());

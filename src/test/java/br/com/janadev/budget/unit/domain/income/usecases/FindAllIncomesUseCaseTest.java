@@ -30,8 +30,8 @@ class FindAllIncomesUseCaseTest {
     @Test
     void shouldFillAllIncomesSuccessfully(){
         List<Income> incomesExpected = List.of(
-                Income.of(2L, "Salário", 55.00, LocalDate.of(2025, Month.JANUARY, 21)),
-                Income.of(3L, "Venda Enjoei", 28.55, LocalDate.of(2025, Month.JANUARY, 21))
+                Income.of(2L, "Salário", 55.00, LocalDate.of(2025, Month.JANUARY, 21), 3L),
+                Income.of(3L, "Venda Enjoei", 28.55, LocalDate.of(2025, Month.JANUARY, 21), 3L)
         );
         when(databasePort.findAll()).thenReturn(incomesExpected);
 

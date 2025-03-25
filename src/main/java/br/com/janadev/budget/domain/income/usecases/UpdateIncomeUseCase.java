@@ -32,7 +32,8 @@ public class UpdateIncomeUseCase implements UpdateIncomePort {
             }
         }
         return incomeDatabasePort.updateById(
-                Income.of(incomeFound.getId(), income.getDescription(), income.getAmount(), income.getDate())
+                Income.of(incomeFound.getId(), income.getDescription(), income.getAmount(), income.getDate(),
+                        income.getUserId())
         );
     }
 

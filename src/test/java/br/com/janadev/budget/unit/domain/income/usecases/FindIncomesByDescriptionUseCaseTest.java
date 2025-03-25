@@ -32,8 +32,8 @@ class FindIncomesByDescriptionUseCaseTest {
     @Test
     void shouldReturnIncomesWithDescription(){
         List<Income> incomesExpected = List.of(
-                Income.of(2L, "Salário", 150.0, LocalDate.of(2025, Month.FEBRUARY, 14)),
-                Income.of(3L, "Salário", 150.0, LocalDate.of(2025, Month.JANUARY, 30))
+                Income.of(2L, "Salário", 150.0, LocalDate.of(2025, Month.FEBRUARY, 14), 3L),
+                Income.of(3L, "Salário", 150.0, LocalDate.of(2025, Month.JANUARY, 30), 3L)
         );
 
         when(incomeDatabasePort.findByDescription(any())).thenReturn(incomesExpected);

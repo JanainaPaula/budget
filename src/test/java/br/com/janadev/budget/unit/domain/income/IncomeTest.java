@@ -17,10 +17,11 @@ class IncomeTest {
     private final String description = "Pagamento";
     private final double amount = 39.90;
     private final LocalDate date = LocalDate.of(2025, Month.JANUARY, 20);
+    private final Long userId = 3L;
 
     @Test
     void shouldCreateCommandSuccessFully(){
-        var income = Income.of(description, amount, date);
+        var income = Income.of(description, amount, date, userId);
         assertAll(
                 () -> assertNotNull(income),
                 () -> assertEquals(description, income.getDescription()),
@@ -33,13 +34,13 @@ class IncomeTest {
     void shouldThrownDomainValidationExceptionWhenSomeFieldsValueIsInvalid(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of(description, 0.0, date),
+                        () -> Income.of(description, 0.0, date, 3L),
                         "Amount field is zero."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of("", amount, date),
+                        () -> Income.of("", amount, date, 3L),
                         "Description fiels is blank or empty."),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Income.of(description, amount, null),
+                        () -> Income.of(description, amount, null, 3L),
                         "Date field is null.")
         );
     }

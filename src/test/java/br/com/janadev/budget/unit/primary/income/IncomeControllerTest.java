@@ -13,10 +13,13 @@ import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
+import br.com.janadev.budget.primary.utils.AuthUserUtil;
 import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -70,10 +74,18 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
     private JacksonTester<ErrorResponse> jsonErrorResponse;
+    private MockedStatic<AuthUserUtil> mockedStatic;
 
     @BeforeEach
     void setUp(){
+        mockedStatic = mockStatic(AuthUserUtil.class);
+        mockedStatic.when(AuthUserUtil::getAuthenticatedUserId).thenReturn(3L);
         JacksonTester.initFields(this, objectMapper);
+    }
+
+    @AfterEach
+    void tearDown(){
+        mockedStatic.close();
     }
 
     @Test
@@ -84,7 +96,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
         var requestBody = new IncomeRequestDTO(description, amount, date);
         var responseExpected = new IncomeResponseDTO(2L, description, amount, date);
 
-        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date, 3L));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -111,7 +123,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
         var date = LocalDate.of(2025, Month.JANUARY, 21);
         var requestBody = new IncomeRequestDTO(description, 0.0, date);
 
-        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date));
+        when(registerIncomePort.register(any())).thenReturn(Income.of(2L, description, amount, date, 3L));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/incomes")
@@ -132,7 +144,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomesEndpoint() throws Exception {
         var income = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21));
+                LocalDate.of(2025, Month.JANUARY, 21), 3L);
         when(findAllIncomesPort.findAll()).thenReturn(List.of(income));
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -155,7 +167,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus200WhenCallGetIncomeDetailsEndpoint() throws Exception {
         var incomeExpected = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21));
+                LocalDate.of(2025, Month.JANUARY, 21), 3L);
         when(getIncomeDetailsPort.getDetails(any())).thenReturn(incomeExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -197,7 +209,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus200WhenCallUpdateIncomeEndpoint() throws Exception {
         var incomeExpected = Income.of(2L, "Venda", 55.90,
-                LocalDate.of(2025, Month.JANUARY, 21));
+                LocalDate.of(2025, Month.JANUARY, 21), 3L);
         var request = new IncomeRequestDTO(
                 incomeExpected.getDescription(),
                 incomeExpected.getAmount(),
@@ -260,7 +272,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     void shouldRespondWithStatus200WhenFindIncomesWithADescription() throws Exception {
         List<Income> incomesExpected = List.of(
                 Income.of(2L, "Salário", 5000.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15))
+                        LocalDate.of(2025, Month.FEBRUARY, 15), 3L)
         );
 
         when(findIncomesByDescriptionPort.findByDescription(any())).thenReturn(incomesExpected);
@@ -286,7 +298,7 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus2OOWhenFindAllIncomesByMonthSuccessfully() throws Exception {
         Income incomeExpected = Income.of(2L, "Salário", 5000.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15));
+                LocalDate.of(2025, Month.FEBRUARY, 15), 3L);
 
         when(findAllIncomesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(incomeExpected));
 

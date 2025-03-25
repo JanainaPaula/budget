@@ -2,7 +2,7 @@ package br.com.janadev.budget.secondary.income;
 
 import br.com.janadev.budget.domain.income.Income;
 import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
-import br.com.janadev.budget.secondary.user.port.UserServicePort;
+import br.com.janadev.budget.secondary.user.adapter.port.UserPort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -13,18 +13,18 @@ import java.util.List;
 public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     private final IncomeRepository repository;
-    private final UserServicePort userServicePort;
+    private final UserPort userPort;
 
-    public IncomeMySQLAdapter(IncomeRepository repository, UserServicePort userServicePort) {
+    public IncomeMySQLAdapter(IncomeRepository repository, UserPort userServicePort) {
         this.repository = repository;
-        this.userServicePort = userServicePort;
+        this.userPort = userServicePort;
     }
 
 
     @Override
     @Transactional
     public Income save(Income income) {
-        var user = userServicePort.findById(income.getUserId());
+        var user = userPort.findById(income.getUserId());
         var incomeDBO = IncomeDBO.of(income.getDescription(), income.getAmount(), income.getDate(), user);
         return repository.save(incomeDBO).toDomain();
     }
@@ -41,7 +41,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
 
     @Override
     public Income updateById(Income income) {
-        var user = userServicePort.findById(income.getUserId());
+        var user = userPort.findById(income.getUserId());
         var incomeDBO = IncomeDBO.of(income.getId(), income.getDescription(), income.getAmount(), income.getDate(), user);
         return repository.save(incomeDBO).toDomain();
     }

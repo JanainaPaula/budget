@@ -7,6 +7,7 @@ import br.com.janadev.budget.secondary.expense.ExpenseDBO;
 import br.com.janadev.budget.secondary.expense.ExpenseRepository;
 import br.com.janadev.budget.secondary.income.IncomeDBO;
 import br.com.janadev.budget.secondary.income.IncomeRepository;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,16 +32,18 @@ public class SummaryIntegratedTests extends IntegratedTestBaseConfig {
     @Autowired
     private ExpenseRepository expenseRepository;
 
+
     @Test
     void shouldGetMonthlySummarySuccessfully(){
+        UserDBO user = getUser();
         double finalBalanceExpected = 4000.0;
         double totalIncomesExpected = 5500.0;
         double totalExpensesExpected = 1500.0;
         incomeRepository.saveAll(List.of(
                 IncomeDBO.of("Sálario", 5000.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 5)),
+                        LocalDate.of(2025, Month.FEBRUARY, 5), user),
                 IncomeDBO.of("Venda Tablet", 500.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15))
+                        LocalDate.of(2025, Month.FEBRUARY, 15), user)
         ));
 
         double totalCategoryOthersExpected = 1000.0;
