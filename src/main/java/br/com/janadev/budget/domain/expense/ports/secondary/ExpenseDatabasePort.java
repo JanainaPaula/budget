@@ -10,7 +10,7 @@ public interface ExpenseDatabasePort {
     Expense register(Expense expense);
     boolean descriptionAlreadyExists(Long userId, String description, LocalDate startDate, LocalDate endDate);
     Expense findById(Long id);
-    List<Expense> findAll();
+    List<Expense> findAllByUserId(Long userId);
     void delete(Expense expense);
     Expense update(Expense expense);
     List<Expense> findByDescription(String description);

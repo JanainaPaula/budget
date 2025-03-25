@@ -29,4 +29,6 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
             GROUP BY e.category
             """)
     List<ExpensesByCategoryProjection> createExpensesByCategorySummary(int year, int month);
+
+    List<ExpenseDBO> findByUserId(Long userId);
 }

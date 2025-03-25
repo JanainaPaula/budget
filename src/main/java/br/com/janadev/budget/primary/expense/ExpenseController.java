@@ -10,7 +10,6 @@ import br.com.janadev.budget.domain.expense.ports.primary.RegisterExpensePort;
 import br.com.janadev.budget.domain.expense.ports.primary.UpdateExpensePort;
 import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
-import br.com.janadev.budget.primary.utils.AuthUserUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,8 +104,9 @@ public class ExpenseController {
     }
 
     private ResponseEntity<List<ExpenseResponseDTO>> findAll() {
+        var authenticatedUserId = getAuthenticatedUserId();
         List<ExpenseResponseDTO> expenses =
-                findAllExpensesPort.findAll().stream().map(ExpenseResponseDTO::toDTO).toList();
+                findAllExpensesPort.findAll(authenticatedUserId).stream().map(ExpenseResponseDTO::toDTO).toList();
         return ResponseEntity.ok(expenses);
     }
 

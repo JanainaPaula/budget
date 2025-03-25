@@ -165,7 +165,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
                 Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName(), 3L)
         );
 
-        when(findAllExpensesPort.findAll()).thenReturn(expensesExpected);
+        when(findAllExpensesPort.findAll(any())).thenReturn(expensesExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/expenses")

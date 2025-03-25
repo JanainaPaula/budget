@@ -15,7 +15,7 @@ public class FindAllExpensesUseCase implements FindAllExpensesPort {
     }
 
     @Override
-    public List<Expense> findAll() {
-        return expenseDatabasePort.findAll();
+    public List<Expense> findAll(Long userId) {
+        return expenseDatabasePort.findAllByUserId(userId);
     }
 }
