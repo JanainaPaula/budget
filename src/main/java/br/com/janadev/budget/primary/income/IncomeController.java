@@ -106,7 +106,8 @@ public class IncomeController {
     }
 
     private ResponseEntity<List<IncomeResponseDTO>> findByDescription(String description) {
-        var incomes = findIncomesByDescriptionPort.findByDescription(description).stream()
+        var authenticatedUserId = getAuthenticatedUserId();
+        var incomes = findIncomesByDescriptionPort.findByDescription(authenticatedUserId, description).stream()
                 .map(IncomeResponseDTO::toDTO).toList();
         return ResponseEntity.ok(incomes);
     }

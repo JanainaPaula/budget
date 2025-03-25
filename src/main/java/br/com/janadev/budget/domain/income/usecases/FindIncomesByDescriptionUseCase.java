@@ -14,7 +14,7 @@ public class FindIncomesByDescriptionUseCase implements FindIncomesByDescription
     }
 
     @Override
-    public List<Income> findByDescription(String description) {
+    public List<Income> findByDescription(Long userId, String description) {
         return incomeDatabasePort.findByDescription(description);
     }
 }

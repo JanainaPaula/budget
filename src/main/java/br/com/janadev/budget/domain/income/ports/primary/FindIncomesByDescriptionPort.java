@@ -5,5 +5,5 @@ import br.com.janadev.budget.domain.income.Income;
 import java.util.List;
 
 public interface FindIncomesByDescriptionPort {
-    List<Income> findByDescription(String description);
+    List<Income> findByDescription(Long userId, String description);
 }
