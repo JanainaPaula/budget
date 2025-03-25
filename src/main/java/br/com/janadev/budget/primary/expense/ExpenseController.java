@@ -111,8 +111,9 @@ public class ExpenseController {
     }
 
     private ResponseEntity<List<ExpenseResponseDTO>> findByDescription(String description) {
+        var authenticatedUserId = getAuthenticatedUserId();
         List<ExpenseResponseDTO> expenses =
-                findExpenseByDescriptionPort.findByDescription(description)
+                findExpenseByDescriptionPort.findByDescription(authenticatedUserId, description)
                         .stream().map(ExpenseResponseDTO::toDTO).toList();
         return ResponseEntity.ok(expenses);
     }
