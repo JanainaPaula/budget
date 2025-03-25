@@ -15,7 +15,7 @@ public class FindExpensesByMonthUseCase implements FindExpensesByMonthPort {
     }
 
     @Override
-    public List<Expense> findAllByMonth(int year, int month) {
+    public List<Expense> findAllByMonth(Long userId, int year, int month) {
         return expenseDatabasePort.findAllByMonth(year, month);
     }
 }

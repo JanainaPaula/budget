@@ -89,7 +89,8 @@ public class ExpenseController {
 
     @GetMapping("/{year}/{month}")
     public ResponseEntity<List<ExpenseResponseDTO>> findByMonth(@PathVariable int year, @PathVariable int month){
-        List<ExpenseResponseDTO> expenses = findExpensesByMonthPort.findAllByMonth(year, month)
+        var authenticatedUserId = getAuthenticatedUserId();
+        List<ExpenseResponseDTO> expenses = findExpensesByMonthPort.findAllByMonth(authenticatedUserId, year, month)
                 .stream().map(ExpenseResponseDTO::toDTO).toList();
         return ResponseEntity.ok(expenses);
     }
