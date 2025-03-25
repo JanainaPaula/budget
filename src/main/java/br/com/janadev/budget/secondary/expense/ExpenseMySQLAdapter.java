@@ -23,7 +23,7 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
 
     @Override
     public Expense register(Expense expense) {
-        UserDBO user = userPort.findById(expense.getId());
+        UserDBO user = userPort.findById(expense.getUserId());
         var expenseDBO = ExpenseDBO.of(expense.getDescription(), expense.getAmount(), expense.getDate(),
                 expense.getCategoryName(), user);
         return expenseRepository.save(expenseDBO).toDomain();

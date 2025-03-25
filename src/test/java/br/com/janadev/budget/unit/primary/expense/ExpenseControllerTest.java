@@ -15,17 +15,13 @@ import br.com.janadev.budget.primary.expense.dto.ExpenseRequestDTO;
 import br.com.janadev.budget.primary.expense.dto.ExpenseResponseDTO;
 import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -48,10 +44,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(controllers = ExpenseController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class ExpenseControllerTest extends TestSecurityMockConfig {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
+
     @MockitoBean
     private RegisterExpensePort registerExpensePort;
     @MockitoBean
@@ -71,11 +64,6 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     private JacksonTester<List<ExpenseResponseDTO>> jsonResponseDtoList;
     private JacksonTester<ErrorResponse> jsonErrorResponse;
 
-    @BeforeEach
-    void setUp(){
-        JacksonTester.initFields(this, objectMapper);
-    }
-
     @Test
     void shouldRespondWithStatus201WhenRegisterExpenseSuccessfully() throws Exception {
         var description = "Luz";
@@ -84,7 +72,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
         var request = new ExpenseRequestDTO(description, amount, date, Category.HOUSE.getName());
         var responseExpected = new ExpenseResponseDTO(2L, description, amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName()));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName(), 3L));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -110,7 +98,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
         var date = LocalDate.of(2025, Month.JANUARY, 28);
         var request = new ExpenseRequestDTO("", amount, date, Category.HOUSE.getName());
 
-        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName()));
+        when(registerExpensePort.register(any())).thenReturn(Expense.of(2L, description, amount, date, Category.HOUSE.getName(), 3L));
 
         MockHttpServletResponse response = mockMvc.perform(
                 post("/expenses")
@@ -131,7 +119,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus200WhenGetExpenseDetailsSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName(), 3L);
         when(getExpenseDetailsPort.getDetails(any())).thenReturn(expenseExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
@@ -173,8 +161,8 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldRespondWithStatus200WhenFindAllExpensesSuccessFully() throws Exception {
         List<Expense> expensesExpected = List.of(
-                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName()),
-                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName())
+                Expense.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName(), 3L),
+                Expense.of("Gás", 15.90, LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName(), 3L)
         );
 
         when(findAllExpensesPort.findAll()).thenReturn(expensesExpected);
@@ -214,7 +202,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldUpdateExpenseSuccessfully() throws Exception {
         var expenseExpected = Expense.of(2L, "Gás", 50.0,
-                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.JANUARY, 29), Category.HOUSE.getName(), 3L);
         when(updateExpensePort.update(any(), any())).thenReturn(expenseExpected);
 
         var request = new ExpenseRequestDTO(expenseExpected.getDescription(),
@@ -242,7 +230,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldFindExpenseByDescriptionSuccessfully() throws Exception {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), 3L);
 
         when(findExpenseByDescriptionPort.findByDescription(any())).thenReturn(List.of(expenseExpected));
 
@@ -267,7 +255,7 @@ class ExpenseControllerTest extends TestSecurityMockConfig {
     @Test
     void shouldFindExpenseByMonthSuccessfully() throws Exception {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), 3L);
 
         when(findExpensesByMonthPort.findAllByMonth(anyInt(), anyInt())).thenReturn(List.of(expenseExpected));
 

@@ -8,6 +8,7 @@ import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
 import br.com.janadev.budget.secondary.expense.ExpenseDBO;
 import br.com.janadev.budget.secondary.expense.ExpenseRepository;
+import br.com.janadev.budget.secondary.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,10 +59,11 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
     }
     @Test
     void shouldThrowExpenseAlreadyExistExceptionWhenTryRegisterExpenseWithDescriptionThatAlreadyExistInTheMonth() throws IOException {
+        UserDBO user = getUser();
         var januaryLuz = ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.JANUARY, 28), Category.HOUSE.getName(), user);
         var januaryGas = ExpenseDBO.of("Gás", 30.0,
-                LocalDate.of(2025, Month.JANUARY, 27), Category.HOUSE.getName());
+                LocalDate.of(2025, Month.JANUARY, 27), Category.HOUSE.getName(), user);
 
         expenseRepository.saveAll(List.of(januaryLuz, januaryGas));
 
@@ -95,8 +97,9 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldGetExpenseDetailsSuccessfully(){
+        UserDBO user = getUser();
         var expenseExpected = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.FEBRUARY, 1), "House")
+                LocalDate.of(2025, Month.FEBRUARY, 1), "House", user)
         );
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
@@ -132,11 +135,12 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
     
     @Test
     void shouldFindAllExpensesSuccessfully(){
+        UserDBO user = getUser();
         List<ExpenseDBO> expenseExpected = List.of(
                 ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29),
-                        Category.HOUSE.getName()),
+                        Category.HOUSE.getName(), user),
                 ExpenseDBO.of("Gás", 30.0, LocalDate.of(2025, Month.JANUARY, 30),
-                        Category.HOUSE.getName())
+                        Category.HOUSE.getName(), user)
         );
         
         expenseRepository.saveAll(expenseExpected);
@@ -178,9 +182,10 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldDeleteExpenseSuccessfully(){
+        UserDBO user = getUser();
         ExpenseDBO expenseSaved = expenseRepository.save(
                 ExpenseDBO.of("Luz", 150.0, LocalDate.of(2025, Month.JANUARY, 29),
-                        Category.HOUSE.getName())
+                        Category.HOUSE.getName(), user)
         );
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
@@ -209,8 +214,9 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldUpdateExpenseSuccessfully(){
+        UserDBO user = getUser();
         var expenseDBO = expenseRepository.save(ExpenseDBO.of("Luz", 150.0,
-                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName()));
+                LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName(), user));
 
         var expenseRequest = new ExpenseRequestDTO("Gás", 50.0,
                 LocalDate.of(2025, Month.JANUARY, 30), Category.HOUSE.getName());
@@ -233,11 +239,12 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldFindExpensesByDescriptionSuccessfully(){
+        UserDBO user = getUser();
         List<ExpenseDBO> expensesExpected = List.of(
                 ExpenseDBO.of("Luz", 150.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName()),
+                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), user),
                 ExpenseDBO.of("Mensalidade da Faculdade", 1550.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.EDUCATION.getName())
+                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.EDUCATION.getName(), user)
         );
         expenseRepository.saveAll(expensesExpected);
 
@@ -276,11 +283,12 @@ public class ExpenseIntegratedTests extends IntegratedTestBaseConfig {
 
     @Test
     void shouldFindExpensesByMonthSuccessfully(){
+        UserDBO user = getUser();
         List<ExpenseDBO> expensesExpected = List.of(
                 ExpenseDBO.of("Luz", 150.0,
-                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName()),
+                        LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), user),
                 ExpenseDBO.of("Mensalidade da Faculdade", 1550.0,
-                        LocalDate.of(2025, Month.JANUARY, 15), Category.EDUCATION.getName())
+                        LocalDate.of(2025, Month.JANUARY, 15), Category.EDUCATION.getName(), user)
         );
         expenseRepository.saveAll(expensesExpected);
 

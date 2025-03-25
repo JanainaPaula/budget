@@ -13,21 +13,14 @@ import br.com.janadev.budget.primary.handler.ErrorResponse;
 import br.com.janadev.budget.primary.income.IncomeController;
 import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
-import br.com.janadev.budget.primary.utils.AuthUserUtil;
 import br.com.janadev.budget.unit.config.TestSecurityMockConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -42,7 +35,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,10 +45,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc(addFilters = false)
 class IncomeControllerTest extends TestSecurityMockConfig {
 
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockitoBean
     private RegisterIncomePort registerIncomePort;
     @MockitoBean
@@ -75,19 +63,6 @@ class IncomeControllerTest extends TestSecurityMockConfig {
     private JacksonTester<IncomeResponseDTO> jsonResponseDto;
     private JacksonTester<List<IncomeResponseDTO>> jsonListResponseDto;
     private JacksonTester<ErrorResponse> jsonErrorResponse;
-    private MockedStatic<AuthUserUtil> mockedStatic;
-
-    @BeforeEach
-    void setUp(){
-        mockedStatic = mockStatic(AuthUserUtil.class);
-        mockedStatic.when(AuthUserUtil::getAuthenticatedUserId).thenReturn(3L);
-        JacksonTester.initFields(this, objectMapper);
-    }
-
-    @AfterEach
-    void tearDown(){
-        mockedStatic.close();
-    }
 
     @Test
     void shouldRespondWithStatus200WhenCallPostIncomesEndpoint() throws Exception {

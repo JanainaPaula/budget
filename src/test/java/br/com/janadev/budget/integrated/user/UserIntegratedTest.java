@@ -113,7 +113,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
 
     @Test
     void shouldNotUpdateUserWhenNewEmailAlreadyBelongsToAnotherUser(){
-        String emailThatAlreadyBelogsToAnother = "already-exist@test.com";
+        String emailThatAlreadyBelogsToAnother = "alreadyexistemail@test.com";
         repository.save(
                 UserDBO.of(emailThatAlreadyBelogsToAnother, "123456", Set.of(Role.USER.name()))
         );

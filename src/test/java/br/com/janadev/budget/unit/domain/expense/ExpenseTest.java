@@ -22,7 +22,7 @@ class ExpenseTest {
 
     @Test
     void shouldCreateExpenseSuccessfully(){
-        var expense = Expense.of(description, amount, date, Category.HOUSE.getName());
+        var expense = Expense.of(description, amount, date, Category.HOUSE.getName(), 3L);
         assertNotNull(expense);
         assertAll(
                 () -> assertEquals(description, expense.getDescription()),
@@ -35,17 +35,17 @@ class ExpenseTest {
     void shouldThrowsDomainValidationExceptionWhenTryCreateExpenseWithInvalidData(){
         assertAll(
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of("", amount, date, Category.HOUSE.getName())),
+                        () -> Expense.of("", amount, date, Category.HOUSE.getName(), 3L)),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of(description, 0.0, date, Category.HOUSE.getName())),
+                        () -> Expense.of(description, 0.0, date, Category.HOUSE.getName(), 3L)),
                 () -> assertThrows(DomainValidationException.class,
-                        () -> Expense.of(description, amount, null, Category.HOUSE.getName()))
+                        () -> Expense.of(description, amount, null, Category.HOUSE.getName(), 3L))
         );
     }
 
     @Test
     void shouldCreateExpenseWithCategoryOthersWhenCategoryIsNull(){
-        Expense expense = Expense.of(description, amount, date, null);
+        Expense expense = Expense.of(description, amount, date, null, 3L);
         assertAll(
                 () -> assertEquals(description, expense.getDescription()),
                 () -> assertEquals(amount, expense.getAmount()),

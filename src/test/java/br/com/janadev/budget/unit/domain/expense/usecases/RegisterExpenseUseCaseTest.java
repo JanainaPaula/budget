@@ -35,8 +35,8 @@ class RegisterExpenseUseCaseTest {
         var description = "Luz";
         double amount = 100.0;
         var date = LocalDate.of(2025, Month.JANUARY, 27);
-        var command = Expense.of(description, amount, date, Category.HOUSE.getName());
-        var expenseExpected = Expense.of(1L, description, amount, date, Category.HOUSE.getName());
+        var command = Expense.of(description, amount, date, Category.HOUSE.getName(), 3L);
+        var expenseExpected = Expense.of(1L, description, amount, date, Category.HOUSE.getName(), 3L);
 
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(false);
         when(expenseDatabasePort.register(any())).thenReturn(expenseExpected);
@@ -55,7 +55,7 @@ class RegisterExpenseUseCaseTest {
     @Test
     void shouldThrowsExpenseAlreadyExistExceptionWhenTryRegisterExpenseWithADescriptionAlreadyExists(){
         Expense expense = Expense.of("Luz", 50.0, LocalDate.of(2025, Month.JANUARY, 27),
-                Category.HOUSE.getName());
+                Category.HOUSE.getName(), 3L);
 
         when(expenseDatabasePort.descriptionAlreadyExists(any(), any(), any())).thenReturn(true);
 

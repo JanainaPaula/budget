@@ -50,9 +50,9 @@ public class SummaryIntegratedTests extends IntegratedTestBaseConfig {
         double totalCategoryHouseExpected = 500.0;
         List<ExpenseDBO> expensesExpected = expenseRepository.saveAll(List.of(
                 ExpenseDBO.of("Cartão de crédito", totalCategoryOthersExpected,
-                        LocalDate.of(2025, Month.FEBRUARY, 10), Category.OTHERS.getName()),
+                        LocalDate.of(2025, Month.FEBRUARY, 10), Category.OTHERS.getName(), user),
                 ExpenseDBO.of("Luz", totalCategoryHouseExpected,
-                        LocalDate.of(2025, Month.FEBRUARY, 10), Category.HOUSE.getName())
+                        LocalDate.of(2025, Month.FEBRUARY, 10), Category.HOUSE.getName(), user)
         ));
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());
