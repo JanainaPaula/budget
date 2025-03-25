@@ -16,6 +16,6 @@ public class FindExpenseByDescriptionUseCase implements FindExpenseByDescription
 
     @Override
     public List<Expense> findByDescription(Long userId, String description) {
-        return expenseDatabasePort.findByDescription(description);
+        return expenseDatabasePort.findByDescription(userId, description);
     }
 }

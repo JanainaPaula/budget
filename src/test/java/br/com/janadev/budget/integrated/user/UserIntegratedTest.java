@@ -140,7 +140,7 @@ public class UserIntegratedTest extends IntegratedTestBaseConfig {
 
     @Test
     void shouldNotUpdateWhenTryUpdateAUserDoesNotExist(){
-        var request = new UserUpdateDTO("already-exist@test.com", null);
+        var request = new UserUpdateDTO("userdoesnotexist@test.com", null);
         HttpEntity<UserUpdateDTO> entity = new HttpEntity<>(request, getAuthorizationHeader());
 
         var randomUserId = (long)(Math.random() * 100) + 1;

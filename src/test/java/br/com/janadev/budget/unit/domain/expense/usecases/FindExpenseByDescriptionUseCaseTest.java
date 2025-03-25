@@ -33,9 +33,9 @@ class FindExpenseByDescriptionUseCaseTest {
         Expense expenseExpected = Expense.of(2L, "Luz", 150.0,
                 LocalDate.of(2025, Month.FEBRUARY, 15), Category.HOUSE.getName(), 3L);
 
-        when(expenseDatabasePort.findByDescription(any())).thenReturn(List.of(expenseExpected));
+        when(expenseDatabasePort.findByDescription(any(), any())).thenReturn(List.of(expenseExpected));
 
-        List<Expense> expenses = findExpenseByDescriptionUseCase.findByDescription("luz");
+        List<Expense> expenses = findExpenseByDescriptionUseCase.findByDescription(3L, "luz");
 
         assertEquals(1, expenses.size());
         assertAll(

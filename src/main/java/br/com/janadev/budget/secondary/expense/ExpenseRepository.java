@@ -11,7 +11,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
 
     boolean existsByUserIdAndDescriptionAndDateBetween(Long userId, String description, LocalDate start, LocalDate end);
 
-    List<ExpenseDBO> findByDescriptionContainingIgnoreCase(String description);
+    List<ExpenseDBO> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String description);
 
     @Query("SELECT e FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month")
     List<ExpenseDBO> findByDateYearAndDateMonth(int year, int month);

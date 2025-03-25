@@ -13,7 +13,7 @@ public interface ExpenseDatabasePort {
     List<Expense> findAllByUserId(Long userId);
     void delete(Expense expense);
     Expense update(Expense expense);
-    List<Expense> findByDescription(String description);
+    List<Expense> findByDescription(Long userId, String description);
     List<Expense> findAllByMonth(int year, int month);
     double sumTotalAmountByMonth(int year, int month);
     List<CategorySummary> findExpensesByCategoryByMonth(int year, int month);
