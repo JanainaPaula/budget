@@ -25,10 +25,10 @@ public interface ExpenseRepository extends JpaRepository<ExpenseDBO, Long> {
 
     @Query("""
             SELECT e.category AS category, COALESCE(SUM(e.amount), 0) AS total
-            FROM ExpenseDBO e WHERE YEAR(e.date) = :year AND MONTH(e.date) = :month
+            FROM ExpenseDBO e WHERE e.user.id = :userId AND YEAR(e.date) = :year AND MONTH(e.date) = :month
             GROUP BY e.category
             """)
-    List<ExpensesByCategoryProjection> createExpensesByCategorySummary(int year, int month);
+    List<ExpensesByCategoryProjection> createExpensesByCategorySummary(Long userId, int year, int month);
 
     List<ExpenseDBO> findByUserId(Long userId);
 }

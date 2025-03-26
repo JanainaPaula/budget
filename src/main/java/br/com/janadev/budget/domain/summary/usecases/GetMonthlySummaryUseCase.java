@@ -20,7 +20,7 @@ public class GetMonthlySummaryUseCase implements GetMonthlySummaryPort {
     public Summary getMonthlySummary(Long userId, int year, int month) {
         double totalIncomes = incomeDatabasePort.sumTotalAmountByMonth(userId, year, month);
         double totalExpenses = expenseDatabasePort.sumTotalAmountByMonth(userId, year, month);
-        var expensesByCategorySummary = expenseDatabasePort.findExpensesByCategoryByMonth(year, month);
+        var expensesByCategorySummary = expenseDatabasePort.findExpensesByCategoryByMonth(userId, year, month);
         return Summary.of(totalIncomes, totalExpenses, expensesByCategorySummary);
     }
 }
