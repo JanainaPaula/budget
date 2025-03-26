@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static br.com.janadev.budget.primary.utils.AuthUserUtil.getAuthenticatedUserId;
+
 @RestController
 @RequestMapping("/summaries")
 public class SummaryController {
@@ -21,7 +23,8 @@ public class SummaryController {
 
     @GetMapping("/{year}/{month}")
     public ResponseEntity<SummaryDTO> getMonthlySummary(@PathVariable int year, @PathVariable int month){
-        Summary summary = getSummaryByMonthPort.getMonthlySummary(year, month);
+        var authenticatedUserId = getAuthenticatedUserId();
+        Summary summary = getSummaryByMonthPort.getMonthlySummary(authenticatedUserId, year, month);
         return ResponseEntity.ok(SummaryDTO.toDTO(summary));
     }
 }

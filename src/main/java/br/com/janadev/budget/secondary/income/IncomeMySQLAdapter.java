@@ -69,7 +69,7 @@ public class IncomeMySQLAdapter implements IncomeDatabasePort {
     }
 
     @Override
-    public double sumTotalAmountByMonth(int year, int month) {
-        return repository.sumTotalAmountByMonth(year, month);
+    public double sumTotalAmountByMonth(Long userId, int year, int month) {
+        return repository.sumTotalAmountByMonth(userId, year, month);
     }
 }

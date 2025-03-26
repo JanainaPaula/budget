@@ -17,8 +17,8 @@ public class GetMonthlySummaryUseCase implements GetMonthlySummaryPort {
     }
 
     @Override
-    public Summary getMonthlySummary(int year, int month) {
-        double totalIncomes = incomeDatabasePort.sumTotalAmountByMonth(year, month);
+    public Summary getMonthlySummary(Long userId, int year, int month) {
+        double totalIncomes = incomeDatabasePort.sumTotalAmountByMonth(userId, year, month);
         double totalExpenses = expenseDatabasePort.sumTotalAmountByMonth(year, month);
         var expensesByCategorySummary = expenseDatabasePort.findExpensesByCategoryByMonth(year, month);
         return Summary.of(totalIncomes, totalExpenses, expensesByCategorySummary);

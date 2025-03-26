@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,11 +46,11 @@ class GetSummaryByMonthUseCaseTest {
                 CategorySummary.of(Category.OTHERS.getName(), totalCategoryOthersExpected)
         );
 
-        when(incomeDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalIncomesExpected);
+        when(incomeDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(totalIncomesExpected);
         when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalExpensesExpected);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(expensesByCategory);
 
-        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(2025, 2);
+        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(3L, 2025, 2);
 
         assertNotNull(summary);
         assertAll(
@@ -66,11 +67,11 @@ class GetSummaryByMonthUseCaseTest {
 
     @Test
     void shouldGetSummaryByMonthSuccessfullyWhenTotalIncomesAndExpenseIsZeroAndCategorySummaryIsEmptyList(){
-        when(incomeDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(0.0);
+        when(incomeDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(0.0);
         when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(0.0);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(List.of());
 
-        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(2025, 2);
+        Summary summary = getSummaryByMonthUseCase.getMonthlySummary(3L, 2025, 2);
 
         assertNotNull(summary);
         assertAll(

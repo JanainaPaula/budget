@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -55,7 +56,7 @@ class SummaryControllerTest extends TestSecurityMockConfig {
                 CategorySummary.of(Category.LEISURE.getName(), 150.0)
         ));
 
-        when(getMonthlySummaryPort.getMonthlySummary(anyInt(), anyInt())).thenReturn(summaryExpected);
+        when(getMonthlySummaryPort.getMonthlySummary(anyLong(), anyInt(), anyInt())).thenReturn(summaryExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/summaries/{year}/{month}", 2025, 2)
@@ -85,7 +86,7 @@ class SummaryControllerTest extends TestSecurityMockConfig {
     void shouldReturnZeroMonthlySummaryWhenThereNoAreIncomesAndExpensesRegisteredInMonth() throws Exception {
         Summary summaryExpected = Summary.of(0.0, 0.0, List.of());
 
-        when(getMonthlySummaryPort.getMonthlySummary(anyInt(), anyInt())).thenReturn(summaryExpected);
+        when(getMonthlySummaryPort.getMonthlySummary(anyLong(), anyInt(), anyInt())).thenReturn(summaryExpected);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get("/summaries/{year}/{month}", 2025, 2)

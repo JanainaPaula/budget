@@ -14,5 +14,5 @@ public interface IncomeDatabasePort {
     void delete(Income income);
     List<Income> findByDescription(Long userId, String description);
     List<Income> findAllByMonth(Long userId, int year, int month);
-    double sumTotalAmountByMonth(int year, int month);
+    double sumTotalAmountByMonth(Long userId, int year, int month);
 }
