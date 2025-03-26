@@ -47,7 +47,7 @@ class GetSummaryByMonthUseCaseTest {
         );
 
         when(incomeDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(totalIncomesExpected);
-        when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(totalExpensesExpected);
+        when(expenseDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(totalExpensesExpected);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(expensesByCategory);
 
         Summary summary = getSummaryByMonthUseCase.getMonthlySummary(3L, 2025, 2);
@@ -68,7 +68,7 @@ class GetSummaryByMonthUseCaseTest {
     @Test
     void shouldGetSummaryByMonthSuccessfullyWhenTotalIncomesAndExpenseIsZeroAndCategorySummaryIsEmptyList(){
         when(incomeDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(0.0);
-        when(expenseDatabasePort.sumTotalAmountByMonth(anyInt(), anyInt())).thenReturn(0.0);
+        when(expenseDatabasePort.sumTotalAmountByMonth(anyLong(), anyInt(), anyInt())).thenReturn(0.0);
         when(expenseDatabasePort.findExpensesByCategoryByMonth(anyInt(), anyInt())).thenReturn(List.of());
 
         Summary summary = getSummaryByMonthUseCase.getMonthlySummary(3L, 2025, 2);

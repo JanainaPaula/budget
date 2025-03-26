@@ -71,8 +71,8 @@ public class ExpenseMySQLAdapter implements ExpenseDatabasePort {
     }
 
     @Override
-    public double sumTotalAmountByMonth(int year, int month) {
-        return expenseRepository.sumTotalAmountByMonth(year, month);
+    public double sumTotalAmountByMonth(Long userId, int year, int month) {
+        return expenseRepository.sumTotalAmountByMonth(userId, year, month);
     }
 
     @Override
