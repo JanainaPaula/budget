@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mysql:8.2.0
+    container_name: budget-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    env_file:
+      - .env-local
+
+volumes:
+  db-data:
