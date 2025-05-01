@@ -17,3 +17,9 @@ api:
   security:
     token:
       secret: ${JWT_SECRET}
+
+user:
+  admin:
+    default:
+      email: ${ADMIN_DEFAULT_EMAIL}
+      password: ${ADMIN_DEFAULT_PASSWORD}

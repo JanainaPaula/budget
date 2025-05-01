@@ -11,6 +11,10 @@ import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 public abstract class TestContainersConfig {
+
+    protected static final String USER_ADMIN_EMAIL = "admin@test.com";
+    protected static final String USER_ADMIN_PASSWORD = "12345";
+    private static final String JWT_TOKEN_SECRET = "12345678";
     private static final MySQLContainer<?> mysqlContainer;
 
     static {
@@ -31,5 +35,8 @@ public abstract class TestContainersConfig {
         registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
         registry.add("spring.datasource.username", mysqlContainer::getUsername);
         registry.add("spring.datasource.password", mysqlContainer::getPassword);
+        registry.add("api.security.token.secret", ()-> JWT_TOKEN_SECRET);
+        registry.add("user.admin.default.email", ()-> USER_ADMIN_EMAIL);
+        registry.add("user.admin.default.password", ()-> USER_ADMIN_PASSWORD);
     }
 }
