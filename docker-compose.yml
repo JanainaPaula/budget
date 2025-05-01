@@ -1,18 +1,25 @@
 version: '3.8'
 
 services:
-  mysql-container:
+  mysql:
     image: mysql:8.2.0
-    container_name: mysql-budget
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: budget
-      MYSQL_USER: user-budget
-      MYSQL_PASSWORD: 12345
+    container_name: budget-db
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - db-data:/var/lib/mysql
+    env_file:
+      - .env
+
+  app:
+    build: .
+    container_name: budget-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
 
 volumes:
-  mysql-data:
+  db-data:

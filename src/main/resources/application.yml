@@ -2,9 +2,9 @@ spring:
   application:
     name: budget
   datasource:
-    url: jdbc:mysql://localhost:3306/budget
-    username: user-budget
-    password: 12345
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,4 +16,4 @@ spring:
 api:
   security:
     token:
-      secret: ${JWT_SECRET:12345678}
+      secret: ${JWT_SECRET}
