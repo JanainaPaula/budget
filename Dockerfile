@@ -5,6 +5,6 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=builder target/budget.jar budget.jar
+COPY --from=builder /app/target/budget.jar budget.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "budget.jar"]
