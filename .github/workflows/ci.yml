@@ -1,0 +1,51 @@
+name: CI - Testes
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: budget
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Esperar MySQL subir
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h"127.0.0.1" -uroot -proot --silent; then
+              echo "MySQL está pronto!"
+              break
+            fi
+            echo "Aguardando MySQL..."
+            sleep 2
+          done
+
+      - name: Rodar testes Maven
+        run: ./mvnw test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/budget
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
