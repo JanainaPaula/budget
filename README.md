@@ -26,6 +26,23 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 ### Como subir o projeto localmente
 
+#### Variáveis de Ambiente
+
+Algumas variáveis podem ser configuradas via `application.yml` ou diretamente no ambiente:
+
+- `JWT_SECRET`: Chave secreta para geração dos tokens JWT.
+- `DB_HOST`: Host do banco de dados (padrão: `localhost`).
+- `DB_PORT`: Porta do banco de dados (padrão: `3306`).
+- `DB_USER`: Usuário do banco de dados (padrão: `root`).
+- `DB_PASSWORD`: Senha do banco de dados (padrão: `root`).
+
+Exemplo de uso no Linux/Mac:
+```bash
+export JWT_SECRET=minha-chave-secreta
+export DB_PASSWORD=suasenha
+```
+```
+
 1. Suba o banco de dados com Docker Compose:
    ```bash
    docker-compose up -d
