@@ -28,6 +28,23 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 ### Como subir o projeto localmente
 
+#### Variáveis de Ambiente
+
+Algumas variáveis podem ser configuradas via `application.yml` ou diretamente no ambiente:
+
+- `JWT_SECRET`: Chave secreta para geração dos tokens JWT.
+- `DB_HOST`: Host do banco de dados (padrão: `localhost`).
+- `DB_PORT`: Porta do banco de dados (padrão: `3306`).
+- `DB_USER`: Usuário do banco de dados (padrão: `root`).
+- `DB_PASSWORD`: Senha do banco de dados (padrão: `root`).
+
+Exemplo de uso no Linux/Mac:
+```bash
+export JWT_SECRET=minha-chave-secreta
+export DB_PASSWORD=suasenha
+```
+```
+
 1. Suba o banco de dados com Docker Compose:
    ```bash
    docker-compose up -d
@@ -171,6 +188,15 @@ sequenceDiagram
         Controller-->>User: 401 Unauthorized
     end
 ```
+### Como Contribuir
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b minha-feature`)
+3. Commit suas alterações (`git commit -m 'feat: minha nova feature'`)
+4. Faça push para a branch (`git push origin minha-feature`)
+5. Abra um Pull Request
+
+Siga o padrão de commits [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
 
 ### Como Contribuir
 
