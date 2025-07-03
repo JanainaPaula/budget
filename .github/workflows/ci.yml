@@ -49,3 +49,9 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/budget
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: root
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: JanainaPaula/budget
