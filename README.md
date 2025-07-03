@@ -3,6 +3,8 @@
 [![CI - Testes](https://github.com/JanainaPaula/budget/actions/workflows/ci.yml/badge.svg)](https://github.com/JanainaPaula/budget/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/JanainaPaula/budget/graph/badge.svg?token=NZFK601NU8)](https://codecov.io/github/JanainaPaula/budget)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Java](https://img.shields.io/badge/Java-%23ED8B00.svg??style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=Spring&logoColor=white)
 
 Aplicação de controle de orçamento pessoal, permitindo o registro de receitas e despesas mensais, além de fornecer um balanço financeiro do usuário.
 
