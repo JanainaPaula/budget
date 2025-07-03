@@ -1,32 +1,155 @@
-# Budget App [WIP]
+# Budget App
 
-Aplicação de controle de orçamento pessoal.
+Aplicação de controle de orçamento pessoal, permitindo o registro de receitas e despesas mensais, além de fornecer um balanço financeiro do usuário.
 
 ### Tecnologias usadas
 
 - Java 17
-- Spring boot
+- Spring Boot
 - Maven
 - MySQL
 - Docker
+- JUnit (testes)
+- Swagger/OpenAPI
 
 ### Arquitetura usada no projeto
 
-Esse projeto foi projetado usando a arquitetura Hexagonal, visando facilitar e extensão e manutenção do projeto a 
-longo prazo.
+Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), visando facilitar a extensão e manutenção do projeto a longo prazo. O domínio é isolado de frameworks e detalhes técnicos, promovendo testabilidade e evolução.
+
+### Funcionalidades
+
+- Cadastro, atualização e remoção de receitas e despesas
+- Consulta de lançamentos por mês e descrição
+- Resumo mensal (balanço de receitas, despesas e saldo)
+- Autenticação de usuários
+- API documentada via Swagger
 
 ### Como subir o projeto localmente
 
-Para subir o projeto, a primeira coisa a ser feita é rodar o arquivo ```docker-compose.yml```, que está no diretório 
-raiz do projeto, para subir o container com o banco de dados. Segue comando:
+1. Suba o banco de dados com Docker Compose:
+   ```bash
+   docker-compose up -d
+   ```
+2. Rode a aplicação pela IDE executando a classe `BudgetApplication.java` ou via terminal:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
-``` bash
-docker-compose up -d
-````
+### Configuração
 
-Depois dentro da IDE rodar a classe main da aplicação, a ````BudgetApplication.java````.
+- As configurações de banco, JWT e outros parâmetros estão em `src/main/resources/application.yml`.
+- Para ambiente local, use o perfil padrão.
+- Para produção, configure as variáveis de ambiente conforme necessário.
 
 ### Testes
+
+- Testes unitários e integrados estão em `src/test/java/`.
+- Para rodar todos os testes:
+  ```bash
+  ./mvnw test
+  ```
+
+### API (Swagger)
+
+- A documentação interativa da API está disponível em:
+  http://localhost:8080/swagger-ui.html
+
+### Estrutura de Pastas
+
+```
+src/
+  main/
+    java/
+      br/com/janadev/budget/
+        domain/         # Entidades, regras de negócio, ports
+        inbound/        # Controllers, DTOs
+        outbound/       # Adapters, repositórios, configs
+  test/
+    java/
+      br/com/janadev/budget/
+        unit/           # Testes unitários
+        integrated/     # Testes integrados
+```
+
+### Diagramas de Sequência das Funcionalidades Principais
+
+#### Registrar Despesa
+[![](https://mermaid.ink/img/pako:eNp1k01u2zAQha9CzCpBFcey9WNxEaCwu2uQNEk3hTYTceIQkEiVpIKkhg_Ts_RipSzGP1GrjcTh9x75huIGKi0IOFj62ZGqaCVxbbApFfNPi8bJSraoHPtuyTC0_t39-W2kHhNLrZzRdT1wX15bUpYOxX9aLtFST9_RWlpHJqjCzFiy0g1KdeQ_Rm61cUfACh0-eq--PIY_C2zdyYav3-6_fQ3lUg2KPvvF1dUhC2e3N_cP7JIGjWVnAoW25wN-4LwoROHMhIhnQbR6uDnf2_eIh4d4nL1gLQVeVkbiadAD2ucZmwbHftIzIQZnLRnbc0xp9oiqCqcX5i-O7Jw2ar8ms1i_4JHlaZ7_su-7_NCzD4o7sq0eGjHq27CQ18ymMVsaQkeCfWK7LkMEayMFcGc6iqAh45vmh7DpbUpwz9RQCdx_CnrCrnYllGrrZf7If2jdvCuN7tbPwJ-wtn7UtcKvEv7_fdWQEmSWulMOeJLGOxPgG3gFHseLSVYspnGaFXlRzLM0gjdfLpLJLFnM0iLLkjjLs3Qbwa_dutPJIk8K_-RpMZ8neVZEQEL6tlwP13B3G7d_AVXZNVs?type=png)](https://mermaid.live/edit#pako:eNp1k01u2zAQha9CzCpBFcey9WNxEaCwu2uQNEk3hTYTceIQkEiVpIKkhg_Ts_RipSzGP1GrjcTh9x75huIGKi0IOFj62ZGqaCVxbbApFfNPi8bJSraoHPtuyTC0_t39-W2kHhNLrZzRdT1wX15bUpYOxX9aLtFST9_RWlpHJqjCzFiy0g1KdeQ_Rm61cUfACh0-eq--PIY_C2zdyYav3-6_fQ3lUg2KPvvF1dUhC2e3N_cP7JIGjWVnAoW25wN-4LwoROHMhIhnQbR6uDnf2_eIh4d4nL1gLQVeVkbiadAD2ucZmwbHftIzIQZnLRnbc0xp9oiqCqcX5i-O7Jw2ar8ms1i_4JHlaZ7_su-7_NCzD4o7sq0eGjHq27CQ18ymMVsaQkeCfWK7LkMEayMFcGc6iqAh45vmh7DpbUpwz9RQCdx_CnrCrnYllGrrZf7If2jdvCuN7tbPwJ-wtn7UtcKvEv7_fdWQEmSWulMOeJLGOxPgG3gFHseLSVYspnGaFXlRzLM0gjdfLpLJLFnM0iLLkjjLs3Qbwa_dutPJIk8K_-RpMZ8neVZEQEL6tlwP13B3G7d_AVXZNVs)
+
+#### Registrar Receita
+
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Controller as IncomeController
+    participant UseCase as RegisterIncomeUseCase
+    participant Domain as Income
+    participant Port as IncomeDatabasePort
+    participant Adapter as IncomeMySQLAdapter
+
+    User->>Controller: POST /incomes (dados)
+    Controller->>UseCase: register(incomeDTO)
+    UseCase->>Domain: valida/cria Income
+    UseCase->>Port: save(income)
+    Port->>Adapter: persiste no banco
+    Adapter-->>Port: retorna Income salva
+    Port-->>UseCase: retorna Income salva
+    UseCase-->>Controller: retorna IncomeResponseDTO
+    Controller-->>User: 201 Created + dados
+```
+
+#### Resumo Mensal
+
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Controller as SummaryController
+    participant UseCase as GetMonthlySummaryUseCase
+    participant ExpensePort as ExpenseDatabasePort
+    participant IncomePort as IncomeDatabasePort
+    participant Domain as Summary
+
+    User->>Controller: GET /summary?month=...&year=...
+    Controller->>UseCase: getMonthlySummary(userId, year, month)
+    UseCase->>IncomePort: sumTotalAmountByMonth(userId, year, month)
+    IncomePort-->>UseCase: totalIncomes
+    UseCase->>ExpensePort: sumTotalAmountByMonth(userId, year, month)
+    ExpensePort-->>UseCase: totalExpenses
+    UseCase->>ExpensePort: findExpensesByCategoryByMonth(userId, year, month)
+    ExpensePort-->>UseCase: despesas por categoria
+    UseCase->>Domain: monta Summary
+    UseCase-->>Controller: retorna SummaryDTO
+    Controller-->>User: 200 OK + resumo mensal
+```
+
+#### Autenticação (Login)
+
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Controller as LoginController
+    participant UseCase as LoginUseCase
+    participant UserPort as UserOutboundPort
+    participant UserAdapter as UserAuthMySQLAdapter
+    participant TokenService as TokenService
+
+    User->>Controller: POST /login (credenciais)
+    Controller->>UseCase: login(email, senha)
+    UseCase->>UserPort: buscar usuário por email
+    UserPort->>UserAdapter: consulta no banco
+    UserAdapter-->>UserPort: retorna usuário
+    UserPort-->>UseCase: retorna usuário
+    UseCase->>UseCase: valida senha
+    alt Credenciais válidas
+        UseCase->>TokenService: gera JWT
+        TokenService-->>UseCase: retorna token
+        UseCase-->>Controller: retorna LoginResponseDTO (token)
+        Controller-->>User: 200 OK + token
+    else Credenciais inválidas
+        UseCase-->>Controller: lança exceção
+        Controller-->>User: 401 Unauthorized
+    end
+```
 
 ### Responsáveis
 
