@@ -2,8 +2,8 @@ package br.com.janadev.budget.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.expense.Expense;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
-import br.com.janadev.budget.domain.expense.ports.primary.GetExpenseDetailsPort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.inbound.GetExpenseDetailsPort;
 
 import static br.com.janadev.budget.domain.expense.exception.ExpenseErrorMessages.EXPENSE_NOT_FOUND;
 

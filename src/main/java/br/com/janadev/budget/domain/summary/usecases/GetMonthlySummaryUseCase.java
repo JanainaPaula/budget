@@ -1,9 +1,9 @@
 package br.com.janadev.budget.domain.summary.usecases;
 
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
-import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.income.ports.outbound.IncomeDatabasePort;
 import br.com.janadev.budget.domain.summary.Summary;
-import br.com.janadev.budget.domain.summary.port.primary.GetMonthlySummaryPort;
+import br.com.janadev.budget.domain.summary.port.inbound.GetMonthlySummaryPort;
 
 public class GetMonthlySummaryUseCase implements GetMonthlySummaryPort {
 

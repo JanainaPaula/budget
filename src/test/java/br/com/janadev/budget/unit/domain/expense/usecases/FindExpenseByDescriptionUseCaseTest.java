@@ -2,7 +2,7 @@ package br.com.janadev.budget.unit.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.FindExpenseByDescriptionUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

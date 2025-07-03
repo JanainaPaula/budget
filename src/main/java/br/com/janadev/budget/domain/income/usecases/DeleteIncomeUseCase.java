@@ -2,8 +2,8 @@ package br.com.janadev.budget.domain.income.usecases;
 
 import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.ports.primary.DeleteIncomePort;
-import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.income.ports.inbound.DeleteIncomePort;
+import br.com.janadev.budget.domain.income.ports.outbound.IncomeDatabasePort;
 
 import static br.com.janadev.budget.domain.income.exception.IncomeErrorMessages.INCOME_DELETE_FAILED_NOT_FOUND;
 

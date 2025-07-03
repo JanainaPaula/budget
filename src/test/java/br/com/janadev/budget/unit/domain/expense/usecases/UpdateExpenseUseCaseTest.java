@@ -4,7 +4,7 @@ import br.com.janadev.budget.domain.exceptions.DomainNotFoundException;
 import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.domain.expense.Expense;
 import br.com.janadev.budget.domain.expense.exception.ExpenseAlreadyExistException;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
 import br.com.janadev.budget.domain.expense.usecases.UpdateExpenseUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

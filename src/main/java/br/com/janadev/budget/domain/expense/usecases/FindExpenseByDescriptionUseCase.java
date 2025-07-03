@@ -1,8 +1,8 @@
 package br.com.janadev.budget.domain.expense.usecases;
 
 import br.com.janadev.budget.domain.expense.Expense;
-import br.com.janadev.budget.domain.expense.ports.primary.FindExpenseByDescriptionPort;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.inbound.FindExpenseByDescriptionPort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
 
 import java.util.List;
 
