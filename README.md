@@ -1,5 +1,7 @@
 # Budget App
 
+[![CI - Testes](https://github.com/JanainaPaula/budget/actions/workflows/ci.yml/badge.svg)](https://github.com/JanainaPaula/budget/actions/workflows/ci.yml)
+
 Aplicação de controle de orçamento pessoal, permitindo o registro de receitas e despesas mensais, além de fornecer um balanço financeiro do usuário.
 
 ### Tecnologias usadas
