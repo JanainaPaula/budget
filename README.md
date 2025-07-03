@@ -74,7 +74,26 @@ src/
 ### Diagramas de Sequência das Funcionalidades Principais
 
 #### Registrar Despesa
-[![](https://mermaid.ink/img/pako:eNp1k01u2zAQha9CzCpBFcey9WNxEaCwu2uQNEk3hTYTceIQkEiVpIKkhg_Ts_RipSzGP1GrjcTh9x75huIGKi0IOFj62ZGqaCVxbbApFfNPi8bJSraoHPtuyTC0_t39-W2kHhNLrZzRdT1wX15bUpYOxX9aLtFST9_RWlpHJqjCzFiy0g1KdeQ_Rm61cUfACh0-eq--PIY_C2zdyYav3-6_fQ3lUg2KPvvF1dUhC2e3N_cP7JIGjWVnAoW25wN-4LwoROHMhIhnQbR6uDnf2_eIh4d4nL1gLQVeVkbiadAD2ucZmwbHftIzIQZnLRnbc0xp9oiqCqcX5i-O7Jw2ar8ms1i_4JHlaZ7_su-7_NCzD4o7sq0eGjHq27CQ18ymMVsaQkeCfWK7LkMEayMFcGc6iqAh45vmh7DpbUpwz9RQCdx_CnrCrnYllGrrZf7If2jdvCuN7tbPwJ-wtn7UtcKvEv7_fdWQEmSWulMOeJLGOxPgG3gFHseLSVYspnGaFXlRzLM0gjdfLpLJLFnM0iLLkjjLs3Qbwa_dutPJIk8K_-RpMZ8neVZEQEL6tlwP13B3G7d_AVXZNVs?type=png)](https://mermaid.live/edit#pako:eNp1k01u2zAQha9CzCpBFcey9WNxEaCwu2uQNEk3hTYTceIQkEiVpIKkhg_Ts_RipSzGP1GrjcTh9x75huIGKi0IOFj62ZGqaCVxbbApFfNPi8bJSraoHPtuyTC0_t39-W2kHhNLrZzRdT1wX15bUpYOxX9aLtFST9_RWlpHJqjCzFiy0g1KdeQ_Rm61cUfACh0-eq--PIY_C2zdyYav3-6_fQ3lUg2KPvvF1dUhC2e3N_cP7JIGjWVnAoW25wN-4LwoROHMhIhnQbR6uDnf2_eIh4d4nL1gLQVeVkbiadAD2ucZmwbHftIzIQZnLRnbc0xp9oiqCqcX5i-O7Jw2ar8ms1i_4JHlaZ7_su-7_NCzD4o7sq0eGjHq27CQ18ymMVsaQkeCfWK7LkMEayMFcGc6iqAh45vmh7DpbUpwz9RQCdx_CnrCrnYllGrrZf7If2jdvCuN7tbPwJ-wtn7UtcKvEv7_fdWQEmSWulMOeJLGOxPgG3gFHseLSVYspnGaFXlRzLM0gjdfLpLJLFnM0iLLkjjLs3Qbwa_dutPJIk8K_-RpMZ8neVZEQEL6tlwP13B3G7d_AVXZNVs)
+
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Controller as ExpenseController
+    participant UseCase as RegisterExpenseUseCase
+    participant Domain as Expense
+    participant Port as ExpenseDatabasePort
+    participant Adapter as ExpenseMySQLAdapter
+
+    User->>Controller: POST /expenses (dados)
+    Controller->>UseCase: register(expenseDTO)
+    UseCase->>Domain: valida/cria Expense
+    UseCase->>Port: register(expense)
+    Port->>Adapter: persiste no banco
+    Adapter-->>Port: retorna Expense salva
+    Port-->>UseCase: retorna Expense salva
+    UseCase-->>Controller: retorna ExpenseResponseDTO
+    Controller-->>User: 201 Created + dados
+```
 
 #### Registrar Receita
 
