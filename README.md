@@ -30,11 +30,20 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 ### Como subir o projeto localmente
 
-1. Suba o banco de dados com Docker Compose:
+1. Crie um arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias:
+   ```env
+   JWT_SECRET=sua-chave-secreta
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=root
+   ```
+   > Dica: Se estiver usando o IntelliJ, utilize o plugin [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) para carregar automaticamente as variáveis do arquivo `.env` ao rodar a aplicação.
+2. Suba o banco de dados com Docker Compose:
    ```bash
    docker-compose up -d
    ```
-2. Rode a aplicação pela IDE executando a classe `BudgetApplication.java` ou via terminal:
+3. Rode a aplicação pela IDE executando a classe `BudgetApplication.java` ou via terminal:
    ```bash
    ./mvnw spring-boot:run
    ```
@@ -173,15 +182,6 @@ sequenceDiagram
         Controller-->>User: 401 Unauthorized
     end
 ```
-### Como Contribuir
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b minha-feature`)
-3. Commit suas alterações (`git commit -m 'feat: minha nova feature'`)
-4. Faça push para a branch (`git push origin minha-feature`)
-5. Abra um Pull Request
-
-Siga o padrão de commits [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
 
 ### Como Contribuir
 
@@ -192,6 +192,10 @@ Siga o padrão de commits [Conventional Commits](https://www.conventionalcommits
 5. Abra um Pull Request
 
 Siga o padrão de commits [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
+
+### Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ### Responsáveis
 
