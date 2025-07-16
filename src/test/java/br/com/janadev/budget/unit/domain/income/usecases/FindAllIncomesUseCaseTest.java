@@ -1,7 +1,7 @@
 package br.com.janadev.budget.unit.domain.income.usecases;
 
 import br.com.janadev.budget.domain.income.Income;
-import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.income.ports.outbound.IncomeDatabasePort;
 import br.com.janadev.budget.domain.income.usecases.FindAllIncomesUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

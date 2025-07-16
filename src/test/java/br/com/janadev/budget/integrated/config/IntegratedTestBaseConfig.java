@@ -1,9 +1,9 @@
 package br.com.janadev.budget.integrated.config;
 
-import br.com.janadev.budget.primary.login.dto.LoginRequestDTO;
-import br.com.janadev.budget.primary.login.dto.LoginResponseDTO;
-import br.com.janadev.budget.secondary.user.UserRepository;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.inbound.login.dto.LoginRequestDTO;
+import br.com.janadev.budget.inbound.login.dto.LoginResponseDTO;
+import br.com.janadev.budget.outbound.user.UserRepository;
+import br.com.janadev.budget.outbound.user.dbo.UserDBO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;

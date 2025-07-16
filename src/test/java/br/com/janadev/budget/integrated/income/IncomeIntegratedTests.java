@@ -1,12 +1,12 @@
 package br.com.janadev.budget.integrated.income;
 
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
-import br.com.janadev.budget.primary.handler.ErrorResponse;
-import br.com.janadev.budget.primary.income.dto.IncomeRequestDTO;
-import br.com.janadev.budget.primary.income.dto.IncomeResponseDTO;
-import br.com.janadev.budget.secondary.income.IncomeDBO;
-import br.com.janadev.budget.secondary.income.IncomeRepository;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.inbound.handler.ErrorResponse;
+import br.com.janadev.budget.inbound.income.dto.IncomeRequestDTO;
+import br.com.janadev.budget.inbound.income.dto.IncomeResponseDTO;
+import br.com.janadev.budget.outbound.income.IncomeDBO;
+import br.com.janadev.budget.outbound.income.IncomeRepository;
+import br.com.janadev.budget.outbound.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

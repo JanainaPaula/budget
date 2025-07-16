@@ -1,10 +1,10 @@
 package br.com.janadev.budget.integrated.auth;
 
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
-import br.com.janadev.budget.primary.handler.ErrorResponse;
-import br.com.janadev.budget.primary.login.dto.LoginRequestDTO;
-import br.com.janadev.budget.primary.login.dto.LoginResponseDTO;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.inbound.handler.ErrorResponse;
+import br.com.janadev.budget.inbound.login.dto.LoginRequestDTO;
+import br.com.janadev.budget.inbound.login.dto.LoginResponseDTO;
+import br.com.janadev.budget.outbound.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;

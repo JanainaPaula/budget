@@ -1,8 +1,8 @@
 package br.com.janadev.budget.unit.domain.summary;
 
 import br.com.janadev.budget.domain.expense.Category;
-import br.com.janadev.budget.domain.expense.ports.secondary.ExpenseDatabasePort;
-import br.com.janadev.budget.domain.income.ports.secondary.IncomeDatabasePort;
+import br.com.janadev.budget.domain.expense.ports.outbound.ExpenseDatabasePort;
+import br.com.janadev.budget.domain.income.ports.outbound.IncomeDatabasePort;
 import br.com.janadev.budget.domain.summary.CategorySummary;
 import br.com.janadev.budget.domain.summary.Summary;
 import br.com.janadev.budget.domain.summary.usecases.GetMonthlySummaryUseCase;

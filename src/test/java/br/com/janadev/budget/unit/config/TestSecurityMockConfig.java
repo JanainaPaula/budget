@@ -1,7 +1,7 @@
 package br.com.janadev.budget.unit.config;
 
-import br.com.janadev.budget.primary.utils.AuthUserUtil;
-import br.com.janadev.budget.secondary.auth.config.SecurityFilter;
+import br.com.janadev.budget.inbound.utils.AuthUserUtil;
+import br.com.janadev.budget.outbound.auth.config.SecurityFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

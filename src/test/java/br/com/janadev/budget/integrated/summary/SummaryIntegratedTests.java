@@ -2,12 +2,12 @@ package br.com.janadev.budget.integrated.summary;
 
 import br.com.janadev.budget.domain.expense.Category;
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
-import br.com.janadev.budget.primary.summary.dto.SummaryDTO;
-import br.com.janadev.budget.secondary.expense.ExpenseDBO;
-import br.com.janadev.budget.secondary.expense.ExpenseRepository;
-import br.com.janadev.budget.secondary.income.IncomeDBO;
-import br.com.janadev.budget.secondary.income.IncomeRepository;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
+import br.com.janadev.budget.inbound.summary.dto.SummaryDTO;
+import br.com.janadev.budget.outbound.expense.ExpenseDBO;
+import br.com.janadev.budget.outbound.expense.ExpenseRepository;
+import br.com.janadev.budget.outbound.income.IncomeDBO;
+import br.com.janadev.budget.outbound.income.IncomeRepository;
+import br.com.janadev.budget.outbound.user.dbo.UserDBO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,15 +1,15 @@
 package br.com.janadev.budget.integrated.user;
 
 import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
-import br.com.janadev.budget.primary.handler.ErrorResponse;
-import br.com.janadev.budget.primary.user.dto.UserRequestDTO;
-import br.com.janadev.budget.primary.user.dto.UserResponseDTO;
-import br.com.janadev.budget.primary.user.dto.UserUpdateDTO;
-import br.com.janadev.budget.secondary.user.UserRepository;
-import br.com.janadev.budget.secondary.user.dbo.Role;
-import br.com.janadev.budget.secondary.user.dbo.UserDBO;
-import br.com.janadev.budget.secondary.user.exception.UserAlreadyExistsException;
-import br.com.janadev.budget.secondary.user.exception.UserNotFoundException;
+import br.com.janadev.budget.inbound.handler.ErrorResponse;
+import br.com.janadev.budget.inbound.user.dto.UserRequestDTO;
+import br.com.janadev.budget.inbound.user.dto.UserResponseDTO;
+import br.com.janadev.budget.inbound.user.dto.UserUpdateDTO;
+import br.com.janadev.budget.outbound.user.UserRepository;
+import br.com.janadev.budget.outbound.user.dbo.Role;
+import br.com.janadev.budget.outbound.user.dbo.UserDBO;
+import br.com.janadev.budget.outbound.user.exception.UserAlreadyExistsException;
+import br.com.janadev.budget.outbound.user.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.Set;
 
-import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_ALREADY_EXITS_WITH_THIS_EMAIL;
-import static br.com.janadev.budget.secondary.user.exception.UserErrorMessages.USER_DOES_NOT_EXIST;
+import static br.com.janadev.budget.outbound.user.exception.UserErrorMessages.USER_ALREADY_EXITS_WITH_THIS_EMAIL;
+import static br.com.janadev.budget.outbound.user.exception.UserErrorMessages.USER_DOES_NOT_EXIST;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
