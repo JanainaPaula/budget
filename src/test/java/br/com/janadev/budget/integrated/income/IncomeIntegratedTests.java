@@ -1,9 +1,9 @@
 package br.com.janadev.budget.integrated.income;
 
-import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.inbound.handler.ErrorResponse;
 import br.com.janadev.budget.inbound.income.dto.IncomeRequestDTO;
 import br.com.janadev.budget.inbound.income.dto.IncomeResponseDTO;
+import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.outbound.income.IncomeDBO;
 import br.com.janadev.budget.outbound.income.IncomeRepository;
 import br.com.janadev.budget.outbound.user.dbo.UserDBO;
@@ -261,7 +261,7 @@ class IncomeIntegratedTests extends IntegratedTestBaseConfig {
         incomeRepository.saveAll(incomesExpected);
 
         String uri = UriComponentsBuilder.fromPath("/incomes")
-                .queryParam("description", "salario")
+                .queryParam("description", "sal")
                 .toUriString();
 
         HttpEntity<String> entity = new HttpEntity<>(getAuthorizationHeader());

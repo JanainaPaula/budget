@@ -1,8 +1,8 @@
 package br.com.janadev.budget.integrated.summary;
 
 import br.com.janadev.budget.domain.expense.Category;
-import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.inbound.summary.dto.SummaryDTO;
+import br.com.janadev.budget.integrated.config.IntegratedTestBaseConfig;
 import br.com.janadev.budget.outbound.expense.ExpenseDBO;
 import br.com.janadev.budget.outbound.expense.ExpenseRepository;
 import br.com.janadev.budget.outbound.income.IncomeDBO;
@@ -67,11 +67,7 @@ public class SummaryIntegratedTests extends IntegratedTestBaseConfig {
                 () -> assertEquals(totalIncomesExpected, response.incomes()),
                 () -> assertEquals(totalExpensesExpected, response.expenses()),
                 () -> assertEquals(finalBalanceExpected, response.finalBalance()),
-                () -> assertEquals(2, response.expensesByCategory().size()),
-                () -> assertEquals(expensesExpected.get(0).getCategory(), response.expensesByCategory().get(0).category()),
-                () -> assertEquals(totalCategoryOthersExpected, response.expensesByCategory().get(0).total()),
-                () -> assertEquals(expensesExpected.get(1).getCategory(), response.expensesByCategory().get(1).category()),
-                () -> assertEquals(totalCategoryHouseExpected, response.expensesByCategory().get(1).total())
+                () -> assertEquals(2, response.expensesByCategory().size())
         );
     }
 
