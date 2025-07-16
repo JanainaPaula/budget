@@ -1,0 +1,39 @@
+name: CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_test_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Run tests
+        run: ./mvnw test
+
+      - name: Build the project
+        run: ./mvnw clean package -DskipTests=true
+
+      - name: Trigger Render Deploy
+        if: success()
+        uses: peter-evans/render-deploy@v1
+        with:
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+
+      - name: Notify Success
+        if: success()
+        run: echo "✅ Deploy realizado com sucesso na Render!"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "❌ Falha nos testes ou build. Deploy cancelado."
