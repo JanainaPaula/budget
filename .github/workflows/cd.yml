@@ -25,7 +25,7 @@ jobs:
 
       - name: Trigger Render Deploy
         if: success()
-        uses: johnbeynon/render-deploy-action@v1
+        uses: johnbeynon/render-deploy-action@v0.0.5
         with:
           api_key: ${{ secrets.RENDER_API_KEY }}
           service_id: ${{ secrets.RENDER_SERVICE_ID }}
