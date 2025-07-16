@@ -7,7 +7,7 @@ Aplicação de controle de orçamento pessoal.
 - Java 17
 - Spring boot
 - Maven
-- MySQL
+- Postgres
 - Docker
 
 ### Arquitetura usada no projeto

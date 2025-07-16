@@ -1,11 +1,11 @@
 services:
-  mysql:
-    image: mysql:8.2.0
+  postgresql:
+    image: postgres:16
     container_name: budget-db
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
     env_file:
       - .env-local
 
