@@ -23,12 +23,12 @@ jobs:
       - name: Build the project
         run: ./mvnw clean package -DskipTests=true
 
-      - name: Trigger Render Deploy
+      - name: Trigger Render Deploy via API
         if: success()
-        uses: johnbeynon/render-deploy-action@v0.0.5
-        with:
-          api_key: ${{ secrets.RENDER_API_KEY }}
-          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json"
 
       - name: Notify Success
         if: success()
