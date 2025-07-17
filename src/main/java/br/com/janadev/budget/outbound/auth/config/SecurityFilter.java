@@ -43,6 +43,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JWTTokenException ex) {
             request.setAttribute("auth_error_message", ex.getMessage());
+            request.setAttribute("exception_simple_name", ex.getClass().getSimpleName());
             throw new AuthenticationException(ex.getMessage()) {};
         }
     }
