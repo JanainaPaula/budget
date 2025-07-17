@@ -28,10 +28,12 @@ public class SecurityConfiguration {
 
     private final SecurityFilter securityFilter;
     private final ObjectMapper objectMapper;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    public SecurityConfiguration(SecurityFilter securityFilter, ObjectMapper objectMapper) {
+    public SecurityConfiguration(SecurityFilter securityFilter, ObjectMapper objectMapper, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.securityFilter = securityFilter;
         this.objectMapper = objectMapper;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Bean
@@ -45,6 +47,9 @@ public class SecurityConfiguration {
                 })
                 .exceptionHandling(eh -> {
                     eh.authenticationEntryPoint(this::handleAuthenticationError);
+                })
+                .exceptionHandling(eh -> {
+                    eh.authenticationEntryPoint(customAuthenticationEntryPoint);
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

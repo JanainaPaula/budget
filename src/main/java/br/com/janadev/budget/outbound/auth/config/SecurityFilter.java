@@ -1,5 +1,6 @@
 package br.com.janadev.budget.outbound.auth.config;
 
+import br.com.janadev.budget.outbound.auth.exception.JWTTokenException;
 import br.com.janadev.budget.outbound.auth.jwt.TokenServicePort;
 import br.com.janadev.budget.outbound.auth.user.BudgetUserDetails;
 import br.com.janadev.budget.outbound.auth.user.UserAuthDatabasePort;
@@ -8,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,15 +31,20 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = retrieveToken(request);
 
-        if (jwtToken != null){
-            var subject = tokenServicePort.getSubject(jwtToken);
-            var user = BudgetUserDetails.of(userDatabasePort.getUserByUsername(subject));
+        try{
+            if (jwtToken != null){
+                var subject = tokenServicePort.getSubject(jwtToken);
+                var user = BudgetUserDetails.of(userDatabasePort.getUserByUsername(subject));
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
+            filterChain.doFilter(request, response);
+        } catch (JWTTokenException ex) {
+            request.setAttribute("auth_error_message", ex.getMessage());
+            throw new AuthenticationException(ex.getMessage()) {};
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private String retrieveToken(HttpServletRequest request){
