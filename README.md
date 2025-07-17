@@ -35,15 +35,15 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 1. Crie um arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias:
    ```env
-    ADMIN_DEFAULT_PASSWORD=
-    ADMIN_DEFAULT_EMAIL=
-    JWT_SECRET=
-    POSTGRES_DB=
-    POSTGRES_PASSWORD=
-    POSTGRES_USER=
-    SPRING_DATASOURCE_URL=
-    SPRING_DATASOURCE_USERNAME=
-    SPRING_DATASOURCE_PASSWORD=
+   ADMIN_DEFAULT_PASSWORD=
+   ADMIN_DEFAULT_EMAIL=
+   JWT_SECRET=
+   POSTGRES_DB=
+   POSTGRES_PASSWORD=
+   POSTGRES_USER=
+   SPRING_DATASOURCE_URL=
+   SPRING_DATASOURCE_USERNAME=
+   SPRING_DATASOURCE_PASSWORD=
    ```
    > Dica: Se estiver usando o IntelliJ, utilize o plugin [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) para carregar automaticamente as variáveis do arquivo `.env` ao rodar a aplicação.
 2. Suba o banco de dados com Docker Compose:
