@@ -2,6 +2,8 @@ package br.com.janadev.budget.inbound.handler;
 
 import br.com.janadev.budget.domain.exceptions.DomainException;
 import br.com.janadev.budget.outbound.exception.OutboundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -14,8 +16,13 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class BudgetExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(BudgetExceptionHandler.class);
+
+
     @ExceptionHandler(DomainException.class)
     private ResponseEntity<ErrorResponse> domainValidationException(DomainException exception, WebRequest request){
+        logger.warn("Domain error [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false));
         var errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.badRequest().body(errorResponse);
@@ -23,6 +30,8 @@ public class BudgetExceptionHandler {
 
     @ExceptionHandler(OutboundException.class)
     private ResponseEntity<ErrorResponse> outboundException(OutboundException exception, WebRequest request){
+        logger.warn("Outbound error [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false));
         var errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.badRequest().body(errorResponse);
@@ -37,6 +46,8 @@ public class BudgetExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<ErrorResponse> methodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest request){
+        logger.warn("Validation error [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false));
         var errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.badRequest().body(errorResponse);
