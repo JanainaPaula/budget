@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Set;
 
@@ -25,6 +26,8 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -38,6 +41,7 @@ class UserServiceTest {
         var userExpected = UserDBO.of(id, email, password, roles);
         when(userRepository.save(any())).thenReturn(userExpected);
         when(userRepository.existsByEmail(any())).thenReturn(false);
+        when(bCryptPasswordEncoder.encode(any())).thenReturn(password);
 
         UserDBO user = userService.register(email, password, roles);
 
