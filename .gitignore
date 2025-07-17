@@ -3,8 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.env-prod
 .env
-.env-local
 .docker-local.yml
 
 ### STS ###
