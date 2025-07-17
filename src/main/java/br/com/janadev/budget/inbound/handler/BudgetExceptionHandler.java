@@ -39,6 +39,8 @@ public class BudgetExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     private ResponseEntity<ErrorResponse> usernameNotFoundException(BadCredentialsException exception, WebRequest request){
+        logger.warn("Login attempt with invalid credentials [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false));
         var errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
@@ -55,6 +57,8 @@ public class BudgetExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     private ResponseEntity<ErrorResponse> accessDeniedException(AccessDeniedException exception, WebRequest request){
+        logger.warn("Access denied [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false));
         var errorResponse = ErrorResponse.of(HttpStatus.FORBIDDEN.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
@@ -62,6 +66,8 @@ public class BudgetExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ErrorResponse> exception(Exception exception, WebRequest request){
+        logger.error("Unexpected error [{}]: {} | Path: {}", exception.getClass().getSimpleName(),
+                exception.getMessage(), request.getDescription(false), exception);
         var errorResponse = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception,
                 request.getDescription(false));
         return ResponseEntity.internalServerError().body(errorResponse);
