@@ -35,11 +35,15 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 1. Crie um arquivo `.env` na raiz do projeto com as variáveis de ambiente necessárias:
    ```env
-   JWT_SECRET=sua-chave-secreta
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_USER=root
-   DB_PASSWORD=root
+    ADMIN_DEFAULT_PASSWORD=
+    ADMIN_DEFAULT_EMAIL=
+    JWT_SECRET=
+    POSTGRES_DB=
+    POSTGRES_PASSWORD=
+    POSTGRES_USER=
+    SPRING_DATASOURCE_URL=
+    SPRING_DATASOURCE_USERNAME=
+    SPRING_DATASOURCE_PASSWORD=
    ```
    > Dica: Se estiver usando o IntelliJ, utilize o plugin [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) para carregar automaticamente as variáveis do arquivo `.env` ao rodar a aplicação.
 2. Suba o banco de dados com Docker Compose:
@@ -67,8 +71,8 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 
 ### API (Swagger)
 
-- A documentação interativa da API está disponível em:
-  http://localhost:8080/swagger-ui.html
+- A documentação interativa da API está disponível em
+  [API Budget](https://budget-xri1.onrender.com/swagger-ui.html)
 
 ### Estrutura de Pastas
 

@@ -2,12 +2,20 @@ services:
   postgresql:
     image: postgres:16
     container_name: budget-db
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     env_file:
-      - .env-local
+      - .env
+
+  app:
+    build: .
+    container_name: budget-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+    env_file:
+      - .env
 
 volumes:
   db-data:
