@@ -46,9 +46,6 @@ public class SecurityConfiguration {
                     req.anyRequest().authenticated();
                 })
                 .exceptionHandling(eh -> {
-                    eh.authenticationEntryPoint(this::handleAuthenticationError);
-                })
-                .exceptionHandling(eh -> {
                     eh.authenticationEntryPoint(customAuthenticationEntryPoint);
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -63,16 +60,5 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-
-    private void handleAuthenticationError(HttpServletRequest request, HttpServletResponse response, Exception exception) throws IOException {
-        sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, exception, request.getRequestURI());
-    }
-
-    private void sendErrorResponse(HttpServletResponse response, int status, Exception exception, String path) throws IOException {
-        var errorResponse = ErrorResponse.of(String.valueOf(status), exception, path);
-        response.setContentType(MediaType.APPLICATION_JSON.toString());
-        response.setStatus(status);
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

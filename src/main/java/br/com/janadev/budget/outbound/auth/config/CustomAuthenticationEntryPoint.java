@@ -1,5 +1,7 @@
 package br.com.janadev.budget.outbound.auth.config;
 
+import br.com.janadev.budget.inbound.handler.ErrorResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +20,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
     public static final String CORRELATION_ID_HEADER = "X-Correlation-ID";
 
+    private final ObjectMapper objectMapper;
+
+    public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
@@ -28,12 +36,20 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         if (message == null) {
             message = "Unauthorized: " + authException.getMessage();
         }
+
+        logger.warn("Authentication error [{}]: {} | CorrelationId: {} | Path: {}",
+                exceptionSimpleName, message, getCorrelationId(request), request.getRequestURI());
+        var errorResponse = ErrorResponse.of(String.valueOf(HttpServletResponse.SC_UNAUTHORIZED), authException, request.getRequestURI());
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+
+    }
+
+    private static String getCorrelationId(HttpServletRequest request) {
         String correlationId = request.getHeader(CORRELATION_ID_HEADER);
         if (correlationId == null || correlationId.isBlank()) {
             correlationId = java.util.UUID.randomUUID().toString();
         }
-        logger.warn("Unauthorized access attempt [{}]: {} | CorrelationId: {} | Path: {}",
-                exceptionSimpleName, message, correlationId, request.getRequestURI());
-        response.getWriter().write("{\"error\": \"" + message + "\"}");
+        return correlationId;
     }
+
 } 

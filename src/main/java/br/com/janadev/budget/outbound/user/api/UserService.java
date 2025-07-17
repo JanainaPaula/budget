@@ -28,7 +28,7 @@ public class UserService implements UserOutboundPort {
     @Override
     public UserDBO register(String email, String password, Set<String> roles) {
         alreadyExistUserByEmail(email);
-        return repository.save(UserDBO.of(email, password, roles));
+        return repository.save(UserDBO.of(email, bCryptPasswordEncoder.encode(password), roles));
     }
 
     @Override

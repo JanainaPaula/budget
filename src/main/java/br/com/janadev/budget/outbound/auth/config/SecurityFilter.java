@@ -21,10 +21,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenServicePort tokenServicePort;
     private final UserAuthDatabasePort userDatabasePort;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    public SecurityFilter(TokenServicePort tokenServicePort, UserAuthDatabasePort userDatabasePort) {
+    public SecurityFilter(TokenServicePort tokenServicePort,
+                          UserAuthDatabasePort userDatabasePort,
+                          CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         this.tokenServicePort = tokenServicePort;
         this.userDatabasePort = userDatabasePort;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
     }
 
     @Override
@@ -44,7 +48,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         } catch (JWTTokenException ex) {
             request.setAttribute("auth_error_message", ex.getMessage());
             request.setAttribute("exception_simple_name", ex.getClass().getSimpleName());
-            throw new AuthenticationException(ex.getMessage()) {};
+            customAuthenticationEntryPoint.commence(request, response,
+                    new AuthenticationException(ex.getMessage()){});
         }
     }
 
