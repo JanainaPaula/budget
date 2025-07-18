@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
                         )
                 )
                 .info(new Info()
-                        .title("Budget")
+                        .title("API Budget")
                         .version("v1")
                         .description("API Budget documentation, monthly personal budget application.")
                 );
