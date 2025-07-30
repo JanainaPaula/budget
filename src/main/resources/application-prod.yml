@@ -1,3 +1,12 @@
 spring:
   jpa:
     show-sql: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    url: /v3/api-docs
+    config-url: /v3/api-docs/swagger-config
+    use-root-path: true
+  api-docs:
+    path: /v3/api-docs
