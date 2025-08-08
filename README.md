@@ -72,7 +72,7 @@ Esse projeto foi projetado usando a arquitetura Hexagonal (Ports & Adapters), vi
 ### API (Swagger)
 
 - A documentação interativa da API está disponível em
-  [API Budget](https://budget-xri1.onrender.com/swagger-ui.html)
+  [API Budget](http://localhost:8080/swagger-ui.html)
 
 ### Estrutura de Pastas
 
